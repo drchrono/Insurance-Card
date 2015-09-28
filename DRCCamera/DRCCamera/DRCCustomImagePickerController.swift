@@ -12,16 +12,16 @@ protocol DRCCustomImagePickerControllerDelegate{
     func customImagePickerDidFinishPickingImage(rectImage: UIImage)
 }
 
-class DRCCustomImagePickerController: UIImagePickerController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CameraOverlayDelegate {
+public class DRCCustomImagePickerController: UIImagePickerController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CameraOverlayDelegate {
     var imagePicker = UIImagePickerController()
     var photoRatio : RectangleRatio?
     var customDelegate: DRCCustomImagePickerControllerDelegate?
     var parentVC: UIViewController?
-    override func viewDidLoad() {
+    override public func viewDidLoad() {
         super.viewDidLoad()
     }
     
-    func showImagePicker(inViewController parent: UIViewController){
+    public func showImagePicker(inViewController parent: UIViewController){
         let sourceType = UIImagePickerControllerSourceType.Camera
         imagePicker.sourceType = sourceType
         
@@ -42,7 +42,7 @@ class DRCCustomImagePickerController: UIImagePickerController, UIImagePickerCont
         parentVC!.presentViewController(imagePicker, animated: true, completion: nil)
     }
     
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+    public func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         let image = info[UIImagePickerControllerOriginalImage] as! UIImage
         self.parentVC!.dismissViewControllerAnimated(true) { () -> Void in
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
