@@ -47,10 +47,10 @@ class DRCCustomImagePickerController: UIImagePickerController, UIImagePickerCont
         self.parentVC!.dismissViewControllerAnimated(true) { () -> Void in
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                                 UIGraphicsBeginImageContext(image.size)
+                 
                 
-                
-                let rotatedPhoto = Graph().scaleAndRotateImage(image)
-                
+//                let rotatedPhoto = Graph().scaleAndRotateImage(image)
+                let rotatedPhoto = ImageHandler.scaleAndRotateImage(image)
                 let imageRef3 = CGImageCreateWithImageInRect(rotatedPhoto.CGImage, CGRectMake(image.size.width * self.photoRatio!.x, image.size.height * self.photoRatio!.y, image.size.width * self.photoRatio!.wp, image.size.height * self.photoRatio!.hp))
                 let rectImage = UIImage(CGImage: imageRef3!)
                 self.customDelegate?.customImagePickerDidFinishPickingImage(rectImage)
