@@ -31,8 +31,10 @@ public class DRCCustomImagePickerController: UIImagePickerController, UIImagePic
         
         imagePicker.delegate = self
         imagePicker.showsCameraControls = false
+        let bundle = NSBundle(forClass: DRCCustomImagePickerController.classForCoder())
+        let xibs = bundle.loadNibNamed("CameraOverlay", owner: nil, options: nil)
         
-        let xibs = NSBundle.mainBundle().loadNibNamed("CameraOverlay", owner: nil, options: nil)
+//        let xibs = NSBundle.mainBundle().loadNibNamed("CameraOverlay", owner: nil, options: nil)
         let overlayView = xibs.first as? CameraOverlay
         overlayView?.frame = imagePicker.cameraOverlayView!.frame
         imagePicker.cameraOverlayView = overlayView
