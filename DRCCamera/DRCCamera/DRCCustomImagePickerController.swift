@@ -8,14 +8,14 @@
 
 import UIKit
 
-protocol DRCCustomImagePickerControllerDelegate{
+public protocol DRCCustomImagePickerControllerDelegate{
     func customImagePickerDidFinishPickingImage(rectImage: UIImage)
 }
 
 public class DRCCustomImagePickerController: UIImagePickerController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CameraOverlayDelegate {
     var imagePicker = UIImagePickerController()
     var photoRatio : RectangleRatio?
-    var customDelegate: DRCCustomImagePickerControllerDelegate?
+    public var customDelegate: DRCCustomImagePickerControllerDelegate?
     var parentVC: UIViewController?
     override public func viewDidLoad() {
         super.viewDidLoad()
