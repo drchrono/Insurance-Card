@@ -8,7 +8,7 @@
 
 import UIKit
 
-public protocol DRCCustomImagePickerControllerDelegate{
+@objc public protocol DRCCustomImagePickerControllerDelegate{
     func customImagePickerDidFinishPickingImage(rectImage: UIImage)
 }
 
