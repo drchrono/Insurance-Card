@@ -98,9 +98,6 @@ public class DRCCustomImagePickerController: UIImagePickerController, UIImagePic
         let detector = CIDetector(ofType: CIDetectorTypeRectangle, context: nil, options: [CIDetectorAccuracy: CIDetectorAccuracyHigh, CIDetectorMinFeatureSize: 0.2])
         
         let imageCI = CIImage(image: image)!
-//        var result = image
-        
-        
         let opts = [CIDetectorAspectRatio: 1.6]
         let features = detector.featuresInImage(imageCI, options: opts) as! [CIRectangleFeature]
         if features.count == 0 {
@@ -109,30 +106,25 @@ public class DRCCustomImagePickerController: UIImagePickerController, UIImagePic
         if features.count > 1{
             print("we found \(features.count) features")
         }
-        let featuresRect = features[0].bounds
-        let imageRef = CGImageCreateWithImageInRect(image.CGImage, featuresRect)
-        let resultImage = UIImage(CGImage: imageRef!)
+        
+        let cardCI = cropCardByFeature(imageCI, feature: features[0])
+        let context = CIContext(options: nil)
+        let cgImage: CGImageRef = context.createCGImage(cardCI, fromRect: cardCI.extent)
+        let card:UIImage = UIImage(CGImage: cgImage)
+        self.testImage = card
+        
+        let resultImage = detectImage(image, features: features)
+        let resultOverlay = detectImageWithOverlay(imageCI, features: features)
+        self.overlay = resultOverlay
+        return resultImage
 //        for f:CIRectangleFeature in features{
 //            var overlay = CIImage(color: CIColor(color: UIColor(red: 1, green: 0, blue: 0, alpha: 0.6)))
 //            overlay = overlay.imageByCroppingToRect(image.extent)
 //            overlay = overlay.imageByApplyingFilter("CIPerspectiveTransformWithExtent", withInputParameters: ["inputExtent": CIVector(x: 0, y: 0, z: 1, w: 1),
 //                "inputTopLeft": CIVector(CGPoint: f.topLeft), "inputTopRight": CIVector(CGPoint: f.topRight), "inputBottomLeft": CIVector(CGPoint: f.bottomLeft),"inputBottomRight": CIVector(CGPoint: f.bottomRight)])
 //            result = overlay.imageByCompositingOverImage(result)
-//            
+//
 //        }
-        let f = features[0]
-        var overlay = CIImage(color: CIColor(color: UIColor(red: 1, green: 0, blue: 0, alpha: 0.6)))
-        overlay = overlay.imageByCroppingToRect(imageCI.extent)
-        
-        overlay = overlay.imageByApplyingFilter("CIPerspectiveTransformWithExtent",
-            withInputParameters: ["inputExtent": CIVector(CGRect: imageCI.extent),
-            "inputTopLeft": CIVector(CGPoint: f.topLeft),
-            "inputTopRight": CIVector(CGPoint: f.topRight),
-            "inputBottomLeft": CIVector(CGPoint: f.bottomLeft),
-            "inputBottomRight": CIVector(CGPoint: f.bottomRight)]
-        )
-        
-        let result = overlay.imageByCompositingOverImage(imageCI)
         
 //        let result2 = image
 //        var overlay = CIImage(color: CIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 0.7))
@@ -141,13 +133,34 @@ public class DRCCustomImagePickerController: UIImagePickerController, UIImagePic
 //        let ciimagewithoverlay = overlay.imageByCompositingOverImage(result2)
 //        resultImage.image = UIImage(CIImage:ciimagewithoverlay)
         
-        let card = cropCardByFeature(imageCI, feature: f)
-        self.testImage = card
-        return resultImage
-//        return UIImage(CIImage: result)
-    }
 
-    var testImage: CIImage?
+    }
+    var overlay: UIImage?
+    var testImage: UIImage?
+    func detectImageWithOverlay(ciImage:CIImage,features: [CIRectangleFeature]) -> UIImage{
+        let f = features[0]
+        var overlay = CIImage(color: CIColor(color: UIColor(red: 1, green: 0, blue: 0, alpha: 0.6)))
+        overlay = overlay.imageByCroppingToRect(ciImage.extent)
+        
+        overlay = overlay.imageByApplyingFilter("CIPerspectiveTransformWithExtent",
+            withInputParameters: ["inputExtent": CIVector(CGRect: ciImage.extent),
+                "inputTopLeft": CIVector(CGPoint: f.topLeft),
+                "inputTopRight": CIVector(CGPoint: f.topRight),
+                "inputBottomLeft": CIVector(CGPoint: f.bottomLeft),
+                "inputBottomRight": CIVector(CGPoint: f.bottomRight)]
+        )
+        
+        let result = overlay.imageByCompositingOverImage(ciImage)
+        return UIImage(CIImage: result)
+    }
+    
+    func detectImage(image:UIImage ,features: [CIRectangleFeature]) -> UIImage{
+        let featuresRect = features[0].bounds
+        let imageRef = CGImageCreateWithImageInRect(image.CGImage, featuresRect)
+        let resultImage = UIImage(CGImage: imageRef!)
+        return resultImage
+    }
+    
     private func cropCardByFeature(image: CIImage, feature: CIRectangleFeature) -> CIImage{
         var card: CIImage
         card = image.imageByApplyingFilter("CIPerspectiveTransformWithExtent",

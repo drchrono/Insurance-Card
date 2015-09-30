@@ -10,6 +10,7 @@ import UIKit
 
 class ViewController: UIViewController , DRCCustomImagePickerControllerDelegate{
 
+    @IBOutlet weak var overlay: UIImageView!
     @IBOutlet weak var cropView: UIImageView!
     @IBOutlet weak var detectView: UIImageView!
     @IBOutlet var imageView: UIImageView!
@@ -37,10 +38,13 @@ class ViewController: UIViewController , DRCCustomImagePickerControllerDelegate{
         imageView.image = rectImage
         detectView.image = detectedRectImage
         
-//        if let image = picker?.testImage {
-//            
-//            cropView.image = i
-//        }
+        if let image = picker?.testImage {
+            
+            cropView.image = image
+        }
+        if let image = picker?.overlay{
+            overlay.image = image
+        }
     }
 }
 
