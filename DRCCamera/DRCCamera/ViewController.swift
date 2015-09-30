@@ -10,6 +10,7 @@ import UIKit
 
 class ViewController: UIViewController , DRCCustomImagePickerControllerDelegate{
 
+    @IBOutlet weak var cropView: UIImageView!
     @IBOutlet weak var detectView: UIImageView!
     @IBOutlet var imageView: UIImageView!
     override func viewDidLoad() {
@@ -21,18 +22,25 @@ class ViewController: UIViewController , DRCCustomImagePickerControllerDelegate{
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
+    var picker: DRCCustomImagePickerController?
 
     @IBAction func click(sender: AnyObject) {
         let customPicker = DRCCustomImagePickerController()
         customPicker.customDelegate = self
         customPicker.showImagePicker(inViewController: self)
         customPicker.enableImageDetecting = true
+        
+        self.picker = customPicker
     }
     
     func customImagePickerDidFinishPickingImage(rectImage: UIImage, detectedRectImage: UIImage?) {
         imageView.image = rectImage
         detectView.image = detectedRectImage
+        
+//        if let image = picker?.testImage {
+//            
+//            cropView.image = i
+//        }
     }
 }
 

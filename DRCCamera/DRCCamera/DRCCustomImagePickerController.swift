@@ -120,6 +120,20 @@ public class DRCCustomImagePickerController: UIImagePickerController, UIImagePic
 //            result = overlay.imageByCompositingOverImage(result)
 //            
 //        }
+        let f = features[0]
+        var overlay = CIImage(color: CIColor(color: UIColor(red: 1, green: 0, blue: 0, alpha: 0.6)))
+        overlay = overlay.imageByCroppingToRect(imageCI.extent)
+        
+        overlay = overlay.imageByApplyingFilter("CIPerspectiveTransformWithExtent",
+            withInputParameters: ["inputExtent": CIVector(CGRect: imageCI.extent),
+            "inputTopLeft": CIVector(CGPoint: f.topLeft),
+            "inputTopRight": CIVector(CGPoint: f.topRight),
+            "inputBottomLeft": CIVector(CGPoint: f.bottomLeft),
+            "inputBottomRight": CIVector(CGPoint: f.bottomRight)]
+        )
+        
+        let result = overlay.imageByCompositingOverImage(imageCI)
+        
 //        let result2 = image
 //        var overlay = CIImage(color: CIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 0.7))
 //        overlay = overlay.imageByCroppingToRect(features[0].bounds)
@@ -127,8 +141,23 @@ public class DRCCustomImagePickerController: UIImagePickerController, UIImagePic
 //        let ciimagewithoverlay = overlay.imageByCompositingOverImage(result2)
 //        resultImage.image = UIImage(CIImage:ciimagewithoverlay)
         
-//        image2.image = UIImage(CIImage: result)
+        let card = cropCardByFeature(imageCI, feature: f)
+        self.testImage = card
         return resultImage
+//        return UIImage(CIImage: result)
     }
 
+    var testImage: CIImage?
+    private func cropCardByFeature(image: CIImage, feature: CIRectangleFeature) -> CIImage{
+        var card: CIImage
+        card = image.imageByApplyingFilter("CIPerspectiveTransformWithExtent",
+            withInputParameters: ["inputExtent": CIVector(CGRect: image.extent),
+                "inputTopLeft": CIVector(CGPoint: feature.topLeft),
+                "inputTopRight": CIVector(CGPoint: feature.topRight),
+                "inputBottomLeft": CIVector(CGPoint: feature.bottomLeft),
+                "inputBottomRight": CIVector(CGPoint: feature.bottomRight)]
+        )
+        card = image.imageByCroppingToRect(card.extent)
+        return card
+    }
 }
