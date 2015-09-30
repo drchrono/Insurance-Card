@@ -17,29 +17,40 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nJs-kk-Ym8">
-                                <rect key="frame" x="277" y="81" width="46" height="30"/>
+                                <rect key="frame" x="277" y="106" width="46" height="30"/>
                                 <state key="normal" title="Button"/>
                                 <connections>
                                     <action selector="click:" destination="BYZ-38-t0r" eventType="touchUpInside" id="grq-dE-wIx"/>
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8nq-vE-lwQ">
-                                <rect key="frame" x="150" y="150" width="300" height="300"/>
+                                <rect key="frame" x="175" y="175" width="250" height="250"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="300" id="Fid-3J-3Vl"/>
-                                    <constraint firstAttribute="height" constant="300" id="jQF-jz-6ib"/>
+                                    <constraint firstAttribute="width" constant="250" id="Fid-3J-3Vl"/>
+                                    <constraint firstAttribute="height" constant="250" id="jQF-jz-6ib"/>
+                                </constraints>
+                            </imageView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="fFI-i1-vD6">
+                                <rect key="frame" x="180" y="433" width="240" height="128"/>
+                                <color key="backgroundColor" white="0.0" alpha="0.47999999999999998" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="240" id="EJa-3E-fJ3"/>
+                                    <constraint firstAttribute="height" constant="128" id="HzF-1a-i3s"/>
                                 </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="8nq-vE-lwQ" firstAttribute="top" secondItem="nJs-kk-Ym8" secondAttribute="bottom" constant="39" id="6Sm-yB-7cS"/>
+                            <constraint firstItem="fFI-i1-vD6" firstAttribute="top" secondItem="8nq-vE-lwQ" secondAttribute="bottom" constant="8" id="HPk-hc-gDJ"/>
                             <constraint firstItem="8nq-vE-lwQ" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Vlq-xI-shE"/>
                             <constraint firstItem="8nq-vE-lwQ" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="XFa-pg-O6U"/>
+                            <constraint firstItem="fFI-i1-vD6" firstAttribute="centerX" secondItem="8nq-vE-lwQ" secondAttribute="centerX" id="c02-J0-QI6"/>
                             <constraint firstItem="nJs-kk-Ym8" firstAttribute="centerX" secondItem="8nq-vE-lwQ" secondAttribute="centerX" id="dTz-Hg-6Wu"/>
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="detectView" destination="fFI-i1-vD6" id="Yeb-J9-2nu"/>
                         <outlet property="imageView" destination="8nq-vE-lwQ" id="2cf-RL-iw5"/>
                     </connections>
                 </viewController>

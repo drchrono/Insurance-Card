@@ -10,6 +10,7 @@ import UIKit
 
 class ViewController: UIViewController , DRCCustomImagePickerControllerDelegate{
 
+    @IBOutlet weak var detectView: UIImageView!
     @IBOutlet var imageView: UIImageView!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,11 +27,12 @@ class ViewController: UIViewController , DRCCustomImagePickerControllerDelegate{
         let customPicker = DRCCustomImagePickerController()
         customPicker.customDelegate = self
         customPicker.showImagePicker(inViewController: self)
-
+        customPicker.enableImageDetecting = true
     }
     
-    func customImagePickerDidFinishPickingImage(rectImage: UIImage) {
+    func customImagePickerDidFinishPickingImage(rectImage: UIImage, detectedRectImage: UIImage?) {
         imageView.image = rectImage
+        detectView.image = detectedRectImage
     }
 }
 
