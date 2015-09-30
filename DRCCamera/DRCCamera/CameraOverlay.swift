@@ -34,6 +34,7 @@ class CameraOverlay: UIView {
     var ratio: RectangleRatio?
     
     override func drawRect(rect: CGRect) {
+        print(2)
 //        self.backgroundColor = UIColor.clearColor()
         // Drawing code
         func old() {
@@ -78,11 +79,19 @@ class CameraOverlay: UIView {
                 print(wp)
                 print(hp)
                 self.ratio = RectangleRatio(x: x, y: y, wp: wp, hp: hp)
-                let label = UILabel(frame: CGRectMake(0, 100, rectInPhone.size.height, 30))
+                let label:UILabel
+                if UIDevice.currentDevice().orientation == UIDeviceOrientation.LandscapeLeft{
+                    label = UILabel(frame: CGRectMake(15 - rectInPhone.height/2 + (rect.width/2 - rectW/2-30-8), rect.height/2 - 15, rectH, 30))
+                    label.transform = CGAffineTransformMakeRotation(CGFloat(M_PI_2))
+                    self.cancelButton.transform = CGAffineTransformMakeRotation(CGFloat(M_PI_2))
+                }else{
+                    label = UILabel(frame: CGRectMake(rect.width - 15 - rectInPhone.height/2 - (rect.width/2 - rectW/2-30-8), rect.height/2 - 15, rectH, 30))
+                    label.transform = CGAffineTransformMakeRotation(CGFloat(-M_PI_2))
+                    self.cancelButton.transform = CGAffineTransformMakeRotation(CGFloat(-M_PI_2))
+                }
                 label.textAlignment = NSTextAlignment.Center
                 label.textColor = UIColor.whiteColor()
                 label.text = "Postion Card in this Frame"
-                label.transform = CGAffineTransformMakeRotation(CGFloat( M_PI_2))
                 self.addSubview(label)
 
         } else {
@@ -119,6 +128,7 @@ class CameraOverlay: UIView {
             label.textAlignment = NSTextAlignment.Center
             label.textColor = UIColor.whiteColor()
             label.text = "Postion Card in this Frame"
+            self.cancelButton.transform = CGAffineTransformIdentity
             self.addSubview(label)
             
         }
@@ -160,6 +170,10 @@ class CameraOverlay: UIView {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        if UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Phone && UIDevice.currentDevice().orientation ==  UIDeviceOrientation.LandscapeLeft {
+                    }
+        if UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Phone && UIDevice.currentDevice().orientation == UIDeviceOrientation.LandscapeRight{
+                    }
 //        let sampleView = self
 //        let maskLayer = CALayer()
 //        maskLayer.frame = sampleView.bounds
