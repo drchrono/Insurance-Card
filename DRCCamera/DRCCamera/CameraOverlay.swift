@@ -47,33 +47,86 @@ class CameraOverlay: UIView {
         }
         let centerWidth = rect.size.width - 2 * sideMargin
         let centerHeight = centerWidth / 1.6
-        
-        NSLog("######")
+        //Todo: change the ratio when use iphone portrait
+        print("######")
         print("width: \(rect.size.width)       height:\(rect.size.height)")
-        let holy = CGRectMake(rect.size.width/2 - centerWidth/2, rect.size.height/2 - centerHeight/2, centerWidth  , centerHeight)
-        let holerect = CGRectIntersection(holy, rect)
-        self.centerRect = holy
         
-        UIColor.clearColor().setFill()
-        UIRectFill(holerect)
+            
+            
+        if UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Phone
+            && (UIDevice.currentDevice().orientation == UIDeviceOrientation.LandscapeLeft || UIDevice.currentDevice().orientation == UIDeviceOrientation.LandscapeRight)  {
+            print("Device current is \(UIDevice.currentDevice().orientation.rawValue)")
+                let rectW:CGFloat = 250
+                let rectH:CGFloat = 400
+                let rectInPhone = CGRectMake((rect.width - rectW) / 2,(rect.height - rectH) / 2 , rectW, rectH)
+                let interRect = CGRectIntersection(rectInPhone, rect)
+                
+                UIColor.clearColor().setFill()
+                UIRectFill(interRect)
+                
+                let path2 = UIBezierPath(roundedRect: rectInPhone, cornerRadius: 3)
+                path2.lineWidth = 1
+                UIColor.whiteColor().setStroke()
+                path2.stroke()
+                let ty = (UIScreen.mainScreen().bounds.height - (UIScreen.mainScreen().bounds.width * 4 / 3)) / 2
+                let y:CGFloat = rectInPhone.origin.x / rect.width
+                let hp:CGFloat = rectInPhone.size.width / rect.width
+                let x:CGFloat = (rectInPhone.origin.y - ty)/(rect.height - 2 * ty)
+                let wp:CGFloat = rectInPhone.size.height / (rect.height - 2 * ty)
+                print(x)
+                print(y)
+                print(wp)
+                print(hp)
+                self.ratio = RectangleRatio(x: x, y: y, wp: wp, hp: hp)
+                let label = UILabel(frame: CGRectMake(0, 100, rectInPhone.size.height, 30))
+                label.textAlignment = NSTextAlignment.Center
+                label.textColor = UIColor.whiteColor()
+                label.text = "Postion Card in this Frame"
+                label.transform = CGAffineTransformMakeRotation(CGFloat( M_PI_2))
+                self.addSubview(label)
+
+        } else {
+            let holy = CGRectMake(rect.size.width/2 - centerWidth/2, rect.size.height/2 - centerHeight/2, centerWidth  , centerHeight)
+            let holerect = CGRectIntersection(holy, rect)
+            self.centerRect = holy
+            
+            UIColor.clearColor().setFill()
+            UIRectFill(holerect)
+            
+            let path = UIBezierPath(roundedRect: holy, cornerRadius: 3)
+            path.lineWidth = 1
+            UIColor.whiteColor().setStroke()
+            path.stroke()
+            if UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad{
+                let x:CGFloat = holy.origin.x / rect.width
+                let y:CGFloat = holy.origin.y / rect.height
+                let wp:CGFloat = holy.size.width / rect.width
+                let hp:CGFloat = holy.size.height / rect.height
+                self.ratio = RectangleRatio(x: x, y: y, wp: wp, hp: hp)
+            }else{
+                let ty = (UIScreen.mainScreen().bounds.height - (UIScreen.mainScreen().bounds.width * 4 / 3)) / 2
+                let x:CGFloat = holy.origin.x / rect.width
+                let wp:CGFloat = holy.size.width / rect.width
+                let y:CGFloat = (holy.origin.y - ty)/(rect.height - 2 * ty)
+                let hp:CGFloat = holy.size.height / (rect.height - 2 * ty)
+                print(x)
+                print(y)
+                print(wp)
+                print(hp)
+                self.ratio = RectangleRatio(x: x, y: y, wp: wp, hp: hp)
+            }
+            let label = UILabel(frame: CGRectMake(rect.size.width/2 - centerWidth/2 , rect.size.height/2 + centerHeight/2 + 8, centerWidth, 30))
+            label.textAlignment = NSTextAlignment.Center
+            label.textColor = UIColor.whiteColor()
+            label.text = "Postion Card in this Frame"
+            self.addSubview(label)
+            
+        }
+            
+
+            
         
-        let path = UIBezierPath(roundedRect: holy, cornerRadius: 3)
-        path.lineWidth = 1
-        UIColor.whiteColor().setStroke()
-        path.stroke()
         
-        let x:CGFloat = holy.origin.x / rect.width
-        let y:CGFloat = holy.origin.y / rect.height
-        let wp:CGFloat = holy.size.width / rect.width
-        let hp:CGFloat = holy.size.height / rect.height
-        self.ratio = RectangleRatio(x: x, y: y, wp: wp, hp: hp)
-        
-        
-        let label = UILabel(frame: CGRectMake(rect.size.width/2 - centerWidth/2 , rect.size.height/2 + centerHeight/2 + 8, centerWidth, 30))
-        label.textAlignment = NSTextAlignment.Center
-        label.textColor = UIColor.whiteColor()
-        label.text = "Postion Card in this Frame"
-        self.addSubview(label)
         }
         
         func new () {
@@ -124,9 +177,16 @@ class CameraOverlay: UIView {
     }
     
     func deviceOrientationChangedNotification(note : NSNotification){
-        self.setNeedsDisplay()
-        if let subView = self.subviews.last as? UILabel {
-            subView.removeFromSuperview()
+        if UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad{
+            self.setNeedsDisplay()
+            if let subView = self.subviews.last as? UILabel {
+                subView.removeFromSuperview()
+            }
+        }else{
+            self.setNeedsDisplay()
+            if let subView = self.subviews.last as? UILabel {
+                subView.removeFromSuperview()
+            }
         }
     }
     

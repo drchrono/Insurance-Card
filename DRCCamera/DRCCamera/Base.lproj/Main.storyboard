@@ -17,17 +17,17 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nJs-kk-Ym8">
-                                <rect key="frame" x="277" y="167" width="46" height="30"/>
+                                <rect key="frame" x="277" y="81" width="46" height="30"/>
                                 <state key="normal" title="Button"/>
                                 <connections>
                                     <action selector="click:" destination="BYZ-38-t0r" eventType="touchUpInside" id="grq-dE-wIx"/>
                                 </connections>
                             </button>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8nq-vE-lwQ">
-                                <rect key="frame" x="180" y="236" width="240" height="128"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8nq-vE-lwQ">
+                                <rect key="frame" x="150" y="150" width="300" height="300"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="240" id="Fid-3J-3Vl"/>
-                                    <constraint firstAttribute="height" constant="128" id="jQF-jz-6ib"/>
+                                    <constraint firstAttribute="width" constant="300" id="Fid-3J-3Vl"/>
+                                    <constraint firstAttribute="height" constant="300" id="jQF-jz-6ib"/>
                                 </constraints>
                             </imageView>
                         </subviews>

@@ -40,20 +40,37 @@ public class DRCCustomImagePickerController: UIImagePickerController, UIImagePic
         imagePicker.cameraOverlayView = overlayView
         overlayView?.delegate = self
         
+        setCameraCenter()
+        
         self.parentVC = parent
         parentVC!.presentViewController(imagePicker, animated: true, completion: nil)
     }
     
+    private func setCameraCenter(){
+        if UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Phone{
+            var transform = self.imagePicker.cameraViewTransform
+            let y = (UIScreen.mainScreen().bounds.height - (UIScreen.mainScreen().bounds.width * 4 / 3)) / 2
+            transform.ty = y
+            self.imagePicker.cameraViewTransform = transform
+        }
+
+    }
+    
+//    public override func shouldAutorotate() -> Bool {
+//        return false
+//    }
     public func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         let image = info[UIImagePickerControllerOriginalImage] as! UIImage
         self.parentVC!.dismissViewControllerAnimated(true) { () -> Void in
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                                UIGraphicsBeginImageContext(image.size)
-                 
+//
+                print(image.imageOrientation.rawValue)
+                let rotatedPhoto: UIImage = ImageHandler.scaleAndRotateImage(image)
+      
+//                let imageRef3 = CGImageCreateWithImageInRect(rotatedPhoto.CGImage, CGRectMake(image.size.width * self.photoRatio!.x, image.size.height * self.photoRatio!.y, image.size.width * self.photoRatio!.wp, image.size.height * self.photoRatio!.hp))
+                let rect = CGRectMake(rotatedPhoto.size.width * self.photoRatio!.x, rotatedPhoto.size.height * self.photoRatio!.y, rotatedPhoto.size.width * self.photoRatio!.wp, rotatedPhoto.size.height * self.photoRatio!.hp)
+                let imageRef3 = CGImageCreateWithImageInRect(rotatedPhoto.CGImage, rect)
                 
-//                let rotatedPhoto = Graph().scaleAndRotateImage(image)
-                let rotatedPhoto = ImageHandler.scaleAndRotateImage(image)
-                let imageRef3 = CGImageCreateWithImageInRect(rotatedPhoto.CGImage, CGRectMake(image.size.width * self.photoRatio!.x, image.size.height * self.photoRatio!.y, image.size.width * self.photoRatio!.wp, image.size.height * self.photoRatio!.hp))
                 let rectImage = UIImage(CGImage: imageRef3!)
                 self.customDelegate?.customImagePickerDidFinishPickingImage(rectImage)
                 

@@ -11,7 +11,7 @@ import UIKit
 
 class ImageHandler {
     class func scaleAndRotateImage(image : UIImage) -> UIImage{
-        let kMaxResolution:CGFloat = 4000
+        let kMaxResolution:CGFloat = 8000
         
         let imageRef = image.CGImage!
         let width:CGFloat = CGFloat(CGImageGetWidth(imageRef))

@@ -33,11 +33,29 @@
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
                 <constraint firstItem="Xqh-KU-njU" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" constant="20" symbolic="YES" id="H3k-ti-hYN"/>
+                <constraint firstItem="jqe-YK-0nE" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="O1j-zj-Nb5"/>
                 <constraint firstItem="jqe-YK-0nE" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="kth-vt-mDR"/>
                 <constraint firstItem="Xqh-KU-njU" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" constant="20" symbolic="YES" id="xzO-vo-rfh"/>
                 <constraint firstAttribute="trailing" secondItem="jqe-YK-0nE" secondAttribute="trailing" constant="20" symbolic="YES" id="yAC-hx-UgF"/>
+                <constraint firstAttribute="bottom" secondItem="jqe-YK-0nE" secondAttribute="bottom" constant="76" id="yq4-yE-fLJ">
+                    <variation key="widthClass=compact" constant="0.0"/>
+                </constraint>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
+            <variation key="default">
+                <mask key="constraints">
+                    <exclude reference="O1j-zj-Nb5"/>
+                    <exclude reference="yq4-yE-fLJ"/>
+                </mask>
+            </variation>
+            <variation key="widthClass=compact">
+                <mask key="constraints">
+                    <include reference="O1j-zj-Nb5"/>
+                    <exclude reference="kth-vt-mDR"/>
+                    <exclude reference="yAC-hx-UgF"/>
+                    <include reference="yq4-yE-fLJ"/>
+                </mask>
+            </variation>
             <connections>
                 <outlet property="cancelButton" destination="Xqh-KU-njU" id="aOX-IW-5Ri"/>
                 <outlet property="saveButton" destination="jqe-YK-0nE" id="iSL-84-hYy"/>
