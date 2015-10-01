@@ -108,14 +108,26 @@ public class DRCCustomImagePickerController: UIImagePickerController, UIImagePic
         let f = features[0]
         var x = (f.topRight.x - f.topLeft.x)
         var y = (f.topRight.y - f.topLeft.y)
-        let slope =  y/x
-        let degree = 180*(atan(Double(slope)) / M_PI )
-        let w = sqrt( x*x + y*y)
+        var w = sqrt( x*x + y*y)
+        var slopeTop =  y/x
+        
+        x = (f.bottomRight.x - f.bottomLeft.x)
+        y = (f.bottomRight.y - f.bottomLeft.y)
+        let bottomSlope = y/x
+        slopeTop = (slopeTop + bottomSlope)/2
+        let wBottom = sqrt( x*x + y*y)
+        
+        let degree = 180*(atan(Double(slopeTop)) / M_PI )
+        
         x = (f.topLeft.x - f.bottomLeft.x)
         y = (f.topLeft.y - f.bottomLeft.y)
-        let h = sqrt( x*x + y*y)
-        //
-        
+        var h = sqrt( x*x + y*y)
+        x = (f.topRight.x - f.bottomRight.x)
+        y = (f.topRight.y - f.bottomRight.y)
+        let hRight = sqrt( x*x + y*y)
+
+        h = (h + hRight)/2
+        w = (w + wBottom)/2
         let cardCI = cropCardByFeature(imageCI, feature: features[0])
         let context = CIContext(options: nil)
         let cgImage: CGImageRef = context.createCGImage(cardCI, fromRect: cardCI.extent)
