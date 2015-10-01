@@ -117,7 +117,7 @@ public class DRCCustomImagePickerController: UIImagePickerController, UIImagePic
         slopeTop = (slopeTop + bottomSlope)/2
         let wBottom = sqrt( x*x + y*y)
         
-        let degree = 180*(atan(Double(slopeTop)) / M_PI )
+        let degree = 180*(atan(Double(bottomSlope)) / M_PI )
         
         x = (f.topLeft.x - f.bottomLeft.x)
         y = (f.topLeft.y - f.bottomLeft.y)
@@ -126,8 +126,10 @@ public class DRCCustomImagePickerController: UIImagePickerController, UIImagePic
         y = (f.topRight.y - f.bottomRight.y)
         let hRight = sqrt( x*x + y*y)
 
-        h = (h + hRight)/2
-        w = (w + wBottom)/2
+//        h = (h + hRight)/2
+//        w = (w + wBottom)/2
+        h = max(h, hRight)
+        w = max(w, wBottom)
         let cardCI = cropCardByFeature(imageCI, feature: features[0])
         let context = CIContext(options: nil)
         let cgImage: CGImageRef = context.createCGImage(cardCI, fromRect: cardCI.extent)
@@ -138,7 +140,7 @@ public class DRCCustomImagePickerController: UIImagePickerController, UIImagePic
 //        let cardRotatedCI = CIImage(image: card)!
         let centerX = card.size.width / 2
         let centerY = card.size.height / 2
-        let cardRef = CGImageCreateWithImageInRect(card.CGImage, CGRectMake(centerX - w/2 - 8, centerY - h/2 - 5, w + 16, h + 10))
+        let cardRef = CGImageCreateWithImageInRect(card.CGImage, CGRectMake(centerX - w/2 , centerY - h/2, w , h ))
         let card2 = UIImage(CGImage: cardRef!)
 //        let newF = detector.featuresInImage(cardRotatedCI, options: opts) as! [CIRectangleFeature]
 //        
