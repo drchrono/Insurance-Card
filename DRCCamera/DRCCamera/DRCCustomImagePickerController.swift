@@ -18,6 +18,7 @@ public class DRCCustomImagePickerController: UIImagePickerController, UIImagePic
     public var enableImageDetecting:Bool = false
     public var customDelegate: DRCCustomImagePickerControllerDelegate?
     var parentVC: UIViewController?
+//    var method = 0
     override public func viewDidLoad() {
         super.viewDidLoad()
     }
@@ -40,7 +41,7 @@ public class DRCCustomImagePickerController: UIImagePickerController, UIImagePic
         overlayView?.frame = imagePicker.cameraOverlayView!.frame
         imagePicker.cameraOverlayView = overlayView
         overlayView?.delegate = self
-        
+//        overlayView?.method = self.method
         setCameraCenter()
         
         self.parentVC = parent
@@ -140,7 +141,8 @@ public class DRCCustomImagePickerController: UIImagePickerController, UIImagePic
         let resultImage = detectImage(image, features: features)
         let resultOverlay = detectImageWithOverlay(imageCI, features: features)
         self.overlay = resultOverlay
-        return resultImage
+//        return resultImage
+        return card2
 //        for f:CIRectangleFeature in features{
 //            var overlay = CIImage(color: CIColor(color: UIColor(red: 1, green: 0, blue: 0, alpha: 0.6)))
 //            overlay = overlay.imageByCroppingToRect(image.extent)

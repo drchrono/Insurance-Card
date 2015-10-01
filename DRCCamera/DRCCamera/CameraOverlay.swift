@@ -28,7 +28,7 @@ struct RectangleRatio {
 }
 
 class CameraOverlay: UIView {
-    let method = 0
+    var method = 0
     var delegate: CameraOverlayDelegate?
     @IBOutlet var saveButton: UIButton!
     @IBOutlet var cancelButton: UIButton!
@@ -36,8 +36,6 @@ class CameraOverlay: UIView {
     var ratio: RectangleRatio?
     
     override func drawRect(rect: CGRect) {
-        print(2)
-        // Drawing code
         if method == 0 {
             drawDirectly(rect)
         }else if method == 1 {

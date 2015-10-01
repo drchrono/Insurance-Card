@@ -28,12 +28,21 @@ class ViewController: UIViewController , DRCCustomImagePickerControllerDelegate{
     }
     var picker: DRCCustomImagePickerController?
 
+    @IBOutlet weak var click2: UIButton!
+    @IBAction func click2(sender: AnyObject) {
+        let customPicker = DRCCustomImagePickerController()
+        customPicker.customDelegate = self
+        customPicker.showImagePicker(inViewController: self)
+        customPicker.enableImageDetecting = true
+//        customPicker.method = 1
+        self.picker = customPicker
+    }
     @IBAction func click(sender: AnyObject) {
         let customPicker = DRCCustomImagePickerController()
         customPicker.customDelegate = self
         customPicker.showImagePicker(inViewController: self)
         customPicker.enableImageDetecting = true
-        
+//        customPicker.method = 0
         self.picker = customPicker
     }
     
