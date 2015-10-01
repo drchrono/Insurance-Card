@@ -17,6 +17,9 @@ class ViewController: UIViewController , DRCCustomImagePickerControllerDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+//        let rectView = CenterView(frame: CGRectInset(self.view.bounds, 100, 100))
+//        rectView.backgroundColor = UIColor.clearColor()
+//        self.view.addSubview(rectView)
     }
 
     override func didReceiveMemoryWarning() {

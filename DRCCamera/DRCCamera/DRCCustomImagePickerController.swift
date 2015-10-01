@@ -57,9 +57,6 @@ public class DRCCustomImagePickerController: UIImagePickerController, UIImagePic
 
     }
     
-//    public override func shouldAutorotate() -> Bool {
-//        return false
-//    }
     public func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         let image = info[UIImagePickerControllerOriginalImage] as! UIImage
         self.parentVC!.dismissViewControllerAnimated(true) { () -> Void in
@@ -106,12 +103,39 @@ public class DRCCustomImagePickerController: UIImagePickerController, UIImagePic
         if features.count > 1{
             print("we found \(features.count) features")
         }
+        //rotate it
+        let f = features[0]
+        var x = (f.topRight.x - f.topLeft.x)
+        var y = (f.topRight.y - f.topLeft.y)
+        let slope =  y/x
+        let degree = 180*(atan(Double(slope)) / M_PI )
+        let w = sqrt( x*x + y*y)
+        x = (f.topLeft.x - f.bottomLeft.x)
+        y = (f.topLeft.y - f.bottomLeft.y)
+        let h = sqrt( x*x + y*y)
+        //
         
         let cardCI = cropCardByFeature(imageCI, feature: features[0])
         let context = CIContext(options: nil)
         let cgImage: CGImageRef = context.createCGImage(cardCI, fromRect: cardCI.extent)
-        let card:UIImage = UIImage(CGImage: cgImage)
-        self.testImage = card
+        var card:UIImage = UIImage(CGImage: cgImage)
+    
+       
+        card = card.imageRotatedByDegrees(CGFloat(degree), flip: false)
+//        let cardRotatedCI = CIImage(image: card)!
+        let centerX = card.size.width / 2
+        let centerY = card.size.height / 2
+        let cardRef = CGImageCreateWithImageInRect(card.CGImage, CGRectMake(centerX - w/2 - 8, centerY - h/2 - 5, w + 16, h + 10))
+        let card2 = UIImage(CGImage: cardRef!)
+//        let newF = detector.featuresInImage(cardRotatedCI, options: opts) as! [CIRectangleFeature]
+//        
+//        let aa = cropCardByFeature(cardRotatedCI, feature: newF[0])
+//        let context2 = CIContext(options: nil)
+//        let aaImage: CGImageRef = context2.createCGImage(aa, fromRect: aa.extent)
+//        let card2:UIImage = UIImage(CGImage: aaImage)
+        
+        
+        self.testImage = card2
         
         let resultImage = detectImage(image, features: features)
         let resultOverlay = detectImageWithOverlay(imageCI, features: features)
@@ -137,6 +161,7 @@ public class DRCCustomImagePickerController: UIImagePickerController, UIImagePic
     }
     var overlay: UIImage?
     var testImage: UIImage?
+    
     func detectImageWithOverlay(ciImage:CIImage,features: [CIRectangleFeature]) -> UIImage{
         let f = features[0]
         var overlay = CIImage(color: CIColor(color: UIColor(red: 1, green: 0, blue: 0, alpha: 0.6)))
@@ -150,10 +175,10 @@ public class DRCCustomImagePickerController: UIImagePickerController, UIImagePic
                 "inputBottomRight": CIVector(CGPoint: f.bottomRight)]
         )
         
-        let result = overlay.imageByCompositingOverImage(ciImage)
-        return UIImage(CIImage: result)
+        let result = UIImage(CIImage:overlay.imageByCompositingOverImage(ciImage))
+        return result
     }
-    
+//    var degree:Double?
     func detectImage(image:UIImage ,features: [CIRectangleFeature]) -> UIImage{
         let featuresRect = features[0].bounds
         let imageRef = CGImageCreateWithImageInRect(image.CGImage, featuresRect)
