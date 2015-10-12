@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8191"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="testOverlay" customModule="DRCCamera" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" horizontalHuggingPriority="300" verticalHuggingPriority="300" horizontalCompressionResistancePriority="800" verticalCompressionResistancePriority="800" translatesAutoresizingMaskIntoConstraints="NO" id="nrd-qm-Nns" customClass="CenterView" customModule="DRCCamera" customModuleProvider="target">
+                    <rect key="frame" x="180" y="236" width="240" height="128"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="128" id="BhV-Wu-kCn"/>
+                        <constraint firstAttribute="width" constant="240" id="QsW-KA-gkm"/>
+                    </constraints>
+                </view>
+                <view contentMode="scaleToFill" horizontalHuggingPriority="256" verticalHuggingPriority="256" horizontalCompressionResistancePriority="754" verticalCompressionResistancePriority="753" translatesAutoresizingMaskIntoConstraints="NO" id="piP-mo-BTa">
+                    <rect key="frame" x="0.0" y="0.0" width="600" height="236"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </view>
+                <view contentMode="scaleToFill" horizontalHuggingPriority="255" verticalHuggingPriority="254" horizontalCompressionResistancePriority="754" verticalCompressionResistancePriority="755" translatesAutoresizingMaskIntoConstraints="NO" id="iM4-Zk-5mE">
+                    <rect key="frame" x="0.0" y="364" width="600" height="236"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="7RD-1n-mwG">
+                    <rect key="frame" x="0.0" y="236" width="180" height="128"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </view>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pf0-dE-6X3">
+                    <rect key="frame" x="420" y="236" width="180" height="128"/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </view>
+            </subviews>
+            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+            <constraints>
+                <constraint firstItem="iM4-Zk-5mE" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="2AK-GQ-YQv"/>
+                <constraint firstItem="7RD-1n-mwG" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="373-rW-Mv6"/>
+                <constraint firstAttribute="trailing" secondItem="pf0-dE-6X3" secondAttribute="trailing" id="3Uh-cn-lh4"/>
+                <constraint firstItem="pf0-dE-6X3" firstAttribute="top" secondItem="piP-mo-BTa" secondAttribute="bottom" id="3cE-yD-MDp"/>
+                <constraint firstItem="pf0-dE-6X3" firstAttribute="leading" secondItem="nrd-qm-Nns" secondAttribute="trailing" id="HF8-lr-uXR"/>
+                <constraint firstItem="nrd-qm-Nns" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="PDW-Kg-lk7"/>
+                <constraint firstItem="iM4-Zk-5mE" firstAttribute="top" secondItem="nrd-qm-Nns" secondAttribute="bottom" id="QxW-J0-46X"/>
+                <constraint firstAttribute="bottom" secondItem="iM4-Zk-5mE" secondAttribute="bottom" id="R3P-oL-5Oc"/>
+                <constraint firstItem="piP-mo-BTa" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="T2v-VR-5uO"/>
+                <constraint firstItem="iM4-Zk-5mE" firstAttribute="top" secondItem="pf0-dE-6X3" secondAttribute="bottom" id="XdG-W9-3XM"/>
+                <constraint firstItem="piP-mo-BTa" firstAttribute="top" secondItem="iN0-l3-epB" secondAttribute="top" id="Zat-Bz-MbE"/>
+                <constraint firstItem="7RD-1n-mwG" firstAttribute="trailing" secondItem="nrd-qm-Nns" secondAttribute="leading" id="agx-nA-81s"/>
+                <constraint firstItem="iM4-Zk-5mE" firstAttribute="top" secondItem="7RD-1n-mwG" secondAttribute="bottom" id="h7v-kU-yWL"/>
+                <constraint firstItem="7RD-1n-mwG" firstAttribute="top" secondItem="piP-mo-BTa" secondAttribute="bottom" id="hPf-LM-P5Z"/>
+                <constraint firstItem="nrd-qm-Nns" firstAttribute="top" secondItem="piP-mo-BTa" secondAttribute="bottom" id="t0f-ob-UOB"/>
+                <constraint firstAttribute="trailing" secondItem="iM4-Zk-5mE" secondAttribute="trailing" id="xkS-D8-rqf"/>
+                <constraint firstItem="nrd-qm-Nns" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="xmy-mE-ZlO"/>
+                <constraint firstAttribute="trailing" secondItem="piP-mo-BTa" secondAttribute="trailing" id="yMP-5K-hul"/>
+            </constraints>
+            <nil key="simulatedStatusBarMetrics"/>
+            <connections>
+                <outlet property="centerView" destination="nrd-qm-Nns" id="FvQ-4m-eeN"/>
+                <outlet property="height" destination="BhV-Wu-kCn" id="sC4-1y-DFP"/>
+                <outlet property="width" destination="QsW-KA-gkm" id="JYl-pO-o9m"/>
+            </connections>
+        </view>
+    </objects>
+</document>

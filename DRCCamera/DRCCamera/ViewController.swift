@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ViewController: UIViewController , DRCCustomImagePickerControllerDelegate{
+class ViewController: UIViewController , DRCCustomImagePickerControllerDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate{
 
     @IBOutlet weak var overlay: UIImageView!
     @IBOutlet weak var cropView: UIImageView!
@@ -30,12 +30,29 @@ class ViewController: UIViewController , DRCCustomImagePickerControllerDelegate{
 
     @IBOutlet weak var click2: UIButton!
     @IBAction func click2(sender: AnyObject) {
-        let customPicker = DRCCustomImagePickerController()
-        customPicker.customDelegate = self
-        customPicker.showImagePicker(inViewController: self)
-        customPicker.enableImageDetecting = true
-//        customPicker.method = 1
-        self.picker = customPicker
+        let imagePicker = UIImagePickerController()
+        let sourceType = UIImagePickerControllerSourceType.Camera
+        imagePicker.sourceType = sourceType
+        
+        var availableSource = UIImagePickerController.availableMediaTypesForSourceType(sourceType)
+        availableSource?.removeLast()
+        imagePicker.mediaTypes = availableSource!
+        
+        imagePicker.delegate = self
+        imagePicker.showsCameraControls = false
+        let bundle = NSBundle(forClass: DRCCustomImagePickerController.classForCoder())
+        let xibs = bundle.loadNibNamed("TestOverlay", owner: nil, options: nil)
+        
+        //        let xibs = NSBundle.mainBundle().loadNibNamed("CameraOverlay", owner: nil, options: nil)
+        let overlayView = xibs.first as? testOverlay
+        overlayView?.frame = imagePicker.cameraOverlayView!.frame
+        imagePicker.cameraOverlayView = overlayView
+//        overlayView?.delegate = self
+        //        overlayView?.method = self.method
+//        setCameraCenter()
+        
+//        self.parentVC = parent
+        self.presentViewController(imagePicker, animated: true, completion: nil)
     }
     @IBAction func click(sender: AnyObject) {
         let customPicker = DRCCustomImagePickerController()
