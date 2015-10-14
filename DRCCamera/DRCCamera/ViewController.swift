@@ -10,6 +10,7 @@ import UIKit
 
 class ViewController: UIViewController , DRCCustomImagePickerControllerDelegate{
     var photos = [UIImage]()
+    var strs = [String]()
     @IBOutlet weak var overlay: UIImageView!
     @IBOutlet weak var cropView: UIImageView!
     @IBOutlet weak var detectView: UIImageView!
@@ -110,22 +111,26 @@ class ViewController: UIViewController , DRCCustomImagePickerControllerDelegate{
         tesseract.engineMode = .TesseractCubeCombined
         
         // 4
-        tesseract.pageSegmentationMode = .Auto
-        
+//        tesseract.pageSegmentationMode = .Auto
+        tesseract.pageSegmentationMode = G8PageSegmentationMode.SingleLine
         // 5
         tesseract.maximumRecognitionTime = 60.0
-        
+//        tesseract.variableValueForKey(<#T##key: String!##String!#>)
         // 6
         let imageG8 = image.g8_blackAndWhite()
         let imageG82 = image.g8_grayScale()
-        print("iamgeG8: \(imageG8)")
-        print("image: \(image)")
+//        print("iamgeG8: \(imageG8)")
+//        print("image: \(image)")
 //        self.overlay.image = imageG8
         tesseract.image = imageG8
         tesseract.recognize()
+//        let operation = G8RecognitionOperation()
         
         // 7
-        print("Detected :     \(tesseract.recognizedText)")
+        print("Detected :     ==\(tesseract.recognizedText)")
+        
+        let text = tesseract.recognizedText
+        self.strs.append(text)
         
     }
     func cropCardByFeature(image: CIImage, feature: CITextFeature) -> CIImage{
@@ -154,6 +159,7 @@ class ViewController: UIViewController , DRCCustomImagePickerControllerDelegate{
         if segue.identifier == "detail"{
             let dest = segue.destinationViewController as! TableViewController
             dest.images = self.photos
+            dest.strs = self.strs
         }
     }
 }

@@ -10,6 +10,7 @@ import UIKit
 
 class TableViewCell: UITableViewCell {
 
+    @IBOutlet weak var result: UILabel!
     @IBOutlet weak var filter: UIImageView!
     override func awakeFromNib() {
         super.awakeFromNib()

@@ -126,18 +126,35 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
                                         <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="7kj-sw-hzF">
-                                            <rect key="frame" x="8" y="8" width="584" height="183"/>
+                                            <rect key="frame" x="8" y="8" width="584" height="156"/>
                                         </imageView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="69z-xM-sqV">
+                                            <rect key="frame" x="279" y="170" width="42" height="21"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <constraints>
+                                        <constraint firstItem="69z-xM-sqV" firstAttribute="centerX" secondItem="IaW-oS-MXu" secondAttribute="centerX" id="7GF-Zr-rrE"/>
                                         <constraint firstAttribute="trailingMargin" secondItem="7kj-sw-hzF" secondAttribute="trailing" id="ArB-kk-qGP"/>
                                         <constraint firstAttribute="bottomMargin" secondItem="7kj-sw-hzF" secondAttribute="bottom" id="EI5-5f-Rf6"/>
+                                        <constraint firstItem="69z-xM-sqV" firstAttribute="top" secondItem="7kj-sw-hzF" secondAttribute="bottom" constant="6" id="JyP-RF-Bd6"/>
                                         <constraint firstItem="7kj-sw-hzF" firstAttribute="leading" secondItem="IaW-oS-MXu" secondAttribute="leadingMargin" id="fYQ-uT-xRx"/>
+                                        <constraint firstItem="69z-xM-sqV" firstAttribute="centerY" secondItem="IaW-oS-MXu" secondAttribute="centerY" id="l9n-Z5-veo"/>
                                         <constraint firstItem="7kj-sw-hzF" firstAttribute="top" secondItem="IaW-oS-MXu" secondAttribute="topMargin" id="nV8-2o-HgA"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="69z-xM-sqV" secondAttribute="bottom" id="o6A-bV-nXX"/>
                                     </constraints>
+                                    <variation key="default">
+                                        <mask key="constraints">
+                                            <exclude reference="EI5-5f-Rf6"/>
+                                            <exclude reference="l9n-Z5-veo"/>
+                                        </mask>
+                                    </variation>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="filter" destination="7kj-sw-hzF" id="GuA-tK-xHw"/>
+                                    <outlet property="result" destination="69z-xM-sqV" id="r31-jC-vwo"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>

@@ -10,6 +10,7 @@ import UIKit
 
 class TableViewController: UITableViewController {
     var images = [UIImage]()
+    var strs = [String]()
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -42,7 +43,7 @@ class TableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCellWithIdentifier("cell", forIndexPath: indexPath) as! TableViewCell
         cell.filter.image = images[indexPath.row]
         // Configure the cell...
-
+        cell.result.text = strs[indexPath.row]
         return cell
     }
     
