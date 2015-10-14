@@ -98,6 +98,8 @@ class ImageHandler {
         
         return imageCopy
     }
+    
+    
 }
 
 extension UIImage{

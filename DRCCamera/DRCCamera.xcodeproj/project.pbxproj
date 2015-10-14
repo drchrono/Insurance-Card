@@ -7,7 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3E8F3CE31BBDA82100E284DD /* CenterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8F3CE21BBDA82100E284DD /* CenterView.swift */; settings = {ASSET_TAGS = (); }; };
+		3E00F4E11BCEE7260059A6B5 /* TesseractOCR.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E00F4E01BCEE7260059A6B5 /* TesseractOCR.framework */; };
+		3E00F4E31BCEE7310059A6B5 /* tessdata in Resources */ = {isa = PBXBuildFile; fileRef = 3E00F4E21BCEE7310059A6B5 /* tessdata */; };
+		3E00F4E51BCEE7750059A6B5 /* CoreImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E00F4E41BCEE7750059A6B5 /* CoreImage.framework */; };
+		3E00F4E71BCEE7880059A6B5 /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = 3E00F4E61BCEE7880059A6B5 /* libstdc++.tbd */; };
+		3E8F3CE31BBDA82100E284DD /* CenterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8F3CE21BBDA82100E284DD /* CenterView.swift */; };
 		3E8F3CE41BBDABEA00E284DD /* CenterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E8F3CE21BBDA82100E284DD /* CenterView.swift */; };
 		3ECC6F891BB9A82F00E5BE7A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECC6F881BB9A82F00E5BE7A /* AppDelegate.swift */; };
 		3ECC6F8B1BB9A82F00E5BE7A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECC6F8A1BB9A82F00E5BE7A /* ViewController.swift */; };
@@ -16,20 +20,21 @@
 		3ECC6F931BB9A82F00E5BE7A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3ECC6F911BB9A82F00E5BE7A /* LaunchScreen.storyboard */; };
 		3ECC6F9E1BB9A82F00E5BE7A /* DRCCameraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECC6F9D1BB9A82F00E5BE7A /* DRCCameraTests.swift */; };
 		3ECC6FA91BB9A82F00E5BE7A /* DRCCameraUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECC6FA81BB9A82F00E5BE7A /* DRCCameraUITests.swift */; };
-		3ECC6FBC1BB9A85700E5BE7A /* CameraOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECC6FB71BB9A85700E5BE7A /* CameraOverlay.swift */; settings = {ASSET_TAGS = (); }; };
-		3ECC6FBD1BB9A85700E5BE7A /* CameraOverlay.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3ECC6FB81BB9A85700E5BE7A /* CameraOverlay.xib */; settings = {ASSET_TAGS = (); }; };
-		3ECC6FBE1BB9A85700E5BE7A /* DRCCustomImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECC6FB91BB9A85700E5BE7A /* DRCCustomImagePickerController.swift */; settings = {ASSET_TAGS = (); }; };
-		3ECC6FBF1BB9A85700E5BE7A /* Graph.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ECC6FBB1BB9A85700E5BE7A /* Graph.m */; settings = {ASSET_TAGS = (); }; };
+		3ECC6FBC1BB9A85700E5BE7A /* CameraOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECC6FB71BB9A85700E5BE7A /* CameraOverlay.swift */; };
+		3ECC6FBD1BB9A85700E5BE7A /* CameraOverlay.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3ECC6FB81BB9A85700E5BE7A /* CameraOverlay.xib */; };
+		3ECC6FBE1BB9A85700E5BE7A /* DRCCustomImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECC6FB91BB9A85700E5BE7A /* DRCCustomImagePickerController.swift */; };
 		3EE87C361BB9C15B00F0D4CE /* DRCCameraSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EE87C351BB9C15B00F0D4CE /* DRCCameraSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3EE87C3D1BB9C15B00F0D4CE /* DRCCameraSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EE87C331BB9C15B00F0D4CE /* DRCCameraSwift.framework */; settings = {ASSET_TAGS = (); }; };
+		3EE87C3D1BB9C15B00F0D4CE /* DRCCameraSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EE87C331BB9C15B00F0D4CE /* DRCCameraSwift.framework */; };
 		3EE87C441BB9C15B00F0D4CE /* DRCCameraSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE87C431BB9C15B00F0D4CE /* DRCCameraSwiftTests.swift */; };
 		3EE87C481BB9C15B00F0D4CE /* DRCCameraSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EE87C331BB9C15B00F0D4CE /* DRCCameraSwift.framework */; };
 		3EE87C491BB9C15B00F0D4CE /* DRCCameraSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3EE87C331BB9C15B00F0D4CE /* DRCCameraSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3EE87C511BB9C19300F0D4CE /* CameraOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECC6FB71BB9A85700E5BE7A /* CameraOverlay.swift */; };
 		3EE87C521BB9C19300F0D4CE /* CameraOverlay.xib in Sources */ = {isa = PBXBuildFile; fileRef = 3ECC6FB81BB9A85700E5BE7A /* CameraOverlay.xib */; };
 		3EE87C531BB9C19300F0D4CE /* DRCCustomImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECC6FB91BB9A85700E5BE7A /* DRCCustomImagePickerController.swift */; };
-		3EE87C581BB9C22800F0D4CE /* ImageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE87C571BB9C22800F0D4CE /* ImageHandler.swift */; settings = {ASSET_TAGS = (); }; };
+		3EE87C581BB9C22800F0D4CE /* ImageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE87C571BB9C22800F0D4CE /* ImageHandler.swift */; };
 		3EE87C591BB9CB7A00F0D4CE /* ImageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE87C571BB9C22800F0D4CE /* ImageHandler.swift */; };
+		3EFFE0111BCEFF3F00D52B48 /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFFE0101BCEFF3F00D52B48 /* TableViewCell.swift */; settings = {ASSET_TAGS = (); }; };
+		3EFFE0131BCEFFA900D52B48 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFFE0121BCEFFA900D52B48 /* TableViewController.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +90,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3E00F4E01BCEE7260059A6B5 /* TesseractOCR.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = TesseractOCR.framework; sourceTree = "<group>"; };
+		3E00F4E21BCEE7310059A6B5 /* tessdata */ = {isa = PBXFileReference; lastKnownFileType = folder; path = tessdata; sourceTree = "<group>"; };
+		3E00F4E41BCEE7750059A6B5 /* CoreImage.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreImage.framework; path = System/Library/Frameworks/CoreImage.framework; sourceTree = SDKROOT; };
+		3E00F4E61BCEE7880059A6B5 /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
+		3E00F4EE1BCEEB810059A6B5 /* DRCCamera-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DRCCamera-Bridging-Header.h"; sourceTree = "<group>"; };
 		3E8F3CE21BBDA82100E284DD /* CenterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CenterView.swift; sourceTree = "<group>"; };
 		3ECC6F851BB9A82F00E5BE7A /* DRCCamera.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DRCCamera.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3ECC6F881BB9A82F00E5BE7A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -99,12 +109,9 @@
 		3ECC6FA41BB9A82F00E5BE7A /* DRCCameraUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DRCCameraUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3ECC6FA81BB9A82F00E5BE7A /* DRCCameraUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DRCCameraUITests.swift; sourceTree = "<group>"; };
 		3ECC6FAA1BB9A82F00E5BE7A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3ECC6FB61BB9A85600E5BE7A /* DRCCamera-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DRCCamera-Bridging-Header.h"; sourceTree = "<group>"; };
 		3ECC6FB71BB9A85700E5BE7A /* CameraOverlay.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraOverlay.swift; sourceTree = "<group>"; };
 		3ECC6FB81BB9A85700E5BE7A /* CameraOverlay.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CameraOverlay.xib; sourceTree = "<group>"; };
 		3ECC6FB91BB9A85700E5BE7A /* DRCCustomImagePickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DRCCustomImagePickerController.swift; sourceTree = "<group>"; };
-		3ECC6FBA1BB9A85700E5BE7A /* Graph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Graph.h; sourceTree = "<group>"; };
-		3ECC6FBB1BB9A85700E5BE7A /* Graph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Graph.m; sourceTree = "<group>"; };
 		3EE87C331BB9C15B00F0D4CE /* DRCCameraSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DRCCameraSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EE87C351BB9C15B00F0D4CE /* DRCCameraSwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DRCCameraSwift.h; sourceTree = "<group>"; };
 		3EE87C371BB9C15B00F0D4CE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -112,6 +119,8 @@
 		3EE87C431BB9C15B00F0D4CE /* DRCCameraSwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DRCCameraSwiftTests.swift; sourceTree = "<group>"; };
 		3EE87C451BB9C15B00F0D4CE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3EE87C571BB9C22800F0D4CE /* ImageHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageHandler.swift; sourceTree = "<group>"; };
+		3EFFE0101BCEFF3F00D52B48 /* TableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
+		3EFFE0121BCEFFA900D52B48 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,6 +128,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3E00F4E71BCEE7880059A6B5 /* libstdc++.tbd in Frameworks */,
+				3E00F4E51BCEE7750059A6B5 /* CoreImage.framework in Frameworks */,
+				3E00F4E11BCEE7260059A6B5 /* TesseractOCR.framework in Frameworks */,
 				3EE87C481BB9C15B00F0D4CE /* DRCCameraSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -185,17 +197,21 @@
 				3ECC6F881BB9A82F00E5BE7A /* AppDelegate.swift */,
 				3ECC6F8A1BB9A82F00E5BE7A /* ViewController.swift */,
 				3ECC6F8C1BB9A82F00E5BE7A /* Main.storyboard */,
+				3EFFE0101BCEFF3F00D52B48 /* TableViewCell.swift */,
+				3EFFE0121BCEFFA900D52B48 /* TableViewController.swift */,
 				3ECC6FB71BB9A85700E5BE7A /* CameraOverlay.swift */,
 				3ECC6FB81BB9A85700E5BE7A /* CameraOverlay.xib */,
 				3ECC6FB91BB9A85700E5BE7A /* DRCCustomImagePickerController.swift */,
 				3E8F3CE21BBDA82100E284DD /* CenterView.swift */,
 				3EE87C571BB9C22800F0D4CE /* ImageHandler.swift */,
-				3ECC6FBA1BB9A85700E5BE7A /* Graph.h */,
-				3ECC6FBB1BB9A85700E5BE7A /* Graph.m */,
 				3ECC6F8F1BB9A82F00E5BE7A /* Assets.xcassets */,
 				3ECC6F911BB9A82F00E5BE7A /* LaunchScreen.storyboard */,
 				3ECC6F941BB9A82F00E5BE7A /* Info.plist */,
-				3ECC6FB61BB9A85600E5BE7A /* DRCCamera-Bridging-Header.h */,
+				3E00F4E61BCEE7880059A6B5 /* libstdc++.tbd */,
+				3E00F4E41BCEE7750059A6B5 /* CoreImage.framework */,
+				3E00F4E21BCEE7310059A6B5 /* tessdata */,
+				3E00F4E01BCEE7260059A6B5 /* TesseractOCR.framework */,
+				3E00F4EE1BCEEB810059A6B5 /* DRCCamera-Bridging-Header.h */,
 			);
 			path = DRCCamera;
 			sourceTree = "<group>";
@@ -404,6 +420,7 @@
 			files = (
 				3ECC6F931BB9A82F00E5BE7A /* LaunchScreen.storyboard in Resources */,
 				3ECC6FBD1BB9A85700E5BE7A /* CameraOverlay.xib in Resources */,
+				3E00F4E31BCEE7310059A6B5 /* tessdata in Resources */,
 				3ECC6F901BB9A82F00E5BE7A /* Assets.xcassets in Resources */,
 				3ECC6F8E1BB9A82F00E5BE7A /* Main.storyboard in Resources */,
 			);
@@ -447,9 +464,10 @@
 				3ECC6FBE1BB9A85700E5BE7A /* DRCCustomImagePickerController.swift in Sources */,
 				3E8F3CE31BBDA82100E284DD /* CenterView.swift in Sources */,
 				3ECC6F8B1BB9A82F00E5BE7A /* ViewController.swift in Sources */,
+				3EFFE0131BCEFFA900D52B48 /* TableViewController.swift in Sources */,
 				3ECC6F891BB9A82F00E5BE7A /* AppDelegate.swift in Sources */,
-				3ECC6FBF1BB9A85700E5BE7A /* Graph.m in Sources */,
 				3EE87C581BB9C22800F0D4CE /* ImageHandler.swift in Sources */,
+				3EFFE0111BCEFF3F00D52B48 /* TableViewCell.swift in Sources */,
 				3ECC6FBC1BB9A85700E5BE7A /* CameraOverlay.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -560,6 +578,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_BITCODE = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -605,6 +624,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_BITCODE = NO;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -627,13 +647,21 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/DRCCamera",
+				);
 				INFOPLIST_FILE = DRCCamera/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "-lstdc++";
 				PRODUCT_BUNDLE_IDENTIFIER = drchrono.DRCCamera;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "DRCCamera/DRCCamera-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
@@ -643,13 +671,21 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LIBRARY = "compiler-default";
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/DRCCamera",
+				);
 				INFOPLIST_FILE = DRCCamera/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_LDFLAGS = "-lstdc++";
 				PRODUCT_BUNDLE_IDENTIFIER = drchrono.DRCCamera;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_INSTALL_OBJC_HEADER = YES;
 				SWIFT_OBJC_BRIDGING_HEADER = "DRCCamera/DRCCamera-Bridging-Header.h";
 			};
 			name = Release;
@@ -705,6 +741,7 @@
 		3EE87C4B1BB9C15B00F0D4CE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
@@ -717,6 +754,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = drchrono.DRCCameraSwift;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -725,6 +763,7 @@
 		3EE87C4C1BB9C15B00F0D4CE /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CURRENT_PROJECT_VERSION = 1;
 				DEFINES_MODULE = YES;
