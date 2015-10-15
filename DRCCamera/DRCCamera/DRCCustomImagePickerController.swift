@@ -156,7 +156,7 @@ public class DRCCustomImagePickerController: UIImagePickerController, UIImagePic
         let resultOverlay = detectImageWithOverlay(imageCI, features: features)
         self.overlay = resultOverlay
 //        return resultImage
-        return card2
+//        return card2
 //        for f:CIRectangleFeature in features{
 //            var overlay = CIImage(color: CIColor(color: UIColor(red: 1, green: 0, blue: 0, alpha: 0.6)))
 //            overlay = overlay.imageByCroppingToRect(image.extent)
@@ -165,7 +165,7 @@ public class DRCCustomImagePickerController: UIImagePickerController, UIImagePic
 //            result = overlay.imageByCompositingOverImage(result)
 //
 //        }
-        
+        return ImageHandler.getImageCorrectedPerspectiv(imageCI, feature: f)
 //        let result2 = image
 //        var overlay = CIImage(color: CIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 0.7))
 //        overlay = overlay.imageByCroppingToRect(features[0].bounds)

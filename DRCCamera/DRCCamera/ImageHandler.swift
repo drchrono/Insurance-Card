@@ -98,6 +98,19 @@ class ImageHandler {
         
         return imageCopy
     }
+    
+    
+    class func getImageCorrectedPerspectiv(image: CIImage , feature f: CIRectangleFeature) -> UIImage{
+        let correctImage = image.imageByApplyingFilter("CIPerspectiveCorrection", withInputParameters: [
+            "inputTopLeft": CIVector(CGPoint: f.topLeft),
+            "inputTopRight": CIVector(CGPoint: f.topRight),
+            "inputBottomLeft": CIVector(CGPoint: f.bottomLeft),
+            "inputBottomRight": CIVector(CGPoint: f.bottomRight)])
+        let context = CIContext(options: nil)
+        let correctRef = context.createCGImage(correctImage, fromRect: correctImage.extent)
+        let correctUIImage = UIImage(CGImage: correctRef)
+        return correctUIImage
+    }
 }
 
 extension UIImage{
