@@ -175,8 +175,8 @@ public class DRCCustomImagePickerController: UIImagePickerController, UIImagePic
         
 
     }
-    var overlay: UIImage?
-    var testImage: UIImage?
+    public var overlay: UIImage?
+    public var testImage: UIImage?
     
     func detectImageWithOverlay(ciImage:CIImage,features: [CIRectangleFeature]) -> UIImage{
         let f = features[0]
