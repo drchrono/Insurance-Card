@@ -48,7 +48,6 @@ class CameraOverlay: UIView {
     private func drawDirectly(rect: CGRect) {
         UIColor(red: 0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 0.3).setFill()
         UIRectFill(rect)
-    
         print("######")
         print("width: \(rect.size.width)       height:\(rect.size.height)")
         let result = calculatePosition()
@@ -103,7 +102,6 @@ class CameraOverlay: UIView {
 //        path.lineWidth = 1
 //        UIColor.whiteColor().setStroke()
 //        path.stroke()
-        
         
         self.bringSubviewToFront(self.rectView!)
         self.bringSubviewToFront(self.saveButton)

@@ -9,8 +9,10 @@
 import UIKit
 
 class CenterView: UIView {
-
     
+    let b = test()
+    let c = OCViewController()
+//    let a = G8Tesseract()
     override func drawRect(rect: CGRect) {
         let path = UIBezierPath(roundedRect: rect, cornerRadius: kCornerRadius)
         path.lineWidth = 1

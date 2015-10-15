@@ -6,10 +6,9 @@
 //  Copyright © 2015 Kan Chen. All rights reserved.
 //
 
-import Foundation
 import UIKit
 
-class ImageHandler {
+class ImageHandler{
     class func scaleAndRotateImage(image : UIImage) -> UIImage{
         let kMaxResolution:CGFloat = 8000
         

@@ -17,3 +17,5 @@ FOUNDATION_EXPORT const unsigned char DRCCameraSwiftVersionString[];
 // In this header, you should import all the public headers of your framework using statements like #import <DRCCameraSwift/PublicHeader.h>
 
 
+#import <DRCCameraSwift/test.h>
+#import <DRCCameraSwift/OCViewController.h>

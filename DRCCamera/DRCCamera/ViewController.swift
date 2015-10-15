@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import DRCCameraSwift
 
 class ViewController: UIViewController , DRCCustomImagePickerControllerDelegate{
     var photos = [UIImage]()
@@ -22,6 +23,8 @@ class ViewController: UIViewController , DRCCustomImagePickerControllerDelegate{
 //        rectView.backgroundColor = UIColor.clearColor()
 //        self.view.addSubview(rectView)
 //        performImageRecognition(UIImage(named: "Lenore")!)
+    
+        
     }
 
     override func didReceiveMemoryWarning() {
