@@ -51,6 +51,8 @@ class ViewController: UIViewController , DRCCustomImagePickerControllerDelegate{
         self.picker = customPicker
     }
     
+    var result = [String: String]()
+    
     func customImagePickerDidFinishPickingImage(rectImage: UIImage, detectedRectImage: UIImage?) {
         imageView.image = rectImage.g8_grayScale()
         detectView.image = detectedRectImage
@@ -66,45 +68,73 @@ class ViewController: UIViewController , DRCCustomImagePickerControllerDelegate{
             
             print("has \(features.count) fs")
             for feature in features{
-                var overlay = CIImage(color: CIColor(color: UIColor(red: 1, green: 0, blue: 0, alpha: 0.7)))
-                overlay = overlay.imageByCroppingToRect(imageci.extent)
+                if isFinished {
+                    break
+                }
+//                var overlay = CIImage(color: CIColor(color: UIColor(red: 1, green: 0, blue: 0, alpha: 0.7)))
+//                overlay = overlay.imageByCroppingToRect(imageci.extent)
                 let f = feature
-//                let f = features[0]
-                //            let topLeft = CGPoint(x: f.topLeft.x - 5, y: f.topLeft.y - 5)
-                //            let topRight = CGPoint(x: f.topRight.x + 5, y: f.topRight.y - 5)
-                //            let bottomLeft = CGPoint(x: f.bottomLeft.x - 5 , y: f.bottomLeft.y + 5)
-                //            let bottomRight = CGPoint(x: f.bottomRight.x + 5, y: f.bottomRight.y + 5)
-                overlay = overlay.imageByApplyingFilter("CIPerspectiveTransformWithExtent",
-                    withInputParameters: ["inputExtent": CIVector(CGRect: imageci.extent),
-                        "inputTopLeft": CIVector(CGPoint: f.topLeft),
-                        "inputTopRight": CIVector(CGPoint: f.topRight),
-                        "inputBottomLeft": CIVector(CGPoint: f.bottomLeft),
-                        "inputBottomRight": CIVector(CGPoint: f.bottomRight)]
-                )
-                let resultci = overlay.imageByCompositingOverImage(imageci)
-                let result = UIImage(CIImage: resultci)
-                self.overlay.image = result
                 
-                let textRect = cropCardByFeature(imageci, feature: f)
+//                overlay = overlay.imageByApplyingFilter("CIPerspectiveTransformWithExtent",
+//                    withInputParameters: ["inputExtent": CIVector(CGRect: imageci.extent),
+//                        "inputTopLeft": CIVector(CGPoint: f.topLeft),
+//                        "inputTopRight": CIVector(CGPoint: f.topRight),
+//                        "inputBottomLeft": CIVector(CGPoint: f.bottomLeft),
+//                        "inputBottomRight": CIVector(CGPoint: f.bottomRight)]
+//                )
+//                let resultci = overlay.imageByCompositingOverImage(imageci)
+//                let result = UIImage(CIImage: resultci)
+//                self.overlay.image = result
+                
+                // filter right part
+                if f.topLeft.x > imageci.extent.width * 0.5 {
+                    continue
+                }
+                // filter height
+                
+                let textRect:CIImage = cropCardByFeature(imageci, feature: f)
                 let context = CIContext(options: nil)
                 let cgImage: CGImageRef = context.createCGImage(textRect, fromRect: textRect.extent)
                 let textUIImage = UIImage(CGImage: cgImage)
+                
                 performImageRecognition(textUIImage)
-                test = textUIImage
-                self.photos.append(textUIImage)
             }
         }
         
-        cropView.image = test
+    }
+    var inSteps = 0
+    var isFinished = false
+    
+    func isPotentialIdString(text:String) -> Bool{
+        let len = text.characters.count
+        let pureDigitPattern = try! NSRegularExpression(pattern: "\\d{\(len)}", options: [])
+        let digitMixCapitalPattern = try! NSRegularExpression(pattern: "(\\d|[A-Z]){3}\\d(\\d|[A-Z])*", options: [])
         
-//        if let image = picker?.overlay{
-//            overlay.image = image
-//        }
+        if let _ = pureDigitPattern.firstMatchInString(text, options: [], range: NSRange(location: 0, length: len)) {
+            return true
+        }
+        if let _ = digitMixCapitalPattern.firstMatchInString(text, options: [], range: NSRange(location: 0, length: len)) {
+            return true
+        }
+        
+        return false
     }
     
-    func performImageRecognition(image: UIImage) {
+    func isID(text:String) -> Bool{
+        let idReg = try! NSRegularExpression(pattern: "(i|I)(d|D)(entification)*", options: [])
+        if let _ = idReg.firstMatchInString(text, options: [], range: NSRange(location: 0, length: text.characters.count)) {
+            return true
+        }
+        return false
+    }
+    
+    func isGroup(text:String) -> Bool{
+        return true
+    }
+    
+    func performImageRecognition(image: UIImage) -> String{
         // 1
-        
+        let start = NSDate.timeIntervalSinceReferenceDate()
         let tesseract = G8Tesseract()
         
         // 2
@@ -119,22 +149,53 @@ class ViewController: UIViewController , DRCCustomImagePickerControllerDelegate{
         // 5
         tesseract.maximumRecognitionTime = 60.0
 //        tesseract.variableValueForKey(<#T##key: String!##String!#>)
+        var end = NSDate.timeIntervalSinceReferenceDate()
+        var interval = Double(end - start)
+        print("Setup cost time: \(interval)")
         // 6
         let imageG8 = image.g8_blackAndWhite()
-        let imageG82 = image.g8_grayScale()
-//        print("iamgeG8: \(imageG8)")
-//        print("image: \(image)")
-//        self.overlay.image = imageG8
+
         tesseract.image = imageG8
         tesseract.recognize()
-//        let operation = G8RecognitionOperation()
         
         // 7
-        print("Detected :     ==\(tesseract.recognizedText)")
-        
+        print("Detected :     ==\(tesseract.recognizedText)===")
+        end = NSDate.timeIntervalSinceReferenceDate()
+        interval = Double(end - start)
+        print("OCR cost time: \(interval)")
         let text = tesseract.recognizedText
-        self.strs.append(text)
         
+        if inSteps == 0 && isID(text){
+            if isPotentialIdString(text) {
+                let strs = text.characters.split(":").map({ String($0) })
+                for index in 1..<strs.count{
+                    if isPotentialIdString(strs[index]) {
+                        self.strs.append(strs[index])
+                        self.photos.append(image)
+                        self.isFinished = true
+                        return strs[index]
+                    }
+                }
+            }else{
+                inSteps = 2
+            }
+        }
+        
+        if inSteps > 0 {
+            if isPotentialIdString(text) {
+                self.strs.append(text)
+                self.photos.append(image)
+                self.isFinished = true
+                return text
+            }
+            inSteps--
+        }
+        
+//        if isPotentialIdString(text){
+//            self.strs.append(text)
+//            self.photos.append(image)
+//        }
+        return text
     }
     func cropCardByFeature(image: CIImage, feature: CITextFeature) -> CIImage{
         var card: CIImage
