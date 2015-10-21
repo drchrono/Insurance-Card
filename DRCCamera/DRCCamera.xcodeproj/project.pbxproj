@@ -28,6 +28,7 @@
 		3EE87C521BB9C19300F0D4CE /* CameraOverlay.xib in Sources */ = {isa = PBXBuildFile; fileRef = 3ECC6FB81BB9A85700E5BE7A /* CameraOverlay.xib */; };
 		3EE87C531BB9C19300F0D4CE /* DRCCustomImagePickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECC6FB91BB9A85700E5BE7A /* DRCCustomImagePickerController.swift */; };
 		3EE87C591BB9CB7A00F0D4CE /* ImageHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE87C571BB9C22800F0D4CE /* ImageHandler.swift */; };
+		3EF3A6931BD7588E00670EC6 /* ImageOCR.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EF3A6921BD7588E00670EC6 /* ImageOCR.swift */; settings = {ASSET_TAGS = (); }; };
 		3EFFE0111BCEFF3F00D52B48 /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFFE0101BCEFF3F00D52B48 /* TableViewCell.swift */; settings = {ASSET_TAGS = (); }; };
 		3EFFE0131BCEFFA900D52B48 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFFE0121BCEFFA900D52B48 /* TableViewController.swift */; settings = {ASSET_TAGS = (); }; };
 		3EFFE01D1BD017DB00D52B48 /* ImageProcessor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EFFE01C1BD017DB00D52B48 /* ImageProcessor.swift */; settings = {ASSET_TAGS = (); }; };
@@ -119,6 +120,7 @@
 		3EE87C431BB9C15B00F0D4CE /* DRCCameraSwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DRCCameraSwiftTests.swift; sourceTree = "<group>"; };
 		3EE87C451BB9C15B00F0D4CE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3EE87C571BB9C22800F0D4CE /* ImageHandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ImageHandler.swift; path = ../DRCCamera/ImageHandler.swift; sourceTree = "<group>"; };
+		3EF3A6921BD7588E00670EC6 /* ImageOCR.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageOCR.swift; sourceTree = "<group>"; };
 		3EFFE0101BCEFF3F00D52B48 /* TableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
 		3EFFE0121BCEFFA900D52B48 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		3EFFE0161BD0134800D52B48 /* OCViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OCViewController.h; path = ../DRCCamera/OCViewController.h; sourceTree = "<group>"; };
@@ -202,6 +204,7 @@
 				3ECC6F881BB9A82F00E5BE7A /* AppDelegate.swift */,
 				3ECC6F8A1BB9A82F00E5BE7A /* ViewController.swift */,
 				3ECC6F8C1BB9A82F00E5BE7A /* Main.storyboard */,
+				3EF3A6921BD7588E00670EC6 /* ImageOCR.swift */,
 				3EFFE0101BCEFF3F00D52B48 /* TableViewCell.swift */,
 				3EFFE0121BCEFFA900D52B48 /* TableViewController.swift */,
 				3EFFE01C1BD017DB00D52B48 /* ImageProcessor.swift */,
@@ -476,6 +479,7 @@
 				3ECC6F8B1BB9A82F00E5BE7A /* ViewController.swift in Sources */,
 				3EFFE0131BCEFFA900D52B48 /* TableViewController.swift in Sources */,
 				3ECC6F891BB9A82F00E5BE7A /* AppDelegate.swift in Sources */,
+				3EF3A6931BD7588E00670EC6 /* ImageOCR.swift in Sources */,
 				3EFFE0111BCEFF3F00D52B48 /* TableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

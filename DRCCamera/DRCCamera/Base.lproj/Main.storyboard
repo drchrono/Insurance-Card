@@ -68,6 +68,9 @@
                                     <action selector="clickedDetail:" destination="BYZ-38-t0r" eventType="touchUpInside" id="VXy-Br-bLt"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="z8t-5k-v5O">
+                                <rect key="frame" x="560" y="72" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
@@ -75,6 +78,7 @@
                             <constraint firstItem="i8p-Rd-lAm" firstAttribute="top" secondItem="cZ8-Zv-esZ" secondAttribute="bottom" constant="34" id="2oW-Dx-OLk"/>
                             <constraint firstItem="di2-G6-Doq" firstAttribute="top" secondItem="8nq-vE-lwQ" secondAttribute="bottom" constant="22" id="4eF-0y-68s"/>
                             <constraint firstItem="8nq-vE-lwQ" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="8R4-Za-YzZ"/>
+                            <constraint firstItem="z8t-5k-v5O" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="9qG-fK-bMh"/>
                             <constraint firstItem="8nq-vE-lwQ" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="OIW-wB-hhK"/>
                             <constraint firstItem="HC2-eG-29y" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="SDc-F0-cN8"/>
                             <constraint firstItem="nJs-kk-Ym8" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="ShV-C0-6P8"/>
@@ -82,6 +86,7 @@
                             <constraint firstItem="di2-G6-Doq" firstAttribute="top" secondItem="fFI-i1-vD6" secondAttribute="bottom" id="XOU-Ax-Cvj"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="nJs-kk-Ym8" secondAttribute="bottom" id="Yyp-gl-gWZ"/>
                             <constraint firstItem="cZ8-Zv-esZ" firstAttribute="leading" secondItem="i8p-Rd-lAm" secondAttribute="leading" id="a3b-gx-ifs"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="z8t-5k-v5O" secondAttribute="trailing" id="aJf-h7-I5G"/>
                             <constraint firstItem="i8p-Rd-lAm" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" constant="-20" id="cpR-Vw-kSU"/>
                             <constraint firstItem="di2-G6-Doq" firstAttribute="centerX" secondItem="8nq-vE-lwQ" secondAttribute="centerX" id="fqA-Mp-xVc"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="HC2-eG-29y" secondAttribute="bottom" id="u31-Kw-YZj"/>
@@ -102,6 +107,7 @@
                         <outlet property="detectView" destination="fFI-i1-vD6" id="Yeb-J9-2nu"/>
                         <outlet property="imageView" destination="8nq-vE-lwQ" id="2cf-RL-iw5"/>
                         <outlet property="overlay" destination="di2-G6-Doq" id="3WT-Js-btN"/>
+                        <outlet property="sniper" destination="z8t-5k-v5O" id="vA2-bg-vpD"/>
                         <segue destination="zYU-BX-tZh" kind="show" identifier="detail" id="jlg-FA-s8I"/>
                     </connections>
                 </viewController>
