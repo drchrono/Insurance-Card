@@ -45,17 +45,22 @@ class ImageOCR {
     }
     
     func detectTextInImageBackground(image: UIImage, completion: (result: [String:String])-> Void) {
+        let start = NSDate.timeIntervalSinceReferenceDate()
         dispatch_async(dispatch_get_main_queue()) { () -> Void in
             if !self.isAvailable {
                 completion(result: [String:String]())
             }
             completion(result: self.detectTextInImage(image))
+            let end = NSDate.timeIntervalSinceReferenceDate()
+            let interval = Double(end - start)
+            print("all process takes \(interval)")
         }
         
     }
-    
+    //return useful dict
     func detectTextInImage(image: UIImage) -> [String: String]{
-        var ocrResult = [String:String]()
+        initBeforeEachDetect()
+        
         guard let detect = textDetector else{
             return ocrResult
         }
@@ -68,11 +73,11 @@ class ImageOCR {
         
         print("Image has \(features.count) features")
         for feature in features{
-            if isFinished {
+            if shouldFinished {
                 break
             }
             // filter right part
-            if feature.topLeft.x > imageci.extent.width * 0.5 {
+            if (feature.topLeft.x + feature.topRight.x) / 2 > imageci.extent.width * 0.5 {
                 continue
             }
             // filter height
@@ -82,9 +87,12 @@ class ImageOCR {
             let cgImage: CGImageRef = context.createCGImage(textRect, fromRect: textRect.extent)
             let textUIImage = UIImage(CGImage: cgImage)
             
-            let id = performImageRecognition(textUIImage)
-            if self.isFinished{
-                ocrResult["id"] = id
+            performImageRecognition(textUIImage, result: &ocrResult)
+//            if ocrResult.count > 1 || self.shouldFinished{
+//                ocrResult["id"] = id
+//                return ocrResult
+//            }
+            if ocrResult.count > 1 || self.shouldFinished {
                 return ocrResult
             }
         }
@@ -100,13 +108,34 @@ class ImageOCR {
         print("didn't detect rect but detect \(features.count) text in image")
 
     }
-
+    enum LastIndentifyKey{
+        case ID
+        case Group
+        case None
+    }
+    var ocrResult = [String:String]()
     var inSteps = 0
-    var isFinished = false
-    func performImageRecognition(image: UIImage) -> String{
+    var finalSteps = Int.max
+    var shouldFinished = false
+    var lastKey = LastIndentifyKey.None
+    
+    func initBeforeEachDetect() {
+        self.ocrResult = [String:String]()
+        self.finalSteps = Int.max
+        self.shouldFinished = false
+        self.lastKey = .None
+        self.inSteps = 0
+    }
+    
+    func performImageRecognition(image: UIImage, inout result: [String: String]){
+        finalSteps--
+        if finalSteps == 0{
+            shouldFinished = true
+            return
+        }
         let start = NSDate.timeIntervalSinceReferenceDate()
         guard let tesseract = tesseract else{
-            return ""
+            return
         }
         
         let imageG8 = image.g8_blackAndWhite()
@@ -117,38 +146,90 @@ class ImageOCR {
         let end = NSDate.timeIntervalSinceReferenceDate()
         let interval = Double(end - start)
         print("OCR cost time: \(interval)")
-        let text = tesseract.recognizedText
+        let text = getCleanString(tesseract.recognizedText)
         
-        if inSteps == 0 && isID(text){
+        if lastKey == .None && foundIdFeature(text){
+            lastKey = .ID
+            inSteps = 2
+            finalSteps = 6
             if isPotentialIdString(text) {
                 let strs = text.characters.split(":").map({ String($0) })
                 for index in 1..<strs.count{
                     if isPotentialIdString(strs[index]) {
+                        result["id"] = strs[index]
                         if isDebug{
-                        self.strs.append(strs[index])
-                        self.photos.append(image)
+                            self.strs.append(strs[index])
+                            self.photos.append(image)
                         }
-                        self.isFinished = true
-                        return strs[index]
+                        return
                     }
                 }
-            }else{
-                inSteps = 2
             }
-        }
-        
-        if inSteps > 0 {
+        }else if lastKey == .ID && result["id"] == nil{
             if isPotentialIdString(text) {
                 if isDebug{
                     self.strs.append(text)
                     self.photos.append(image)
                 }
-                self.isFinished = true
-                return text
+//                self.shouldFinished = true
+                result["id"] = text
+                return
             }
-            inSteps--
+            if inSteps == 1 {
+                lastKey = .None
+                inSteps = 0
+            }else{
+                inSteps--
+            }
+        }else if lastKey == .ID {
+            if text.characters.count > 6 && isPotentialIdString(text){
+                if text.containsString(":") {
+                    let strs = text.characters.split(":").map({ String($0)})
+                    for index in 1..<strs.count{
+                        if isPotentialIdString(strs[index]){
+                            result["group"] = strs[index]
+                            shouldFinished = true
+                            return
+                        }
+                    }
+                }else{
+                    result["group"] = text
+                    shouldFinished = true
+                    return
+                }
+            }
         }
-        return text
+        if foundGroupFeatrue(text){
+            lastKey = .Group
+            inSteps = 2
+            if isPotentialIdString(text){
+                let strs = text.characters.split(":").map({String($0)})
+                for index in 1..<strs.count{
+                    if isPotentialIdString(strs[index]){
+                        result["group"] = strs[index]
+                        shouldFinished = true
+                        if isDebug{
+                            
+                        }
+//                        shouldFinished = true
+                        return
+                    }
+                }
+            }
+        }else if lastKey == .Group && result["group"] == nil{
+            if isPotentialIdString(text){
+                result["group"] = text
+                shouldFinished = true
+                return
+            }
+            if inSteps == 1 {
+                shouldFinished = true
+                return
+            }else{
+                inSteps--
+            }
+        }
+        return
     }
     
     //MARK: - Regex Part
@@ -168,7 +249,7 @@ class ImageOCR {
         return false
     }
     
-    func isID(text:String) -> Bool{
+    func foundIdFeature(text:String) -> Bool{
         let idReg = try! NSRegularExpression(pattern: "(i|I)(d|D)(entification)*", options: [])
         if let _ = idReg.firstMatchInString(text, options: [], range: NSRange(location: 0, length: text.characters.count)) {
             return true
@@ -176,8 +257,13 @@ class ImageOCR {
         return false
     }
     
-    func isGroup(text:String) -> Bool{
-        return true
+    func foundGroupFeatrue(text:String) -> Bool{
+        //ocr will mix p and g sometimes
+        let groupReg = try! NSRegularExpression(pattern: "(g|G|p)rou(p|g)", options: [])
+        if let _ = groupReg.firstMatchInString(text, options: [], range: NSRange(location: 0, length: text.characters.count)) {
+            return true
+        }
+        return false
     }
     
     //MARK: - crop
@@ -197,5 +283,10 @@ class ImageOCR {
         )
         card = image.imageByCroppingToRect(card.extent)
         return card
+    }
+    
+    //MARK: - ResultTextProcess
+    func getCleanString(s: String) -> String{
+        return s.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceAndNewlineCharacterSet())
     }
 }

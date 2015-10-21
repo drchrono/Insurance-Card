@@ -59,9 +59,7 @@ class ViewController: UIViewController , DRCCustomImagePickerControllerDelegate{
                 sniper.startAnimating()
                 imageOCR.detectTextInImageBackground(detectedRectImage, completion: { (result) -> Void in
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        if let id = result["id"] {
-                            print("result:"+id)
-                        }
+                        print(result)
                         self.sniper.stopAnimating()
                     })
                     
