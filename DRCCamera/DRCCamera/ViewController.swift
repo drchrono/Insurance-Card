@@ -7,7 +7,7 @@
 //
 
 import UIKit
-
+import DRCCameraSwift
 class ViewController: UIViewController , DRCCustomImagePickerControllerDelegate{
 
     @IBOutlet weak var overlay: UIImageView!
