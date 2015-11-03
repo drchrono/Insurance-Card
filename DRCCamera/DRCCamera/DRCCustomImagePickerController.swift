@@ -24,6 +24,9 @@ public class DRCCustomImagePickerController: UIImagePickerController, UIImagePic
     }
     
     public func showImagePicker(inViewController parent: UIViewController){
+        if !UIImagePickerController.isCameraDeviceAvailable(UIImagePickerControllerCameraDevice.Rear){
+            return
+        }
         let sourceType = UIImagePickerControllerSourceType.Camera
         imagePicker.sourceType = sourceType
         
