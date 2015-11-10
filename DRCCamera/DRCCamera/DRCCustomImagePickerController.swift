@@ -15,6 +15,7 @@ import UIKit
 public class DRCCustomImagePickerController: UIImagePickerController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, CameraOverlayDelegate {
     var imagePicker = UIImagePickerController()
     var photoRatio : RectangleRatio?
+    var detectRatio: RectangleRatio?
     public var enableImageDetecting:Bool = false
     public var customDelegate: DRCCustomImagePickerControllerDelegate?
     var parentVC: UIViewController?
@@ -70,12 +71,21 @@ public class DRCCustomImagePickerController: UIImagePickerController, UIImagePic
                 let rotatedPhoto: UIImage = ImageHandler.scaleAndRotateImage(image)
       
 //                let imageRef3 = CGImageCreateWithImageInRect(rotatedPhoto.CGImage, CGRectMake(image.size.width * self.photoRatio!.x, image.size.height * self.photoRatio!.y, image.size.width * self.photoRatio!.wp, image.size.height * self.photoRatio!.hp))
+                
                 let rect = CGRectMake(rotatedPhoto.size.width * self.photoRatio!.x, rotatedPhoto.size.height * self.photoRatio!.y, rotatedPhoto.size.width * self.photoRatio!.wp, rotatedPhoto.size.height * self.photoRatio!.hp)
                 let imageRef3 = CGImageCreateWithImageInRect(rotatedPhoto.CGImage, rect)
-                
                 let rectImage = UIImage(CGImage: imageRef3!)
-                self.customDelegate?.customImagePickerDidFinishPickingImage(rectImage, detectedRectImage: self.detect(rectImage))
-                
+                if let detectRatio = self.detectRatio{
+                    let detectRect = CGRectMake(rotatedPhoto.size.width * detectRatio.x,
+                        rotatedPhoto.size.height * detectRatio.y,
+                        rotatedPhoto.size.width * detectRatio.wp,
+                        rotatedPhoto.size.height * detectRatio.hp)
+                    let detectedImageRef = CGImageCreateWithImageInRect(rotatedPhoto.CGImage, detectRect)
+                    let detectedImage = UIImage(CGImage: detectedImageRef!)
+                    self.customDelegate?.customImagePickerDidFinishPickingImage(rectImage, detectedRectImage: self.detect(detectedImage))
+                }else{
+                    self.customDelegate?.customImagePickerDidFinishPickingImage(rectImage, detectedRectImage: self.detect(rectImage))
+                }
             })
             
             
@@ -87,9 +97,10 @@ public class DRCCustomImagePickerController: UIImagePickerController, UIImagePic
     func cancelFromImagePicker() {
         self.parentVC!.dismissViewControllerAnimated(true, completion: nil)
     }
-    func saveInImagePicker(ratio: RectangleRatio) {
+    func saveInImagePicker(ratio: RectangleRatio, detectRatio: RectangleRatio?) {
         imagePicker.takePicture()
         self.photoRatio = ratio
+        self.detectRatio = detectRatio
     }
     
     func detect(image: UIImage) -> UIImage?{

@@ -11,7 +11,7 @@ let kCornerRadius: CGFloat = 3
 
 protocol CameraOverlayDelegate{
     func cancelFromImagePicker()
-    func saveInImagePicker(ratio:RectangleRatio)
+    func saveInImagePicker(ratio:RectangleRatio, detectRatio: RectangleRatio?)
 }
 
 struct RectangleRatio {
@@ -34,7 +34,7 @@ class CameraOverlay: UIView {
     @IBOutlet var cancelButton: UIButton!
     var centerRect: CGRect?
     var ratio: RectangleRatio?
-    
+    var detectRatio: RectangleRatio?
     override func drawRect(rect: CGRect) {
         if method == 0 {
             drawDirectly(rect)
@@ -115,9 +115,12 @@ class CameraOverlay: UIView {
         let rect = UIScreen.mainScreen().bounds
         var sideMargin:CGFloat = 30.0
         if (UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad) {
-            // iPad
-            sideMargin = 100
-            //TODO: check landscape and protrait
+            if UIDevice.currentDevice().orientation == UIDeviceOrientation.Portrait || UIDevice.currentDevice().orientation == UIDeviceOrientation.PortraitUpsideDown{
+                sideMargin = 100
+            }else{
+                sideMargin = 200
+            }
+
         }
         let centerWidth = rect.size.width - 2 * sideMargin
         let centerHeight = centerWidth / 1.6
@@ -158,6 +161,11 @@ class CameraOverlay: UIView {
                 let wp:CGFloat = rectInCenter.size.width / rect.width
                 let hp:CGFloat = rectInCenter.size.height / rect.height
                 self.ratio = RectangleRatio(x: x, y: y, wp: wp, hp: hp)
+                let dx:CGFloat = (rectInCenter.origin.x - 40) / rect.width
+                let dy:CGFloat = (rectInCenter.origin.y - 40) / rect.height
+                let dwp:CGFloat = (rectInCenter.size.width + 80) / rect.width
+                let dhp:CGFloat = (rectInCenter.size.height + 80) / rect.height
+                self.detectRatio = RectangleRatio(x: dx, y: dy, wp: dwp, hp: dhp)
             }else{
                 let ty = (UIScreen.mainScreen().bounds.height - (UIScreen.mainScreen().bounds.width * 4 / 3)) / 2
                 let x:CGFloat = rectInCenter.origin.x / rect.width
@@ -261,6 +269,6 @@ class CameraOverlay: UIView {
     }
     
     @IBAction func clickedSaveButton(sender: AnyObject) {
-        delegate?.saveInImagePicker(self.ratio!)
+        delegate?.saveInImagePicker(self.ratio!, detectRatio: detectRatio)
     }
 }
