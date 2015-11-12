@@ -115,10 +115,13 @@ class CameraOverlay: UIView {
         let rect = UIScreen.mainScreen().bounds
         var sideMargin:CGFloat = 30.0
         if (UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad) {
-            if UIDevice.currentDevice().orientation == UIDeviceOrientation.Portrait || UIDevice.currentDevice().orientation == UIDeviceOrientation.PortraitUpsideDown{
-                sideMargin = 100
-            }else{
-                sideMargin = 200
+            if (UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad) {
+                if UIApplication.sharedApplication().statusBarOrientation == UIInterfaceOrientation.LandscapeLeft || UIApplication.sharedApplication().statusBarOrientation == UIInterfaceOrientation.LandscapeRight{
+                    sideMargin = 200
+                }else{
+                    sideMargin = 100
+                }
+                
             }
 
         }
