@@ -32,6 +32,7 @@ class CameraOverlay: UIView {
     var delegate: CameraOverlayDelegate?
     @IBOutlet var saveButton: UIButton!
     @IBOutlet var cancelButton: UIButton!
+    @IBOutlet weak var spinner: UIActivityIndicatorView!
     var centerRect: CGRect?
     var ratio: RectangleRatio?
     var detectRatio: RectangleRatio?
@@ -219,6 +220,7 @@ class CameraOverlay: UIView {
     var rectView: UIView?
     override func awakeFromNib() {
         super.awakeFromNib()
+        self.spinner.hidden = true
         if method == 1{
             let newRect = calculatePosition()!.0
             
@@ -247,9 +249,14 @@ class CameraOverlay: UIView {
         //
         //        sampleView.layer.mask = maskLayer
         
-        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "spinnerShouldStart", name: "startProcessing", object: nil)
         
     }
+    func spinnerShouldStart(){
+        self.spinner.hidden = false
+        self.spinner.startAnimating()
+    }
+    
     var lastOrientation: UIDeviceOrientation?
     func deviceOrientationChangedNotification2(note : NSNotification){
         let currentOrientation = UIDevice.currentDevice().orientation

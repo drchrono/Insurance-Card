@@ -4,9 +4,9 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="photoViewController" customModule="DRCCamera" customModuleProvider="target"/>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="photoViewController" customModule="DRCCameraSwift" customModuleProvider="target"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="CameraOverlay" customModule="DRCCamera" customModuleProvider="target">
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="CameraOverlay" customModule="DRCCameraSwift" customModuleProvider="target">
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
@@ -53,11 +53,18 @@
                         </mask>
                     </variation>
                 </view>
+                <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="zuS-zc-dt7">
+                    <rect key="frame" x="282" y="281" width="37" height="37"/>
+                    <animations/>
+                    <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                </activityIndicatorView>
             </subviews>
             <animations/>
             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             <constraints>
+                <constraint firstItem="zuS-zc-dt7" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="5LY-jV-PD4"/>
                 <constraint firstAttribute="trailing" secondItem="QfA-YA-Fcv" secondAttribute="trailing" id="5oM-Of-XiY"/>
+                <constraint firstItem="zuS-zc-dt7" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="BB9-Bl-eD7"/>
                 <constraint firstItem="QfA-YA-Fcv" firstAttribute="leading" secondItem="iN0-l3-epB" secondAttribute="leading" id="M1D-co-Iv9"/>
                 <constraint firstItem="jqe-YK-0nE" firstAttribute="centerX" secondItem="iN0-l3-epB" secondAttribute="centerX" id="O1j-zj-Nb5"/>
                 <constraint firstItem="jqe-YK-0nE" firstAttribute="centerY" secondItem="iN0-l3-epB" secondAttribute="centerY" id="kth-vt-mDR"/>
@@ -85,6 +92,7 @@
             <connections>
                 <outlet property="cancelButton" destination="Xqh-KU-njU" id="aOX-IW-5Ri"/>
                 <outlet property="saveButton" destination="jqe-YK-0nE" id="iSL-84-hYy"/>
+                <outlet property="spinner" destination="zuS-zc-dt7" id="Qjt-AS-MUw"/>
             </connections>
         </view>
     </objects>

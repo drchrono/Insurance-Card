@@ -64,31 +64,34 @@ public class DRCCustomImagePickerController: UIImagePickerController, UIImagePic
     
     public func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         let image = info[UIImagePickerControllerOriginalImage] as! UIImage
-        self.parentVC!.dismissViewControllerAnimated(true) { () -> Void in
+
+        NSNotificationCenter.defaultCenter().postNotificationName("startProcessing", object: nil)
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) { () -> Void in
+            print(image.imageOrientation.rawValue)
+            let rotatedPhoto: UIImage = ImageHandler.scaleAndRotateImage(image)
+            
+            //                let imageRef3 = CGImageCreateWithImageInRect(rotatedPhoto.CGImage, CGRectMake(image.size.width * self.photoRatio!.x, image.size.height * self.photoRatio!.y, image.size.width * self.photoRatio!.wp, image.size.height * self.photoRatio!.hp))
+            
+            let rect = CGRectMake(rotatedPhoto.size.width * self.photoRatio!.x, rotatedPhoto.size.height * self.photoRatio!.y, rotatedPhoto.size.width * self.photoRatio!.wp, rotatedPhoto.size.height * self.photoRatio!.hp)
+            let imageRef3 = CGImageCreateWithImageInRect(rotatedPhoto.CGImage, rect)
+            let rectImage = UIImage(CGImage: imageRef3!)
+            let detectedRect : UIImage?
+            if let detectRatio = self.detectRatio{
+                let detectRect = CGRectMake(rotatedPhoto.size.width * detectRatio.x,
+                    rotatedPhoto.size.height * detectRatio.y,
+                    rotatedPhoto.size.width * detectRatio.wp,
+                    rotatedPhoto.size.height * detectRatio.hp)
+                let detectedImageRef = CGImageCreateWithImageInRect(rotatedPhoto.CGImage, detectRect)
+                let detectedImage = UIImage(CGImage: detectedImageRef!)
+                detectedRect = self.detect(detectedImage)
+            }else{
+                detectedRect = self.detect(rectImage)
+            }
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//
-                print(image.imageOrientation.rawValue)
-                let rotatedPhoto: UIImage = ImageHandler.scaleAndRotateImage(image)
-      
-//                let imageRef3 = CGImageCreateWithImageInRect(rotatedPhoto.CGImage, CGRectMake(image.size.width * self.photoRatio!.x, image.size.height * self.photoRatio!.y, image.size.width * self.photoRatio!.wp, image.size.height * self.photoRatio!.hp))
-                
-                let rect = CGRectMake(rotatedPhoto.size.width * self.photoRatio!.x, rotatedPhoto.size.height * self.photoRatio!.y, rotatedPhoto.size.width * self.photoRatio!.wp, rotatedPhoto.size.height * self.photoRatio!.hp)
-                let imageRef3 = CGImageCreateWithImageInRect(rotatedPhoto.CGImage, rect)
-                let rectImage = UIImage(CGImage: imageRef3!)
-                if let detectRatio = self.detectRatio{
-                    let detectRect = CGRectMake(rotatedPhoto.size.width * detectRatio.x,
-                        rotatedPhoto.size.height * detectRatio.y,
-                        rotatedPhoto.size.width * detectRatio.wp,
-                        rotatedPhoto.size.height * detectRatio.hp)
-                    let detectedImageRef = CGImageCreateWithImageInRect(rotatedPhoto.CGImage, detectRect)
-                    let detectedImage = UIImage(CGImage: detectedImageRef!)
-                    self.customDelegate?.customImagePickerDidFinishPickingImage(rectImage, detectedRectImage: self.detect(detectedImage))
-                }else{
-                    self.customDelegate?.customImagePickerDidFinishPickingImage(rectImage, detectedRectImage: self.detect(rectImage))
-                }
+                self.parentVC?.dismissViewControllerAnimated(true, completion: { () -> Void in
+                    self.customDelegate?.customImagePickerDidFinishPickingImage(rectImage, detectedRectImage: detectedRect)
+                })
             })
-            
-            
         }
 
     }
