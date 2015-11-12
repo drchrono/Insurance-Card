@@ -37,9 +37,12 @@ class CameraOverlay: UIView {
     var detectRatio: RectangleRatio?
     override func drawRect(rect: CGRect) {
         if method == 0 {
+            print("drawRect=====")
+            print(UIApplication.sharedApplication().statusBarOrientation.rawValue)
+            print("width: \(rect.size.width)       height:\(rect.size.height)")
+
             drawDirectly(rect)
         }else if method == 1 {
-            
             drawUsingMultipleLayers(rect)
         }
         
@@ -51,12 +54,15 @@ class CameraOverlay: UIView {
     
         print("######")
         print("width: \(rect.size.width)       height:\(rect.size.height)")
-        let result = calculatePosition()
-        
+    
+        guard let result = calculatePosition() else{
+            return
+        }
         let labelRect: CGRect = result.1
         let labelTransform: CGAffineTransform = result.2
         let rectInCenter: CGRect = result.0
-        
+        print("======")
+        print(rectInCenter)
         let interRect = CGRectIntersection(rectInCenter, rect)
         
         UIColor.clearColor().setFill()
@@ -80,11 +86,13 @@ class CameraOverlay: UIView {
     }
     
     private func drawUsingMultipleLayers (rect: CGRect) {
-        let result = calculatePosition()
+        guard let result = calculatePosition() else{
+            return
+        }
         let labelRect: CGRect = result.1
         let labelTransform: CGAffineTransform = result.2
         let rectInCenter: CGRect = result.0
-
+       
         //Shadow Layer
         let shadowView = UIView(frame: rect)
         shadowView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.7)
@@ -111,15 +119,38 @@ class CameraOverlay: UIView {
         
     }
     
-    func calculatePosition() -> (CGRect,CGRect,CGAffineTransform){
+    func calculatePosition() -> (CGRect,CGRect,CGAffineTransform)?{
         let rect = UIScreen.mainScreen().bounds
+        print("=====")
+        print(UIApplication.sharedApplication().statusBarOrientation.rawValue)
+        print("width: \(rect.size.width)       height:\(rect.size.height)")
         var sideMargin:CGFloat = 30.0
         if (UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad) {
             if (UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad) {
-                if UIApplication.sharedApplication().statusBarOrientation == UIInterfaceOrientation.LandscapeLeft || UIApplication.sharedApplication().statusBarOrientation == UIInterfaceOrientation.LandscapeRight{
+                if UIDevice.currentDevice().orientation == UIDeviceOrientation.LandscapeLeft || UIDevice.currentDevice().orientation == UIDeviceOrientation.LandscapeRight{
                     sideMargin = 200
+                    if rect.size.width == 768 {
+                        print("reDraw")
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW,  500 * Int64(NSEC_PER_MSEC) ), dispatch_get_main_queue(), { () -> Void in
+                            if let subView = self.subviews.last as? UILabel {
+                                subView.removeFromSuperview()
+                            }
+                             self.setNeedsDisplay()
+                        })
+                    }
+                    
                 }else{
                     sideMargin = 100
+                    if rect.size.width == 1024{
+                        print("reDraw")
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW,  500 * Int64(NSEC_PER_MSEC) ), dispatch_get_main_queue(), { () -> Void in
+                            if let subView = self.subviews.last as? UILabel {
+                                subView.removeFromSuperview()
+                            }
+                            self.setNeedsDisplay()
+                        })
+                    }
+                    
                 }
                 
             }
@@ -189,7 +220,7 @@ class CameraOverlay: UIView {
     override func awakeFromNib() {
         super.awakeFromNib()
         if method == 1{
-            let newRect = calculatePosition().0
+            let newRect = calculatePosition()!.0
             
             let rectView = CenterView(frame:newRect)
             //        let rectView = UIView(frame: newRect)
@@ -219,20 +250,31 @@ class CameraOverlay: UIView {
         
         
     }
+    var lastOrientation: UIDeviceOrientation?
     func deviceOrientationChangedNotification2(note : NSNotification){
-        guard let _ = self.superview else {
+        let currentOrientation = UIDevice.currentDevice().orientation
+        if currentOrientation == lastOrientation{
             return
         }
-        if UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad{
-            self.setNeedsDisplay()
-            if let subView = self.subviews.last as? UILabel {
-                subView.removeFromSuperview()
-            }
-        }else{
-            self.setNeedsDisplay()
-            if let subView = self.subviews.last as? UILabel {
-                subView.removeFromSuperview()
-            }
+        lastOrientation = currentOrientation
+        if currentOrientation == UIDeviceOrientation.LandscapeLeft ||
+            currentOrientation == UIDeviceOrientation.LandscapeRight ||
+            currentOrientation == UIDeviceOrientation.Portrait ||
+            currentOrientation == UIDeviceOrientation.PortraitUpsideDown{
+                guard let _ = self.superview else {
+                    return
+                }
+                if UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad{
+                    self.setNeedsDisplay()
+                    if let subView = self.subviews.last as? UILabel {
+                        subView.removeFromSuperview()
+                    }
+                }else{
+                    self.setNeedsDisplay()
+                    if let subView = self.subviews.last as? UILabel {
+                        subView.removeFromSuperview()
+                    }
+                }
         }
     }
     
@@ -248,7 +290,7 @@ class CameraOverlay: UIView {
             self.setNeedsDisplay()
             
         }else{
-            let newRect = calculatePosition().0
+            let newRect = calculatePosition()!.0
             let tempView = UIView(frame: self.frame)
             tempView.backgroundColor = UIColor(red: 0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 0.7)
             self.insertSubview(tempView, atIndex: 1)
