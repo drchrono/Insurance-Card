@@ -7,7 +7,7 @@
 //
 
 import UIKit
-let kCornerRadius: CGFloat = 3
+let kCornerRadius: CGFloat = 4
 
 protocol CameraOverlayDelegate{
     func cancelFromImagePicker()
@@ -33,6 +33,7 @@ class CameraOverlay: UIView {
     @IBOutlet var saveButton: UIButton!
     @IBOutlet var cancelButton: UIButton!
     @IBOutlet weak var spinner: UIActivityIndicatorView!
+    
     var centerRect: CGRect?
     var ratio: RectangleRatio?
     var detectRatio: RectangleRatio?
@@ -50,7 +51,7 @@ class CameraOverlay: UIView {
     }
     
     private func drawDirectly(rect: CGRect) {
-        UIColor(red: 0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 0.3).setFill()
+        UIColor(red: 0/255.0, green: 0/255.0, blue: 0/255.0, alpha: 0.4).setFill()
         UIRectFill(rect)
     
         print("######")
@@ -70,7 +71,7 @@ class CameraOverlay: UIView {
         UIRectFill(interRect)
         
         let path = UIBezierPath(roundedRect: rectInCenter, cornerRadius: kCornerRadius)
-        path.lineWidth = 1
+        path.lineWidth = 0.5
         UIColor.whiteColor().setStroke()
         path.stroke()
         
@@ -79,8 +80,10 @@ class CameraOverlay: UIView {
         
         label.textAlignment = NSTextAlignment.Center
         label.textColor = UIColor.whiteColor()
-        label.text = "Postion Card in this Frame"
+        label.text = "Position card in frame"
         self.cancelButton.transform = labelTransform
+        self.cancelButton.layer.cornerRadius = 22
+        self.saveButton.layer.cornerRadius = 32
         self.addSubview(label)
         
         
@@ -96,7 +99,7 @@ class CameraOverlay: UIView {
        
         //Shadow Layer
         let shadowView = UIView(frame: rect)
-        shadowView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.7)
+        shadowView.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.6)
         let maskLayer = CAShapeLayer()
         let maskPath = CGPathCreateMutable()
         CGPathAddRoundedRect(maskPath, nil, rectInCenter, kCornerRadius, kCornerRadius)
