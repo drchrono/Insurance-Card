@@ -111,6 +111,23 @@ class ImageHandler {
         let correctUIImage = UIImage(CGImage: correctRef)
         return correctUIImage
     }
+    class func getImageCorrectedPerspectiveShrink(image: CIImage , feature f: CIRectangleFeature) -> UIImage{
+        let horizonShrink = (f.topRight.x - f.topLeft.x) * 0.01
+        let verticalShrink = (f.topRight.y - f.bottomRight.y) * 0.01
+        let topLeft = CGPoint(x: f.topLeft.x + horizonShrink, y: f.topLeft.y - verticalShrink)
+        let topRight = CGPoint(x: f.topRight.x - horizonShrink, y: f.topRight.y - verticalShrink)
+        let bottomLeft = CGPoint(x: f.bottomLeft.x + horizonShrink, y: f.bottomLeft.y + verticalShrink)
+        let bottomRight = CGPoint(x: f.bottomRight.x - horizonShrink, y: f.bottomRight.y + verticalShrink)
+        let correctImage = image.imageByApplyingFilter("CIPerspectiveCorrection", withInputParameters: [
+            "inputTopLeft": CIVector(CGPoint: topLeft),
+            "inputTopRight": CIVector(CGPoint: topRight),
+            "inputBottomLeft": CIVector(CGPoint: bottomLeft),
+            "inputBottomRight": CIVector(CGPoint: bottomRight)])
+        let context = CIContext(options: nil)
+        let correctRef = context.createCGImage(correctImage, fromRect: correctImage.extent)
+        let correctUIImage = UIImage(CGImage: correctRef)
+        return correctUIImage
+    }
 }
 
 extension UIImage{

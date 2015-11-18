@@ -260,7 +260,8 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
                 self.captureSession?.stopRunning()
                 var image: UIImage? = nil
                 if let _ = self.lastCIImage{
-                    image = ImageHandler.getImageCorrectedPerspectiv(self.lastCIImage!, feature: self.lastRectFeature!)
+//                    image = ImageHandler.getImageCorrectedPerspectiv(self.lastCIImage!, feature: self.lastRectFeature!)
+                    image = ImageHandler.getImageCorrectedPerspectiveShrink(self.lastCIImage!, feature: self.lastRectFeature!)
                 }else{
                     let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(sampleBuffer)
                     let dataProvider = CGDataProviderCreateWithCFData(imageData)
