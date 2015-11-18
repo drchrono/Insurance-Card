@@ -17,6 +17,8 @@
 		3ECC6FA91BB9A82F00E5BE7A /* DRCCameraUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECC6FA81BB9A82F00E5BE7A /* DRCCameraUITests.swift */; };
 		3EE44E2B1BFBC0A600D03F5F /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE44E291BFBC0A600D03F5F /* CameraViewController.swift */; };
 		3EE44E301BFBC57E00D03F5F /* CameraViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3EE44E2F1BFBC57E00D03F5F /* CameraViewController.xib */; };
+		3EE44E321BFCFD7000D03F5F /* CameraMaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE44E311BFCFD7000D03F5F /* CameraMaskView.swift */; };
+		3EE44E341BFD020700D03F5F /* CameraKitConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE44E331BFD020700D03F5F /* CameraKitConstants.swift */; };
 		3EE87C361BB9C15B00F0D4CE /* DRCCameraSwift.h in Headers */ = {isa = PBXBuildFile; fileRef = 3EE87C351BB9C15B00F0D4CE /* DRCCameraSwift.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3EE87C3D1BB9C15B00F0D4CE /* DRCCameraSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EE87C331BB9C15B00F0D4CE /* DRCCameraSwift.framework */; };
 		3EE87C441BB9C15B00F0D4CE /* DRCCameraSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE87C431BB9C15B00F0D4CE /* DRCCameraSwiftTests.swift */; };
@@ -101,6 +103,8 @@
 		3ECC6FB91BB9A85700E5BE7A /* DRCCustomImagePickerController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DRCCustomImagePickerController.swift; path = ../DRCCamera/DRCCustomImagePickerController.swift; sourceTree = "<group>"; };
 		3EE44E291BFBC0A600D03F5F /* CameraViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraViewController.swift; sourceTree = "<group>"; };
 		3EE44E2F1BFBC57E00D03F5F /* CameraViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = CameraViewController.xib; sourceTree = "<group>"; };
+		3EE44E311BFCFD7000D03F5F /* CameraMaskView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraMaskView.swift; sourceTree = "<group>"; };
+		3EE44E331BFD020700D03F5F /* CameraKitConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CameraKitConstants.swift; sourceTree = "<group>"; };
 		3EE87C331BB9C15B00F0D4CE /* DRCCameraSwift.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = DRCCameraSwift.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3EE87C351BB9C15B00F0D4CE /* DRCCameraSwift.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DRCCameraSwift.h; sourceTree = "<group>"; };
 		3EE87C371BB9C15B00F0D4CE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -210,13 +214,15 @@
 		3EE87C341BB9C15B00F0D4CE /* DRCCameraSwift */ = {
 			isa = PBXGroup;
 			children = (
-				3ECC6FB71BB9A85700E5BE7A /* CameraOverlay.swift */,
 				3EE44E291BFBC0A600D03F5F /* CameraViewController.swift */,
 				3EE44E2F1BFBC57E00D03F5F /* CameraViewController.xib */,
+				3EE44E311BFCFD7000D03F5F /* CameraMaskView.swift */,
+				3ECC6FB71BB9A85700E5BE7A /* CameraOverlay.swift */,
 				3ECC6FB81BB9A85700E5BE7A /* CameraOverlay.xib */,
 				3ECC6FB91BB9A85700E5BE7A /* DRCCustomImagePickerController.swift */,
 				3E8F3CE21BBDA82100E284DD /* CenterView.swift */,
 				3EE87C571BB9C22800F0D4CE /* ImageHandler.swift */,
+				3EE44E331BFD020700D03F5F /* CameraKitConstants.swift */,
 				3EE87C351BB9C15B00F0D4CE /* DRCCameraSwift.h */,
 				3EE87C371BB9C15B00F0D4CE /* Info.plist */,
 			);
@@ -466,11 +472,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				3E8F3CE41BBDABEA00E284DD /* CenterView.swift in Sources */,
+				3EE44E341BFD020700D03F5F /* CameraKitConstants.swift in Sources */,
 				3EE87C591BB9CB7A00F0D4CE /* ImageHandler.swift in Sources */,
 				3EE87C511BB9C19300F0D4CE /* CameraOverlay.swift in Sources */,
 				3EE87C521BB9C19300F0D4CE /* CameraOverlay.xib in Sources */,
 				3EE87C531BB9C19300F0D4CE /* DRCCustomImagePickerController.swift in Sources */,
 				3EE44E2B1BFBC0A600D03F5F /* CameraViewController.swift in Sources */,
+				3EE44E321BFCFD7000D03F5F /* CameraMaskView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,8 +8,9 @@
 
 import UIKit
 import AVFoundation
+import GLKit
 @objc public protocol CameraViewControllerDelegate{
-    func didFinshedTakePhoto(image: UIImage)
+    func didFinshedTakePhoto(image: UIImage?)
 }
 
 public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
@@ -22,17 +23,36 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
     var videoOutput:AVCaptureVideoDataOutput?
     var stillImageOutput:AVCaptureStillImageOutput?
     
+    
     var detector:CIDetector!
     var enableDetect = true
     var lastRectFeature: CIRectangleFeature?
     
     var context: EAGLContext?
+    
+    @IBOutlet weak var SaveButton: UIButton!
+    @IBOutlet weak var backButton: UIButton!
+    func createGLKView(){
+        if let _ = context{
+            return
+        }
+        context = EAGLContext(API: EAGLRenderingAPI.OpenGLES2)
+        let glView = GLKView(frame: self.view.bounds)
+        glView.autoresizingMask = [.FlexibleWidth , .FlexibleHeight]
+        glView.translatesAutoresizingMaskIntoConstraints = true
+        glView.context = context!
+    }
+    
     public class func ViewControllerFromNib() -> CameraViewController{
         let nibVC = CameraViewController(nibName: "CameraViewController", bundle: NSBundle(forClass: CameraViewController.classForCoder()))
         return nibVC
     }
     override public func viewDidLoad() {
         super.viewDidLoad()
+        self.SaveButton.layer.cornerRadius = 32
+        self.SaveButton.layer.masksToBounds = true
+        self.backButton.layer.cornerRadius = 22
+        self.backButton.layer.masksToBounds = true
         let value = UIInterfaceOrientation.Portrait.rawValue
         UIDevice.currentDevice().setValue(value, forKey: "orientation")
 
@@ -58,6 +78,7 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
         captureSession?.startRunning()
     }
     var lastDate = NSDate()
+    var lastCIImage: CIImage?
     public func captureOutput(captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, fromConnection connection: AVCaptureConnection!) {
         let pixelBuffer: CVPixelBufferRef = CMSampleBufferGetImageBuffer(sampleBuffer)!
         
@@ -68,6 +89,7 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
                 print("dont detect now")
                 return
             }
+            lastCIImage = nil
             lastDate = NSDate()
             let features = detector.featuresInImage(ciImage) as? [CIRectangleFeature]
             print("detected \(features?.count) features")
@@ -83,17 +105,20 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
 //                dispatch_async(dispatch_get_main_queue(), { () -> Void in
 //                    self.drawForFeature(f, clap: clap, orientation: UIDevice.currentDevice().orientation)
 //                })
-                let overlay = self.drawOverlay(ciImage, feature: f)
-                let context = CIContext()
-                let cgImage = context.createCGImage(overlay, fromRect: ciImage.extent)
-                let uiImage = UIImage(CGImage: cgImage)
-                print("uiimage orientation:\(uiImage.imageOrientation.rawValue)")
-                print(ciImage.extent)
-                print(uiImage.size)
+                var uiImage:UIImage? = nil
+                if isFeatureRectInRectangle(ciImage, feature: f){
+                    let overlay = self.drawOverlay(ciImage, feature: f)
+                    let context = CIContext()
+                    let cgImage = context.createCGImage(overlay, fromRect: ciImage.extent)
+                    uiImage = UIImage(CGImage: cgImage)
+                    lastCIImage = ciImage
+                    print("uiimage orientation:\(uiImage!.imageOrientation.rawValue)")
+                    print(ciImage.extent)
+                    print(uiImage!.size)
+                }
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     self.overlayImageView.image = uiImage
                     self.previewView.bringSubviewToFront(self.overlayImageView)
-//                    self.capturedImage.image = uiImage
                 })
 
             }
@@ -161,7 +186,7 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
     }
     
     func drawOverlay(ciImage: CIImage , feature: CIRectangleFeature) -> CIImage{
-        var overlay = CIImage(color: CIColor(red: 1, green: 0, blue: 0, alpha: 0.6))
+        var overlay = CIImage(color: CIColor(red: 70/255, green: 140/255, blue: 215/255, alpha: 0.6))
         overlay = overlay.imageByCroppingToRect(ciImage.extent)
         overlay = overlay.imageByApplyingFilter("CIPerspectiveTransformWithExtent", withInputParameters: ["inputExtent": CIVector(CGRect: ciImage.extent),
             "inputTopLeft": CIVector(CGPoint:feature.topLeft),
@@ -169,7 +194,7 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
             "inputBottomLeft": CIVector(CGPoint: feature.bottomLeft),
             "inputBottomRight": CIVector(CGPoint: feature.bottomRight)])
         
-        overlay = overlay.imageByCompositingOverImage(ciImage)
+//        overlay = overlay.imageByCompositingOverImage(ciImage)
         return overlay
     }
     /*
@@ -232,10 +257,28 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
                     return
                 }
                 self.captureSession?.stopRunning()
-                let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(sampleBuffer)
-                let dataProvider = CGDataProviderCreateWithCFData(imageData)
-                let cgImageRef = CGImageCreateWithJPEGDataProvider(dataProvider, nil, true, CGColorRenderingIntent.RenderingIntentDefault)
-                let image = UIImage(CGImage: cgImageRef!, scale: 1.0, orientation:.Right)
+                var image: UIImage? = nil
+                if let _ = self.lastCIImage{
+                    image = ImageHandler.getImageCorrectedPerspectiv(self.lastCIImage!, feature: self.lastRectFeature!)
+                }else{
+                    let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(sampleBuffer)
+                    let dataProvider = CGDataProviderCreateWithCFData(imageData)
+                    let cgImageRef = CGImageCreateWithJPEGDataProvider(dataProvider, nil, true, CGColorRenderingIntent.RenderingIntentDefault)
+                    image = UIImage(CGImage: cgImageRef!, scale: 1.0, orientation: UIImageOrientation.Right)
+                    image = ImageHandler.scaleAndRotateImage(image!)
+                    
+                    let rect = CGRectMake(image!.size.width * CameraKitConstants.RectangleRectRatio.x,
+                                         image!.size.height * CameraKitConstants.RectangleRectRatio.y,
+                                         image!.size.width * CameraKitConstants.RectangleRectRatio.wp, image!.size.height * CameraKitConstants.RectangleRectRatio.hp)
+                    let imageRef = CGImageCreateWithImageInRect(image!.CGImage, rect)
+                    image = UIImage(CGImage: imageRef!)
+//                    let ciImage = CIImage(CGImage: cgImageRef!)
+//                    let image = ImageHandler.getImageCorrectedPerspectiv(ciImage, feature: self.lastRectFeature!)
+                    print(image!.imageOrientation.rawValue)
+                    print(image!.size)
+                }
+                
+
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     self.delegate?.didFinshedTakePhoto(image)
                 })
@@ -245,6 +288,26 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
         
         }
     }
+    func isFeatureRectInRectangle(image: CIImage, feature: CIRectangleFeature) -> Bool{
+        let leftBoundary = image.extent.width * CameraKitConstants.RectangleRectRatio.x
+        let rightBoundary = leftBoundary + image.extent.width * CameraKitConstants.RectangleRectRatio.wp
+        let bottomBoundary = image.extent.height * (1 - CameraKitConstants.RectangleRectRatio.y - CameraKitConstants.RectangleRectRatio.hp)
+        let topBoundary = image.extent.height * (1 - CameraKitConstants.RectangleRectRatio.y)
+        if feature.topLeft.y > topBoundary || feature.topRight.y > topBoundary{
+            return false
+        }
+        if feature.bottomLeft.y < bottomBoundary || feature.bottomRight.y < bottomBoundary{
+            return false
+        }
+        if feature.bottomLeft.x < leftBoundary || feature.topLeft.x < leftBoundary {
+            return false
+        }
+        if feature.bottomRight.x > rightBoundary || feature.topRight.x > rightBoundary{
+            return false
+        }
+        return true
+    }
+    
     public override func shouldAutorotate() -> Bool {
         return false
     }
