@@ -8,7 +8,7 @@
 
 import UIKit
 import DRCCameraSwift
-class ViewController: UIViewController , DRCCustomImagePickerControllerDelegate{
+class ViewController: UIViewController , DRCCustomImagePickerControllerDelegate, CameraViewControllerDelegate{
 
     @IBOutlet weak var overlay: UIImageView!
     @IBOutlet weak var cropView: UIImageView!
@@ -45,6 +45,11 @@ class ViewController: UIViewController , DRCCustomImagePickerControllerDelegate{
 //        customPicker.method = 0
         self.picker = customPicker
     }
+    @IBAction func clickedNew(sender: AnyObject) {
+        let vc = CameraViewController.ViewControllerFromNib()
+        vc.delegate = self
+        self.presentViewController(vc, animated: true, completion: nil)
+    }
     
     func customImagePickerDidFinishPickingImage(rectImage: UIImage, detectedRectImage: UIImage?) {
         imageView.image = rectImage
@@ -57,6 +62,16 @@ class ViewController: UIViewController , DRCCustomImagePickerControllerDelegate{
         if let image = picker?.overlay{
             overlay.image = image
         }
+    }
+    
+    func didFinshedTakePhoto(image: UIImage) {
+        self.dismissViewControllerAnimated(true) { () -> Void in
+            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                self.imageView.image = image
+            })
+            
+        }
+        
     }
 }
 
