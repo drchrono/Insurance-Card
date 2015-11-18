@@ -14,6 +14,7 @@ import GLKit
 }
 
 public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
+    let detectionOverlayColor = CIColor(red: 70/255, green: 140/255, blue: 215/255, alpha: 0.6)
     @IBOutlet weak var previewView: UIView!
     @IBOutlet weak var overlayImageView: UIImageView!
     public var delegate :CameraViewControllerDelegate?
@@ -186,7 +187,7 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
     }
     
     func drawOverlay(ciImage: CIImage , feature: CIRectangleFeature) -> CIImage{
-        var overlay = CIImage(color: CIColor(red: 70/255, green: 140/255, blue: 215/255, alpha: 0.6))
+        var overlay = CIImage(color: detectionOverlayColor)
         overlay = overlay.imageByCroppingToRect(ciImage.extent)
         overlay = overlay.imageByApplyingFilter("CIPerspectiveTransformWithExtent", withInputParameters: ["inputExtent": CIVector(CGRect: ciImage.extent),
             "inputTopLeft": CIVector(CGPoint:feature.topLeft),
