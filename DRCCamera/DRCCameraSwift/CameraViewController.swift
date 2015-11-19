@@ -66,7 +66,7 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
             print("Setup Failed")
             assert(false)
         }
-        detector = CIDetector(ofType: CIDetectorTypeRectangle, context: nil, options: [CIDetectorAccuracy:CIDetectorAccuracyHigh])
+        detector = CIDetector(ofType: CIDetectorTypeRectangle, context: nil, options: [CIDetectorAccuracy:CIDetectorAccuracyHigh, CIDetectorMinFeatureSize: 0.15])
     }
     
     public override func viewWillAppear(animated: Bool) {
@@ -87,13 +87,14 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
         if enableDetect{
             let interval = NSDate().timeIntervalSinceDate(lastDate)
             if interval < 0.1 {
-                print("dont detect now")
+//                print("dont detect now")
                 return
             }
             lastCIImage = nil
             lastDate = NSDate()
-            let features = detector.featuresInImage(ciImage) as? [CIRectangleFeature]
-            print("detected \(features?.count) features")
+            
+            let features = detector.featuresInImage(ciImage, options: [CIDetectorAspectRatio:1.6]) as? [CIRectangleFeature]
+//            print("detected \(features?.count) features")
             if let features = features where features.count > 0 {
                 self.lastRectFeature = features[0]
             }else{
@@ -113,9 +114,9 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
                     let cgImage = context.createCGImage(overlay, fromRect: ciImage.extent)
                     uiImage = UIImage(CGImage: cgImage)
                     lastCIImage = ciImage
-                    print("uiimage orientation:\(uiImage!.imageOrientation.rawValue)")
-                    print(ciImage.extent)
-                    print(uiImage!.size)
+//                    print("uiimage orientation:\(uiImage!.imageOrientation.rawValue)")
+//                    print(ciImage.extent)
+//                    print(uiImage!.size)
                 }
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     self.overlayImageView.image = uiImage
@@ -291,10 +292,10 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
         }
     }
     func isFeatureRectInRectangle(image: CIImage, feature: CIRectangleFeature) -> Bool{
-        let leftBoundary = image.extent.width * CameraKitConstants.RectangleRectRatio.x
-        let rightBoundary = leftBoundary + image.extent.width * CameraKitConstants.RectangleRectRatio.wp
-        let bottomBoundary = image.extent.height * (1 - CameraKitConstants.RectangleRectRatio.y - CameraKitConstants.RectangleRectRatio.hp)
-        let topBoundary = image.extent.height * (1 - CameraKitConstants.RectangleRectRatio.y)
+        let leftBoundary = image.extent.width * CameraKitConstants.DetectionRectangleRatio.x
+        let rightBoundary = leftBoundary + image.extent.width * CameraKitConstants.DetectionRectangleRatio.wp
+        let bottomBoundary = image.extent.height * (1 - CameraKitConstants.DetectionRectangleRatio.y - CameraKitConstants.DetectionRectangleRatio.hp)
+        let topBoundary = image.extent.height * (1 - CameraKitConstants.DetectionRectangleRatio.y)
         if feature.topLeft.y > topBoundary || feature.topRight.y > topBoundary{
             return false
         }
