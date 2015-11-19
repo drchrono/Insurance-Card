@@ -48,7 +48,7 @@ class ViewController: UIViewController , DRCCustomImagePickerControllerDelegate,
     @IBAction func clickedNew(sender: AnyObject) {
         let vc = CameraViewController.ViewControllerFromNib()
         vc.delegate = self
-        self.presentViewController(vc, animated: true, completion: nil)
+        vc.showCaremaIfPossible(inViewController: self)
     }
     
     func customImagePickerDidFinishPickingImage(rectImage: UIImage, detectedRectImage: UIImage?) {
