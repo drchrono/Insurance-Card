@@ -305,6 +305,7 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     @IBAction func clickedTakeButton(sender: AnyObject) {
+        SaveButton.enabled = false
         if let videoConnection = stillImageOutput!.connectionWithMediaType(AVMediaTypeVideo) {
             stillImageOutput?.captureStillImageAsynchronouslyFromConnection(videoConnection, completionHandler: { (sampleBuffer:CMSampleBuffer!, error:NSError!) -> Void in
                 if sampleBuffer == nil{
@@ -342,16 +343,29 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
                     image = UIImage(CGImage: cgImageRef!, scale: 1.0, orientation: imageOrientation)
                     image = ImageHandler.scaleAndRotateImage(image!)
                     let rect :CGRect
+//                    if outputOrientation == AVCaptureVideoOrientation.Portrait || outputOrientation == AVCaptureVideoOrientation.PortraitUpsideDown{
+//                        rect = CGRectMake(image!.size.width * CameraKitConstants.RectangleRectRatio.x,
+//                            image!.size.height * CameraKitConstants.RectangleRectRatio.y,
+//                            image!.size.width * CameraKitConstants.RectangleRectRatio.wp,
+//                            image!.size.height * CameraKitConstants.RectangleRectRatio.hp)
+//                    }else{
+//                        rect = CGRectMake(image!.size.width * CameraKitConstants.RectangleRectLandscapeRatio.x,
+//                            image!.size.height * CameraKitConstants.RectangleRectLandscapeRatio.y,
+//                            image!.size.width * CameraKitConstants.RectangleRectLandscapeRatio.wp,
+//                            image!.size.height * CameraKitConstants.RectangleRectLandscapeRatio.hp)
+//                    }
                     if outputOrientation == AVCaptureVideoOrientation.Portrait || outputOrientation == AVCaptureVideoOrientation.PortraitUpsideDown{
-                    rect = CGRectMake(image!.size.width * CameraKitConstants.RectangleRectRatio.x,
-                                         image!.size.height * CameraKitConstants.RectangleRectRatio.y,
-                                         image!.size.width * CameraKitConstants.RectangleRectRatio.wp, image!.size.height * CameraKitConstants.RectangleRectRatio.hp)
+                        rect = CGRectMake(image!.size.width * self.RectPortraitRatio.x,
+                            image!.size.height * self.RectPortraitRatio.y,
+                            image!.size.width * self.RectPortraitRatio.wp,
+                            image!.size.height * self.RectPortraitRatio.hp)
                     }else{
-                        rect = CGRectMake(image!.size.width * CameraKitConstants.RectangleRectLandscapeRatio.x,
-                            image!.size.height * CameraKitConstants.RectangleRectLandscapeRatio.y,
-                            image!.size.width * CameraKitConstants.RectangleRectLandscapeRatio.wp,
-                            image!.size.height * CameraKitConstants.RectangleRectLandscapeRatio.hp)
+                        rect = CGRectMake(image!.size.width * self.RectLandscapeRatio.x,
+                            image!.size.height * self.RectLandscapeRatio.y,
+                            image!.size.width * self.RectLandscapeRatio.wp,
+                            image!.size.height * self.RectLandscapeRatio.hp)
                     }
+
                     let imageRef = CGImageCreateWithImageInRect(image!.CGImage, rect)
                     image = UIImage(CGImage: imageRef!)
 //                    let ciImage = CIImage(CGImage: cgImageRef!)
@@ -369,18 +383,53 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
         
         }
     }
-    
+    var RectPortraitRatio: RectangleRatio{
+        get {
+            if UIDevice.currentDevice().userInterfaceIdiom == .Phone{
+                return CameraKitConstants().iphoneRectangleRatio
+            }else{
+                return CameraKitConstants.RectangleRectRatio
+            }
+        }
+    }
+    var RectLandscapeRatio: RectangleRatio{
+        get {
+            if UIDevice.currentDevice().userInterfaceIdiom == .Phone{
+                return CameraKitConstants().iphoneRectangleLandscapeRatio
+            }else{
+                return CameraKitConstants.RectangleRectLandscapeRatio
+            }
+        }
+    }
+    var DetectionRectRatio: RectangleRatio{
+        get{
+            if UIDevice.currentDevice().userInterfaceIdiom == .Phone{
+                return CameraKitConstants().iphoneRectangleRatio
+            }else{
+                return CameraKitConstants.DetectionRectangleRatio
+            }
+        }
+    }
+    var DetectionRectLandscapeRatio: RectangleRatio{
+        get{
+            if UIDevice.currentDevice().userInterfaceIdiom == .Phone{
+                return CameraKitConstants().iphoneRectangleLandscapeRatio
+            }else{
+                return CameraKitConstants.DetectionRectangleLandscapeRatio
+            }
+        }
+    }
     func isFeatureRectInRectangle(image: CIImage, feature: CIRectangleFeature, orientation: AVCaptureVideoOrientation) -> Bool{
         let isLandscape = (orientation == .LandscapeLeft || orientation == .LandscapeRight)
-        let leftBoundary = image.extent.width * (isLandscape ? CameraKitConstants.DetectionRectangleLandscapeRatio.x : CameraKitConstants.DetectionRectangleRatio.x )
+        let leftBoundary = image.extent.width * (isLandscape ? DetectionRectLandscapeRatio.x : DetectionRectRatio.x )
         let rightBoundary = leftBoundary + image.extent.width *
-            (isLandscape ? CameraKitConstants.DetectionRectangleLandscapeRatio.wp : CameraKitConstants.DetectionRectangleRatio.wp)
+            (isLandscape ? DetectionRectLandscapeRatio.wp : DetectionRectRatio.wp)
         let bottomBoundary = image.extent.height *
             (1 - (isLandscape ?
-                (CameraKitConstants.DetectionRectangleLandscapeRatio.y + CameraKitConstants.DetectionRectangleLandscapeRatio.hp) :
-                (CameraKitConstants.DetectionRectangleRatio.y + CameraKitConstants.DetectionRectangleRatio.hp)
+                (DetectionRectLandscapeRatio.y + DetectionRectLandscapeRatio.hp) :
+                (DetectionRectRatio.y + DetectionRectRatio.hp)
                 ))
-        let topBoundary = image.extent.height * (1 - (isLandscape ? CameraKitConstants.DetectionRectangleLandscapeRatio.y : CameraKitConstants.DetectionRectangleRatio.y))
+        let topBoundary = image.extent.height * (1 - (isLandscape ? DetectionRectLandscapeRatio.y : DetectionRectRatio.y))
         if feature.topLeft.y > topBoundary || feature.topRight.y > topBoundary{
             return false
         }
@@ -396,13 +445,21 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
         return true
     }
     
-//    public override func shouldAutorotate() -> Bool {
-//        return false
-//    }
-//    
-//    public override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-//        return UIInterfaceOrientationMask.Portrait
-//    }
+    public override func shouldAutorotate() -> Bool {
+        if UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Phone{
+            return false
+        }else{
+            return true
+        }
+    }
+
+    public override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        if UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Phone{
+            return UIInterfaceOrientationMask.Portrait
+        }else{
+            return UIInterfaceOrientationMask.All
+        }
+    }
  
     public override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
