@@ -9,8 +9,9 @@
 import UIKit
 import AVFoundation
 import GLKit
+
 @objc public protocol CameraViewControllerDelegate{
-    func didFinshedTakePhoto(image: UIImage?)
+    func cameraViewControllerDidTakeImage (image: UIImage?)
 }
 
 public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
@@ -375,7 +376,7 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
                 }
 
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.delegate?.didFinshedTakePhoto(image)
+                    self.delegate?.cameraViewControllerDidTakeImage(image)
                 })
             })
             
