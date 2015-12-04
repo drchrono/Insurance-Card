@@ -10,10 +10,9 @@ import Foundation
 
 struct CameraKitConstants {
     static let singleton : CameraKitConstants = CameraKitConstants()
-
-    static let RectangleSizeProtrait = CGSize(width: 568, height: 355)
     let RectangleRectProtrait : CGRect?
     let RectangleRectLandscape : CGRect?
+    // ipad and ipadPro ratio are same, because Rect in iPad Pro is scaled
     static let RectangleRectRatio = RectangleRatio(x: 100 / 768, y: 334.5 / 1024, wp: 568 / 768, hp: 355 / 1024)
     static let DetectionRectangleRatio = RectangleRatio(x: 84 / 768, y: (334.5 + 10) / 1024, wp: 600 / 768, hp: (355 + 20) / 1024)
     static let RectangleRectLandscapeRatio = RectangleRatio(x: 228/1024, y: 206.5/768, wp: 568/1024, hp: 355/768)

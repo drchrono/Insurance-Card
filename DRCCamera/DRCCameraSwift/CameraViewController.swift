@@ -24,9 +24,7 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
     var avcapturePreviewLayer: AVCaptureVideoPreviewLayer?
     var videoOutput:AVCaptureVideoDataOutput?
     var stillImageOutput:AVCaptureStillImageOutput?
-    
-  
-    
+
     var detector:CIDetector!
     var enableDetect = true
     var lastRectFeature: CIRectangleFeature?
@@ -36,18 +34,7 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
     @IBOutlet weak var SaveButton: UIButton!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var distanceBetweenPromptAndSaveButtonConstraint: NSLayoutConstraint!
-    
-    func createGLKView(){
-        if let _ = context{
-            return
-        }
-        context = EAGLContext(API: EAGLRenderingAPI.OpenGLES2)
-        let glView = GLKView(frame: self.view.bounds)
-        glView.autoresizingMask = [.FlexibleWidth , .FlexibleHeight]
-        glView.translatesAutoresizingMaskIntoConstraints = true
-        glView.context = context!
-    }
-    
+
     public class func ViewControllerFromNib() -> CameraViewController{
         let nibVC = CameraViewController(nibName: "CameraViewController", bundle: NSBundle(forClass: CameraViewController.classForCoder()))
         return nibVC
@@ -128,6 +115,7 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
     }
     var lastDate = NSDate()
     var lastCIImage: CIImage?
+
     public func captureOutput(captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, fromConnection connection: AVCaptureConnection!) {
         let pixelBuffer: CVPixelBufferRef = CMSampleBufferGetImageBuffer(sampleBuffer)!
 //        print(connection.videoOrientation.rawValue)
@@ -151,11 +139,6 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
             }
 
             if let f = lastRectFeature{
-//                let fdesc = CMSampleBufferGetFormatDescription(sampleBuffer)
-//                let clap = CMVideoFormatDescriptionGetCleanAperture(fdesc!, false  /*originIsTopLeft == false*/)
-//                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-//                    self.drawForFeature(f, clap: clap, orientation: UIDevice.currentDevice().orientation)
-//                })
                 var uiImage:UIImage? = nil
                 if isFeatureRectInRectangle(ciImage, feature: f,orientation: currentAVOrientaion!){
                     let overlay = self.drawOverlay(ciImage, feature: f)
@@ -176,65 +159,6 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
         }
 
     }
-    func drawForFeature(feature:CIRectangleFeature, clap:CGRect, orientation: UIDeviceOrientation ){
-        let sublayers = avcapturePreviewLayer?.sublayers
-        
-        CATransaction.begin()
-        CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
-        
-        for layer in sublayers!{
-            if layer.name == "FaceLayer"{
-                layer.hidden = true
-            }
-        }
-        let parentFrameSize = previewView.frame.size
-        let gravity = avcapturePreviewLayer?.videoGravity
-        let previewBox = self.videoPreviewBoxForGravity(gravity!, frameSize: parentFrameSize, apertureSize: clap.size)
-        
-        
-    }
-    
-    func videoPreviewBoxForGravity(gravity:String, frameSize:CGSize, apertureSize:CGSize) -> CGRect{
-        let apertureRatio = apertureSize.height / apertureSize.width
-        let viewRatio = frameSize.width / frameSize.height
-        var size = CGSizeZero
-        if gravity == AVLayerVideoGravityResizeAspectFill{
-            if viewRatio > apertureRatio{
-                if (viewRatio > apertureRatio) {
-                    size.width = frameSize.width
-                    size.height = apertureSize.width * (frameSize.width / apertureSize.height)
-                } else {
-                    size.width = apertureSize.height * (frameSize.height / apertureSize.width)
-                    size.height = frameSize.height
-                }
-            }else if gravity == AVLayerVideoGravityResizeAspect{
-                if (viewRatio > apertureRatio) {
-                    size.width = apertureSize.height * (frameSize.height / apertureSize.width);
-                    size.height = frameSize.height;
-                } else {
-                    size.width = frameSize.width;
-                    size.height = apertureSize.width * (frameSize.width / apertureSize.height);
-                }
-            }else if gravity == AVLayerVideoGravityResize{
-                size.width = frameSize.width;
-                size.height = frameSize.height;
-            }
-        }
-        var videoBox = CGRect()
-        videoBox.size = size
-        if (size.width < frameSize.width){
-            videoBox.origin.x = (frameSize.width - size.width) / 2}
-        else{
-            videoBox.origin.x = (size.width - frameSize.width) / 2}
-        
-        if ( size.height < frameSize.height ){
-            videoBox.origin.y = (frameSize.height - size.height) / 2}
-        else{
-            videoBox.origin.y = (size.height - frameSize.height) / 2}
-        
-        return videoBox
-        
-    }
     
     func drawOverlay(ciImage: CIImage , feature: CIRectangleFeature) -> CIImage{
         var overlay = CIImage(color: detectionOverlayColor)
@@ -248,15 +172,7 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
 //        overlay = overlay.imageByCompositingOverImage(ciImage)
         return overlay
     }
-    /*
-    // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
     func setupCaptureSession() -> Bool{
         captureSession = AVCaptureSession()
         captureSession!.sessionPreset = AVCaptureSessionPresetPhoto
@@ -334,20 +250,20 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
                     var imageOrientation = UIImageOrientation.Right
                     switch outputOrientation{
                     case .Portrait:
-                        print("portait")
+//                        print("portait")
                         imageOrientation = UIImageOrientation.Right
                     case .LandscapeLeft:
-                        print("land left")
+//                        print("land left")
                         imageOrientation = UIImageOrientation.Down
                     case .LandscapeRight:
-                        print("land right")
+//                        print("land right")
                         imageOrientation = UIImageOrientation.Up
                     case .PortraitUpsideDown:
-                        print("up side")
+//                        print("up side")
                         imageOrientation = UIImageOrientation.Left
                     }
-                    print(connection!.videoOrientation.rawValue)
-                    print(UIImageOrientation.Right.rawValue)
+//                    print(connection!.videoOrientation.rawValue)
+//                    print(UIImageOrientation.Right.rawValue)
                     image = UIImage(CGImage: cgImageRef!, scale: 1.0, orientation: imageOrientation)
                     image = ImageHandler.scaleAndRotateImage(image!)
                     let rect :CGRect
@@ -378,19 +294,17 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
                     image = UIImage(CGImage: imageRef!)
 //                    let ciImage = CIImage(CGImage: cgImageRef!)
 //                    let image = ImageHandler.getImageCorrectedPerspectiv(ciImage, feature: self.lastRectFeature!)
-                    print(image!.imageOrientation.rawValue)
-                    print(image!.size)
+//                    print(image!.imageOrientation.rawValue)
+//                    print(image!.size)
                 }
 
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     self.delegate?.cameraViewControllerDidTakeImage(image)
                 })
             })
-            
-            
-        
         }
     }
+
     var RectPortraitRatio: RectangleRatio{
         if UIDevice.currentDevice().userInterfaceIdiom == .Phone{
             if let ratio = CameraKitConstants.singleton.iphoneRectangleRatio {
@@ -413,7 +327,7 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
             return CameraKitConstants.RectangleRectLandscapeRatio
         }
     }
-    var detectedRectRatioPortrait: RectangleRatio{
+    var detectingRectRatioPortrait: RectangleRatio{
         if UIDevice.currentDevice().userInterfaceIdiom == .Phone{
             if let ratio = CameraKitConstants.singleton.iphoneRectangleRatio  {
                 return ratio
@@ -425,28 +339,28 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
         }
     }
 
-    var detectedRectRatioLandscape: RectangleRatio{
+    var detectingRectRatioLandscape: RectangleRatio{
         if UIDevice.currentDevice().userInterfaceIdiom == .Phone{
             if let ratio = CameraKitConstants.singleton.iphoneRectangleLandscapeRatio {
                 return ratio
             } else {
                 return RectangleRatio()
             }
-        }else{
+        } else {
             return CameraKitConstants.DetectionRectangleLandscapeRatio
         }
     }
 
     func isFeatureRectInRectangle(image: CIImage, feature: CIRectangleFeature, orientation: AVCaptureVideoOrientation) -> Bool{
         let isLandscape = (orientation == .LandscapeLeft || orientation == .LandscapeRight)
-        let leftBoundary = image.extent.width * (isLandscape ? detectedRectRatioLandscape.x : detectedRectRatioPortrait.x )
-        let rightBoundary = leftBoundary + image.extent.width * (isLandscape ? detectedRectRatioLandscape.wp : detectedRectRatioPortrait.wp)
+        let leftBoundary = image.extent.width * (isLandscape ? detectingRectRatioLandscape.x : detectingRectRatioPortrait.x )
+        let rightBoundary = leftBoundary + image.extent.width * (isLandscape ? detectingRectRatioLandscape.wp : detectingRectRatioPortrait.wp)
         let bottomBoundary = image.extent.height *
             (1 - (isLandscape ?
-                (detectedRectRatioLandscape.y + detectedRectRatioLandscape.hp) :
-                (detectedRectRatioPortrait.y + detectedRectRatioPortrait.hp)
+                (detectingRectRatioLandscape.y + detectingRectRatioLandscape.hp) :
+                (detectingRectRatioPortrait.y + detectingRectRatioPortrait.hp)
                 ))
-        let topBoundary = image.extent.height * (1 - (isLandscape ? detectedRectRatioLandscape.y : detectedRectRatioPortrait.y))
+        let topBoundary = image.extent.height * (1 - (isLandscape ? detectingRectRatioLandscape.y : detectingRectRatioPortrait.y))
         if feature.topLeft.y > topBoundary || feature.topRight.y > topBoundary{
             return false
         }
