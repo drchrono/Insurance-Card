@@ -35,6 +35,7 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
     @IBOutlet weak var maskView: CameraMaskView!
     @IBOutlet weak var SaveButton: UIButton!
     @IBOutlet weak var backButton: UIButton!
+    @IBOutlet weak var distanceBetweenPromptAndSaveButtonConstraint: NSLayoutConstraint!
     
     func createGLKView(){
         if let _ = context{
@@ -88,6 +89,12 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
     var initOrientation : UIInterfaceOrientation?
     override public func viewDidLoad() {
         super.viewDidLoad()
+        if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+            if let centerRectangleSize = CameraKitConstants.singleton.RectangleRectProtrait?.size {
+                distanceBetweenPromptAndSaveButtonConstraint.constant = (centerRectangleSize.height / 2) - 32 + 8
+                view.layoutIfNeeded()
+            }
+        }
         self.SaveButton.layer.cornerRadius = 32
         self.SaveButton.layer.masksToBounds = true
         self.backButton.layer.cornerRadius = 22
@@ -385,52 +392,61 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
         }
     }
     var RectPortraitRatio: RectangleRatio{
-        get {
-            if UIDevice.currentDevice().userInterfaceIdiom == .Phone{
-                return CameraKitConstants().iphoneRectangleRatio
-            }else{
-                return CameraKitConstants.RectangleRectRatio
+        if UIDevice.currentDevice().userInterfaceIdiom == .Phone{
+            if let ratio = CameraKitConstants.singleton.iphoneRectangleRatio {
+                return ratio
+            } else {
+                return RectangleRatio()
             }
+        } else {
+            return CameraKitConstants.RectangleRectRatio
         }
     }
     var RectLandscapeRatio: RectangleRatio{
-        get {
-            if UIDevice.currentDevice().userInterfaceIdiom == .Phone{
-                return CameraKitConstants().iphoneRectangleLandscapeRatio
-            }else{
-                return CameraKitConstants.RectangleRectLandscapeRatio
+        if UIDevice.currentDevice().userInterfaceIdiom == .Phone{
+            if let ratio = CameraKitConstants.singleton.iphoneRectangleLandscapeRatio {
+                return ratio
+            } else {
+                return RectangleRatio()
             }
+        } else {
+            return CameraKitConstants.RectangleRectLandscapeRatio
         }
     }
-    var DetectionRectRatio: RectangleRatio{
-        get{
-            if UIDevice.currentDevice().userInterfaceIdiom == .Phone{
-                return CameraKitConstants().iphoneRectangleRatio
-            }else{
-                return CameraKitConstants.DetectionRectangleRatio
+    var detectedRectRatioPortrait: RectangleRatio{
+        if UIDevice.currentDevice().userInterfaceIdiom == .Phone{
+            if let ratio = CameraKitConstants.singleton.iphoneRectangleRatio  {
+                return ratio
+            } else {
+                return RectangleRatio()
             }
+        } else {
+            return CameraKitConstants.DetectionRectangleRatio
         }
     }
-    var DetectionRectLandscapeRatio: RectangleRatio{
-        get{
-            if UIDevice.currentDevice().userInterfaceIdiom == .Phone{
-                return CameraKitConstants().iphoneRectangleLandscapeRatio
-            }else{
-                return CameraKitConstants.DetectionRectangleLandscapeRatio
+
+    var detectedRectRatioLandscape: RectangleRatio{
+        if UIDevice.currentDevice().userInterfaceIdiom == .Phone{
+            if let ratio = CameraKitConstants.singleton.iphoneRectangleLandscapeRatio {
+                return ratio
+            } else {
+                return RectangleRatio()
             }
+        }else{
+            return CameraKitConstants.DetectionRectangleLandscapeRatio
         }
     }
+
     func isFeatureRectInRectangle(image: CIImage, feature: CIRectangleFeature, orientation: AVCaptureVideoOrientation) -> Bool{
         let isLandscape = (orientation == .LandscapeLeft || orientation == .LandscapeRight)
-        let leftBoundary = image.extent.width * (isLandscape ? DetectionRectLandscapeRatio.x : DetectionRectRatio.x )
-        let rightBoundary = leftBoundary + image.extent.width *
-            (isLandscape ? DetectionRectLandscapeRatio.wp : DetectionRectRatio.wp)
+        let leftBoundary = image.extent.width * (isLandscape ? detectedRectRatioLandscape.x : detectedRectRatioPortrait.x )
+        let rightBoundary = leftBoundary + image.extent.width * (isLandscape ? detectedRectRatioLandscape.wp : detectedRectRatioPortrait.wp)
         let bottomBoundary = image.extent.height *
             (1 - (isLandscape ?
-                (DetectionRectLandscapeRatio.y + DetectionRectLandscapeRatio.hp) :
-                (DetectionRectRatio.y + DetectionRectRatio.hp)
+                (detectedRectRatioLandscape.y + detectedRectRatioLandscape.hp) :
+                (detectedRectRatioPortrait.y + detectedRectRatioPortrait.hp)
                 ))
-        let topBoundary = image.extent.height * (1 - (isLandscape ? DetectionRectLandscapeRatio.y : DetectionRectRatio.y))
+        let topBoundary = image.extent.height * (1 - (isLandscape ? detectedRectRatioLandscape.y : detectedRectRatioPortrait.y))
         if feature.topLeft.y > topBoundary || feature.topRight.y > topBoundary{
             return false
         }

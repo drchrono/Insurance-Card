@@ -14,22 +14,25 @@ class CameraMaskView: UIView {
     let RectangleCornerRadius:CGFloat = 10
     let iphoneRectPortrait: CGRect!
     let iphoneRectLandscape:CGRect!
+    let iPadRectPortrait: CGRect!
+    let iPadRectLandscape: CGRect!
+
     override func drawRect(rect: CGRect) {
         
         let maskLayer = CAShapeLayer()
         let maskPath = CGPathCreateMutable()
         // draw central rect
         if UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Phone{
-            if rect.width < rect.height{
+            if rect.width < rect.height {
                 CGPathAddRoundedRect(maskPath, nil, iphoneRectPortrait, RectangleCornerRadius, RectangleCornerRadius)
-            }else{
+            } else {
                 CGPathAddRoundedRect(maskPath, nil, iphoneRectLandscape, RectangleCornerRadius, RectangleCornerRadius)
             }
         }else{
-            if rect.width == 768 {
-                CGPathAddRoundedRect(maskPath, nil, CameraKitConstants.RectangleRectProtrait, RectangleCornerRadius, RectangleCornerRadius)
+            if rect.width < rect.height {
+                CGPathAddRoundedRect(maskPath, nil, iPadRectPortrait, RectangleCornerRadius, RectangleCornerRadius)
             }else{
-                CGPathAddRoundedRect(maskPath, nil, CameraKitConstants.RectangleRectLandscape, RectangleCornerRadius, RectangleCornerRadius)
+                CGPathAddRoundedRect(maskPath, nil, iPadRectLandscape, RectangleCornerRadius, RectangleCornerRadius)
             }
         }
         
@@ -47,32 +50,62 @@ class CameraMaskView: UIView {
                 path = UIBezierPath(roundedRect: iphoneRectLandscape, cornerRadius: RectangleCornerRadius)
             }
         }else{
-            switch rect.width{
-            case 768:
-                path = UIBezierPath(roundedRect: CameraKitConstants.RectangleRectProtrait, cornerRadius: RectangleCornerRadius)
-            case 1024:
-                path = UIBezierPath(roundedRect: CameraKitConstants.RectangleRectLandscape, cornerRadius: RectangleCornerRadius)
-            default:
-                path = UIBezierPath(roundedRect: CGRectMake(0, 0, 10, 10), cornerRadius: RectangleCornerRadius)
-        }
+            if rect.width < rect.height {
+                path = UIBezierPath(roundedRect: iPadRectPortrait, cornerRadius: RectangleCornerRadius)
+            } else {
+                path = UIBezierPath(roundedRect: iPadRectLandscape, cornerRadius: RectangleCornerRadius)
+            }
         }
         path.lineWidth = 1
         UIColor.whiteColor().setStroke()
         path.stroke()
     }
     
-    
     override init(frame: CGRect) {
-        let constants = CameraKitConstants()
-        self.iphoneRectPortrait = constants.iPhoneRectangleRectPortrait
-        self.iphoneRectLandscape = constants.iPhoneRectangleRectLandscape
+        if let rect = CameraKitConstants.singleton.iPhoneRectangleRectPortrait {
+            self.iphoneRectPortrait = rect
+        } else {
+            self.iphoneRectPortrait = CGRectMake(0, 0, 10, 10)
+        }
+        if let rect = CameraKitConstants.singleton.iPhoneRectangleRectLandscape {
+            self.iphoneRectLandscape = rect
+        } else {
+            self.iphoneRectLandscape = CGRectMake(0, 0, 10, 10)
+        }
+        if let rect = CameraKitConstants.singleton.RectangleRectProtrait {
+            self.iPadRectPortrait = rect
+        } else {
+            self.iPadRectPortrait = CGRectMake(0, 0, 10, 10)
+        }
+        if let rect = CameraKitConstants.singleton.RectangleRectLandscape {
+            self.iPadRectLandscape = rect
+        } else {
+            self.iPadRectLandscape = CGRectMake(0, 0, 10, 10)
+        }
         super.init(frame: frame)
     }
     
     required init?(coder aDecoder: NSCoder) {
-        let constants = CameraKitConstants()
-        self.iphoneRectPortrait = constants.iPhoneRectangleRectPortrait
-        self.iphoneRectLandscape = constants.iPhoneRectangleRectLandscape
+        if let rect = CameraKitConstants.singleton.iPhoneRectangleRectPortrait {
+            self.iphoneRectPortrait = rect
+        } else {
+            self.iphoneRectPortrait = CGRectMake(0, 0, 10, 10)
+        }
+        if let rect = CameraKitConstants.singleton.iPhoneRectangleRectLandscape {
+            self.iphoneRectLandscape = rect
+        } else {
+            self.iphoneRectLandscape = CGRectMake(0, 0, 10, 10)
+        }
+        if let rect = CameraKitConstants.singleton.RectangleRectProtrait {
+            self.iPadRectPortrait = rect
+        } else {
+            self.iPadRectPortrait = CGRectMake(0, 0, 10, 10)
+        }
+        if let rect = CameraKitConstants.singleton.RectangleRectLandscape {
+            self.iPadRectLandscape = rect
+        } else {
+            self.iPadRectLandscape = CGRectMake(0, 0, 10, 10)
+        }
         super.init(coder: aDecoder)
     }
 }

@@ -64,14 +64,14 @@ class ViewController: UIViewController , DRCCustomImagePickerControllerDelegate,
         }
     }
     
-    func didFinshedTakePhoto(image: UIImage?) {
+    func cameraViewControllerDidTakeImage(image: UIImage?) {
         self.dismissViewControllerAnimated(true) { () -> Void in
             dispatch_async(dispatch_get_main_queue(), { () -> Void in
                 self.imageView.image = image
             })
-            
+
         }
-        
     }
+
 }
 

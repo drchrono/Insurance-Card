@@ -8,6 +8,7 @@
             <connections>
                 <outlet property="SaveButton" destination="QlH-zd-LXu" id="zWk-Tj-t8d"/>
                 <outlet property="backButton" destination="Y5X-4i-Bnf" id="4Ma-Yg-AGd"/>
+                <outlet property="distanceBetweenPromptAndSaveButtonConstraint" destination="Hkf-d9-M9l" id="Hbb-Od-ffl"/>
                 <outlet property="maskView" destination="WtL-je-bOn" id="tKX-S7-Rra"/>
                 <outlet property="overlayImageView" destination="l3Q-Ve-C5X" id="Ecl-ic-MdQ"/>
                 <outlet property="previewView" destination="4qs-ce-Y4D" id="Jyy-Kq-55F"/>
