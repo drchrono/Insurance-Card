@@ -300,6 +300,7 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
 
                 dispatch_async(dispatch_get_main_queue(), { () -> Void in
                     self.delegate?.cameraViewControllerDidTakeImage(image)
+                    self.SaveButton.enabled = true
                 })
             })
         }
