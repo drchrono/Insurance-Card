@@ -32,7 +32,7 @@ class ImageHandler {
         }
         
         let scaleRatio = bounds.size.width / width
-        let imageSize: CGSize = CGSizeMake(width, height)
+        let imageSize: CGSize = CGSize(width: width, height: height)
         var boundHeight: CGFloat
         let orient = image.imageOrientation
         switch orient{
@@ -92,7 +92,7 @@ class ImageHandler {
         }
         CGContextConcatCTM(context, transform)
         
-        CGContextDrawImage(UIGraphicsGetCurrentContext(), CGRectMake(0, 0, width, height), imageRef)
+        CGContextDrawImage(UIGraphicsGetCurrentContext(), CGRect(x: 0, y: 0, width: width, height: height), imageRef)
         let imageCopy: UIImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
