@@ -253,7 +253,7 @@ class CameraOverlay: UIView {
         //        maskLayer.frame = sampleView.bounds
         //        let circleLayer = CAShapeLayer()
         //        circleLayer.frame = CGRectMake(sampleView.center.x - 100, sampleView.center.y - 100, 200, 200)
-        //        let circlePath = UIBezierPath(ovalInRect: CGRectMake(0, 0, 200, 200))
+        //        let circlePath = UIBezierPath(ovalInRect: CGRect(x: 0, y: 0, width: 200, height: 200))
         //        circleLayer.path = circlePath.CGPath
         //        circleLayer.fillColor = UIColor.blackColor().CGColor
         //        maskLayer.addSublayer(circleLayer)

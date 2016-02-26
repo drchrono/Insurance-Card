@@ -69,14 +69,14 @@ struct CameraKitConstants {
         }
         if UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad {
             let iPadDeviceSize = UIScreen.mainScreen().bounds.size
-            if iPadDeviceSize == CGSizeMake(1024, 768) || iPadDeviceSize == CGSizeMake(768, 1024) {
+            if iPadDeviceSize == CGSize(width: 1024, height: 768) || iPadDeviceSize == CGSize(width: 768, height: 1024) {
                 //iPad normal
-                RectangleRectProtrait = CGRectMake(100, 334.5, 568, 355)
-                RectangleRectLandscape = CGRectMake(228, 206.5, 568, 355)
-            } else if iPadDeviceSize == CGSizeMake(1366, 1024) || iPadDeviceSize == CGSizeMake(1024, 1366) {
+                RectangleRectProtrait = CGRect(x: 100, y: 334.5, width: 568, height: 355)
+                RectangleRectLandscape = CGRect(x: 228, y: 206.5, width: 568, height: 355)
+            } else if iPadDeviceSize == CGSize(width: 1366, height: 1024) || iPadDeviceSize == CGSize(width: 1024, height: 1366) {
                 //iPad Pro
-                RectangleRectProtrait = CGRectMake(133, 446, 758, 474)
-                RectangleRectLandscape = CGRectMake(304, 275, 758, 474)
+                RectangleRectProtrait = CGRect(x: 133, y: 446, width: 758, height: 474)
+                RectangleRectLandscape = CGRect(x: 304, y: 275, width: 758, height: 474)
             } else {
                 // Unkown
                 RectangleRectProtrait = nil
