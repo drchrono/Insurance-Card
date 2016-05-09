@@ -8,6 +8,27 @@
 
 import Foundation
 
+struct RectangleRatio {
+    var x:CGFloat
+    var y:CGFloat
+    var wp:CGFloat
+    var hp:CGFloat
+
+    init (x: CGFloat,y:CGFloat, wp:CGFloat, hp:CGFloat) {
+        self.x = x
+        self.y = y
+        self.wp = wp
+        self.hp = hp
+    }
+
+    init () {
+        self.x = 0
+        self.y = 0
+        self.wp = 0
+        self.hp = 0
+    }
+}
+
 struct CameraKitConstants {
     static let singleton : CameraKitConstants = CameraKitConstants()
     let RectangleRectProtrait : CGRect?

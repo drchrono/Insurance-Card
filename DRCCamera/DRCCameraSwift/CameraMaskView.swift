@@ -8,8 +8,6 @@
 
 import UIKit
 
-
-
 class CameraMaskView: UIView {
     let RectangleCornerRadius:CGFloat = 10
     let iphoneRectPortrait: CGRect!
