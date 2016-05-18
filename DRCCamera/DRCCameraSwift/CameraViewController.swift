@@ -11,14 +11,15 @@ import AVFoundation
 import GLKit
 
 @objc public protocol CameraViewControllerDelegate{
-    func cameraViewControllerDidTakeImage (image: UIImage?)
+    optional func cameraViewControllerDidClose(cameraViewController: CameraViewController)
+    func cameraViewController(cameraViewController: CameraViewController, didTakeImage image: UIImage?)
 }
 
 public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
     let detectionOverlayColor = CIColor(red: 70/255, green: 140/255, blue: 215/255, alpha: 0.6)
     @IBOutlet weak var previewView: UIView!
     @IBOutlet weak var overlayImageView: UIImageView!
-    public var delegate :CameraViewControllerDelegate?
+    public weak var delegate :CameraViewControllerDelegate?
     
     var captureSession:AVCaptureSession?
     var avcapturePreviewLayer: AVCaptureVideoPreviewLayer?
@@ -226,7 +227,9 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
     }
     
     @IBAction func clickedCancelButton(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+        dismissViewControllerAnimated(true) {
+            self.delegate?.cameraViewControllerDidClose?(self)
+        }
     }
     @IBAction func clickedTakeButton(sender: AnyObject) {
         SaveButton.enabled = false
@@ -297,11 +300,12 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
 //                    print(image!.imageOrientation.rawValue)
 //                    print(image!.size)
                 }
-
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                    self.delegate?.cameraViewControllerDidTakeImage(image)
-                    self.SaveButton.enabled = true
-                })
+                dispatch_async(dispatch_get_main_queue()) {
+                    self.dismissViewControllerAnimated(true, completion: {
+                        self.delegate?.cameraViewController(self, didTakeImage: image)
+                        self.SaveButton.enabled = true
+                    })
+                }
             })
         }
     }
@@ -431,11 +435,7 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
                 break
             }
         }
-        
-
-        
     }
-    
     
     public override func prefersStatusBarHidden() -> Bool {
         return true
