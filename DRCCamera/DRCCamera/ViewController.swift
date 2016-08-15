@@ -24,19 +24,19 @@ class ViewController: UIViewController, CameraViewControllerDelegate{
     }
 
     @IBOutlet weak var click2: UIButton!
-    @IBAction func click2(sender: AnyObject) {
+    @IBAction func click2(_ sender: AnyObject) {
     }
-    @IBAction func click(sender: AnyObject) {
+    @IBAction func click(_ sender: AnyObject) {
     }
-    @IBAction func clickedNew(sender: AnyObject) {
+    @IBAction func clickedNew(_ sender: AnyObject) {
         let vc = CameraViewController.ViewControllerFromNib()
         vc.delegate = self
         vc.showCaremaIfPossible(inViewController: self)
     }
 
-    func cameraViewControllerDidTakeImage(image: UIImage?) {
-        self.dismissViewControllerAnimated(true) { () -> Void in
-            dispatch_async(dispatch_get_main_queue(), { () -> Void in
+    func cameraViewControllerDidTakeImage(_ image: UIImage?) {
+        self.dismiss(animated: true) { () -> Void in
+            DispatchQueue.main.async(execute: { () -> Void in
                 self.imageView.image = image
             })
 
