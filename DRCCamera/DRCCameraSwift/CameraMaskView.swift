@@ -33,8 +33,8 @@ class CameraMaskView: UIView {
                 maskPath.__addRoundedRect(transform: nil, rect: iPadRectLandscape, cornerWidth: RectangleCornerRadius, cornerHeight: RectangleCornerRadius)
             }
         }
-        
-        CGPathAddRect(maskPath, nil, rect)
+        maskPath.addRect(rect)
+//        CGPathAddRect(maskPath, nil, rect)
         maskLayer.path = maskPath
         maskLayer.fillColor = UIColor.white.cgColor
         maskLayer.fillRule = kCAFillRuleEvenOdd

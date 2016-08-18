@@ -91,8 +91,8 @@ class ImageHandler {
             context.translateBy(x: 0, y: -height)
         }
         context.concatenate(transform)
-        
-        CGContextDrawImage(UIGraphicsGetCurrentContext(), CGRect(x: 0, y: 0, width: width, height: height), imageRef)
+        context.draw(imageRef, in:  CGRect(x: 0, y: 0, width: width, height: height))
+//        CGContextDrawImage(UIGraphicsGetCurrentContext(), CGRect(x: 0, y: 0, width: width, height: height), imageRef)
         let imageCopy: UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         
@@ -165,8 +165,9 @@ extension UIImage{
         }
         
         bitmap?.scaleBy(x: yFlip, y: -1.0)
-        CGContextDrawImage(bitmap, CGRect(x: -size.width / 2, y: -size.height / 2, width: size.width, height: size.height), cgImage)
-        
+        bitmap?.draw(cgImage!, in: CGRect(x: -size.width / 2, y: -size.height / 2, width: size.width, height: size.height))
+//        CGContextDrawImage(bitmap, CGRect(x: -size.width / 2, y: -size.height / 2, width: size.width, height: size.height), cgImage)
+
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         

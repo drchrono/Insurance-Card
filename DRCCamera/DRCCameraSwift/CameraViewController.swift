@@ -62,10 +62,12 @@ open class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampl
             return
         case .notDetermined:
             AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo, completionHandler: { (success:Bool) -> Void in
-                if success {
-                    rootViewController.present(self, animated: true, completion: nil)
-                }else{
-                    return
+                DispatchQueue.main.async {
+                    if success {
+                        rootViewController.present(self, animated: true, completion: nil)
+                    }else{
+                        return
+                    }
                 }
             })
             return
@@ -87,6 +89,8 @@ open class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampl
         self.SaveButton.layer.masksToBounds = true
         self.backButton.layer.cornerRadius = 22
         self.backButton.layer.masksToBounds = true
+        //iOS 10, move up 1 point to be center
+        SaveButton.imageEdgeInsets = UIEdgeInsets(top: -1, left: 0, bottom: 1, right: 0)
         initOrientation = UIApplication.shared.statusBarOrientation
 //        let value = UIInterfaceOrientation.Portrait.rawValue
 //        UIDevice.currentDevice().setValue(value, forKey: "orientation")
@@ -234,8 +238,8 @@ open class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampl
     @IBAction func clickedTakeButton(_ sender: AnyObject) {
         SaveButton.isEnabled = false
         if let videoConnection = stillImageOutput!.connection(withMediaType: AVMediaTypeVideo) {
-            stillImageOutput?.captureStillImageAsynchronously(from: videoConnection, completionHandler: { (sampleBuffer:CMSampleBuffer!, error:NSError!) -> Void in
-                if sampleBuffer == nil{
+            stillImageOutput?.captureStillImageAsynchronously(from: videoConnection, completionHandler: { sampleBuffer, error in
+                guard let sampleBuffer = sampleBuffer else {
                     print(error)
                     return
                 }
@@ -245,9 +249,9 @@ open class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampl
 //                    image = ImageHandler.getImageCorrectedPerspectiv(self.lastCIImage!, feature: self.lastRectFeature!)
                     image = ImageHandler.getImageCorrectedPerspectiveShrink(self.lastCIImage!, feature: self.lastRectFeature!)
                 }else{
-                    let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(sampleBuffer)
-                    let dataProvider = CGDataProvider(data: imageData)
-                    let cgImageRef = CGImage(jpegDataProviderSource: dataProvider, decode: nil, shouldInterpolate: true, intent: CGColorRenderingIntent.defaultIntent)
+                    let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(sampleBuffer) as NSData
+                    let dataProvider = CGDataProvider(data: imageData as CFData)
+                    let cgImageRef = CGImage(jpegDataProviderSource: dataProvider!, decode: nil, shouldInterpolate: true, intent: CGColorRenderingIntent.defaultIntent)
                     let connection = self.videoOutput?.connection(withMediaType: AVMediaTypeVideo)
                     let outputOrientation = connection!.videoOrientation
                     var imageOrientation = UIImageOrientation.right
@@ -293,7 +297,7 @@ open class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampl
                             height: image!.size.height * self.RectLandscapeRatio.hp)
                     }
 
-                    let imageRef = image!.cgImage.cropping(to: rect)
+                    let imageRef = image!.cgImage!.cropping(to: rect)
                     image = UIImage(cgImage: imageRef!)
 //                    let ciImage = CIImage(CGImage: cgImageRef!)
 //                    let image = ImageHandler.getImageCorrectedPerspectiv(ciImage, feature: self.lastRectFeature!)
@@ -381,7 +385,7 @@ open class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampl
         return true
     }
     
-    open override func shouldAutorotate() -> Bool {
+    open override var shouldAutorotate: Bool {
         if UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.phone{
             return false
         }else{
@@ -389,7 +393,7 @@ open class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampl
         }
     }
 
-    open override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
         if UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.phone{
             return UIInterfaceOrientationMask.portrait
         }else{
@@ -437,7 +441,7 @@ open class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampl
         }
     }
     
-    open override func prefersStatusBarHidden() -> Bool {
+    open override var prefersStatusBarHidden: Bool {
         return true
     }
 }

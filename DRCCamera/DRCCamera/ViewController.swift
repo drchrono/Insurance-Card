@@ -34,13 +34,8 @@ class ViewController: UIViewController, CameraViewControllerDelegate{
         vc.showCaremaIfPossible(inViewController: self)
     }
 
-    func cameraViewControllerDidTakeImage(_ image: UIImage?) {
-        self.dismiss(animated: true) { () -> Void in
-            DispatchQueue.main.async(execute: { () -> Void in
-                self.imageView.image = image
-            })
-
-        }
+    func cameraViewController(_ cameraViewController: CameraViewController, didTakeImage image: UIImage?) {
+        self.imageView.image = image
     }
 
 }
