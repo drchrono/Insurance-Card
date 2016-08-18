@@ -15,33 +15,33 @@ class CameraMaskView: UIView {
     let iPadRectPortrait: CGRect!
     let iPadRectLandscape: CGRect!
 
-    override func drawRect(rect: CGRect) {
+    override func draw(_ rect: CGRect) {
         
         let maskLayer = CAShapeLayer()
-        let maskPath = CGPathCreateMutable()
+        let maskPath = CGMutablePath()
         // draw central rect
-        if UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Phone{
+        if UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.phone{
             if rect.width < rect.height {
-                CGPathAddRoundedRect(maskPath, nil, iphoneRectPortrait, RectangleCornerRadius, RectangleCornerRadius)
+                maskPath.__addRoundedRect(transform: nil, rect: iphoneRectPortrait, cornerWidth: RectangleCornerRadius, cornerHeight: RectangleCornerRadius)
             } else {
-                CGPathAddRoundedRect(maskPath, nil, iphoneRectLandscape, RectangleCornerRadius, RectangleCornerRadius)
+                maskPath.__addRoundedRect(transform: nil, rect: iphoneRectLandscape, cornerWidth: RectangleCornerRadius, cornerHeight: RectangleCornerRadius)
             }
         }else{
             if rect.width < rect.height {
-                CGPathAddRoundedRect(maskPath, nil, iPadRectPortrait, RectangleCornerRadius, RectangleCornerRadius)
+                maskPath.__addRoundedRect(transform: nil, rect: iPadRectPortrait, cornerWidth: RectangleCornerRadius, cornerHeight: RectangleCornerRadius)
             }else{
-                CGPathAddRoundedRect(maskPath, nil, iPadRectLandscape, RectangleCornerRadius, RectangleCornerRadius)
+                maskPath.__addRoundedRect(transform: nil, rect: iPadRectLandscape, cornerWidth: RectangleCornerRadius, cornerHeight: RectangleCornerRadius)
             }
         }
         
         CGPathAddRect(maskPath, nil, rect)
         maskLayer.path = maskPath
-        maskLayer.fillColor = UIColor.whiteColor().CGColor
+        maskLayer.fillColor = UIColor.white.cgColor
         maskLayer.fillRule = kCAFillRuleEvenOdd
         self.layer.mask = maskLayer
         
         let path : UIBezierPath!
-        if UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Phone{
+        if UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.phone{
             if rect.width < rect.height{
                 path = UIBezierPath(roundedRect: iphoneRectPortrait, cornerRadius: RectangleCornerRadius)
             }else{
@@ -55,7 +55,7 @@ class CameraMaskView: UIView {
             }
         }
         path.lineWidth = 1
-        UIColor.whiteColor().setStroke()
+        UIColor.white.setStroke()
         path.stroke()
     }
     
