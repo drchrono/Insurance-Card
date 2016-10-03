@@ -45,15 +45,15 @@ struct CameraKitConstants {
     let iPhoneRectangleRectLandscape: CGRect?
 
     init () {
-        if UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Phone {
-            let iphoneSize = UIScreen.mainScreen().bounds.size
+        if UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.phone {
+            let iphoneSize = UIScreen.main.bounds.size
             if iphoneSize.width < iphoneSize.height{
                 let longEdge = iphoneSize.height
                 let shortEdge = iphoneSize.width
                 let width = shortEdge - 60
                 let height = width / 1.6
-                iPhoneRectangleRectPortrait = CGRectMake(30, (longEdge - height)/2 , width, height)
-                iPhoneRectangleRectLandscape = CGRectMake( (longEdge - width)/2, (shortEdge - height)/2, width , height)
+                iPhoneRectangleRectPortrait = CGRect(x: 30, y: (longEdge - height)/2 , width: width, height: height)
+                iPhoneRectangleRectLandscape = CGRect( x: (longEdge - width)/2, y: (shortEdge - height)/2, width: width , height: height)
                 let videoWidth = iphoneSize.width
                 let videoHeight = videoWidth * 4 / 3
                 iphoneRectangleRatio = RectangleRatio(x: 30 / videoWidth,
@@ -69,8 +69,8 @@ struct CameraKitConstants {
                 let shortEdge = iphoneSize.height
                 let width = shortEdge - 60
                 let height = width / 1.6
-                iPhoneRectangleRectPortrait = CGRectMake(30, (longEdge - height)/2 , width , height)
-                iPhoneRectangleRectLandscape = CGRectMake((longEdge - width)/2, (shortEdge - height)/2, width, height)
+                iPhoneRectangleRectPortrait = CGRect(x: 30, y: (longEdge - height)/2 , width: width , height: height)
+                iPhoneRectangleRectLandscape = CGRect(x: (longEdge - width)/2, y: (shortEdge - height)/2, width: width, height: height)
                 let videoHeight = shortEdge
                 let videoWidth = videoHeight * 4 / 3
                 iphoneRectangleRatio = RectangleRatio(x: (shortEdge - width)/2/shortEdge,
@@ -88,8 +88,8 @@ struct CameraKitConstants {
             iPhoneRectangleRectLandscape = nil
             iPhoneRectangleRectPortrait = nil
         }
-        if UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad {
-            let iPadDeviceSize = UIScreen.mainScreen().bounds.size
+        if UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.pad {
+            let iPadDeviceSize = UIScreen.main.bounds.size
             if iPadDeviceSize == CGSize(width: 1024, height: 768) || iPadDeviceSize == CGSize(width: 768, height: 1024) {
                 //iPad normal
                 RectangleRectProtrait = CGRect(x: 100, y: 334.5, width: 568, height: 355)

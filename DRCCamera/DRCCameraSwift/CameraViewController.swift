@@ -11,15 +11,15 @@ import AVFoundation
 import GLKit
 
 @objc public protocol CameraViewControllerDelegate{
-    optional func cameraViewControllerDidClose(cameraViewController: CameraViewController)
-    func cameraViewController(cameraViewController: CameraViewController, didTakeImage image: UIImage?)
+    @objc optional func cameraViewControllerDidClose(_ cameraViewController: CameraViewController)
+    func cameraViewController(_ cameraViewController: CameraViewController, didTakeImage image: UIImage?)
 }
 
-public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
+open class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampleBufferDelegate {
     let detectionOverlayColor = CIColor(red: 70/255, green: 140/255, blue: 215/255, alpha: 0.6)
     @IBOutlet weak var previewView: UIView!
     @IBOutlet weak var overlayImageView: UIImageView!
-    public weak var delegate :CameraViewControllerDelegate?
+    open weak var delegate :CameraViewControllerDelegate?
     
     var captureSession:AVCaptureSession?
     var avcapturePreviewLayer: AVCaptureVideoPreviewLayer?
@@ -36,48 +36,50 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var distanceBetweenPromptAndSaveButtonConstraint: NSLayoutConstraint!
 
-    public class func ViewControllerFromNib() -> CameraViewController{
-        let nibVC = CameraViewController(nibName: "CameraViewController", bundle: NSBundle(forClass: CameraViewController.classForCoder()))
+    open class func ViewControllerFromNib() -> CameraViewController{
+        let nibVC = CameraViewController(nibName: "CameraViewController", bundle: Bundle(for: CameraViewController.classForCoder()))
         return nibVC
     }
 
-    public func showCaremaIfPossible(inViewController rootViewController: UIViewController){
-        if !UIImagePickerController.isCameraDeviceAvailable(UIImagePickerControllerCameraDevice.Rear){
+    open func showCaremaIfPossible(inViewController rootViewController: UIViewController){
+        if !UIImagePickerController.isCameraDeviceAvailable(UIImagePickerControllerCameraDevice.rear){
             let errorMsg = "You do not have a rear camera on this device."
-            let alert = UIAlertController(title: "Error", message: errorMsg, preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
-            rootViewController.presentViewController(alert, animated: true, completion: nil)
+            let alert = UIAlertController(title: "Error", message: errorMsg, preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            rootViewController.present(alert, animated: true, completion: nil)
             return
         }
-        switch AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeVideo){
-        case .Authorized:
+        switch AVCaptureDevice.authorizationStatus(forMediaType: AVMediaTypeVideo){
+        case .authorized:
                 break
-        case .Denied:
+        case .denied:
             let errorMsg = "Authorization denied. \nYou can change it in Settings"
-            let alert = UIAlertController(title: "Error", message: errorMsg, preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
-            rootViewController.presentViewController(alert, animated: true, completion: nil)
+            let alert = UIAlertController(title: "Error", message: errorMsg, preferredStyle: UIAlertControllerStyle.alert)
+            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.default, handler: nil))
+            rootViewController.present(alert, animated: true, completion: nil)
             return
-        case .Restricted:
+        case .restricted:
             return
-        case .NotDetermined:
-            AVCaptureDevice.requestAccessForMediaType(AVMediaTypeVideo, completionHandler: { (success:Bool) -> Void in
-                if success {
-                    rootViewController.presentViewController(self, animated: true, completion: nil)
-                }else{
-                    return
+        case .notDetermined:
+            AVCaptureDevice.requestAccess(forMediaType: AVMediaTypeVideo, completionHandler: { (success:Bool) -> Void in
+                DispatchQueue.main.async {
+                    if success {
+                        rootViewController.present(self, animated: true, completion: nil)
+                    }else{
+                        return
+                    }
                 }
             })
             return
         }
         
-        rootViewController.presentViewController(self, animated: true, completion: nil)
+        rootViewController.present(self, animated: true, completion: nil)
     }
     
     var initOrientation : UIInterfaceOrientation?
-    override public func viewDidLoad() {
+    override open func viewDidLoad() {
         super.viewDidLoad()
-        if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+        if UIDevice.current.userInterfaceIdiom == .pad {
             if let centerRectangleSize = CameraKitConstants.singleton.RectangleRectProtrait?.size {
                 distanceBetweenPromptAndSaveButtonConstraint.constant = (centerRectangleSize.height / 2) - 32 + 8
                 view.layoutIfNeeded()
@@ -87,7 +89,9 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
         self.SaveButton.layer.masksToBounds = true
         self.backButton.layer.cornerRadius = 22
         self.backButton.layer.masksToBounds = true
-        initOrientation = UIApplication.sharedApplication().statusBarOrientation
+        //iOS 10, move up 1 point to be center
+        SaveButton.imageEdgeInsets = UIEdgeInsets(top: -1, left: 0, bottom: 1, right: 0)
+        initOrientation = UIApplication.shared.statusBarOrientation
 //        let value = UIInterfaceOrientation.Portrait.rawValue
 //        UIDevice.currentDevice().setValue(value, forKey: "orientation")
 
@@ -103,37 +107,37 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
         detector = CIDetector(ofType: CIDetectorTypeRectangle, context: nil, options: [CIDetectorAccuracy:CIDetectorAccuracyHigh, CIDetectorMinFeatureSize: 0.15])
     }
     
-    public override func viewWillAppear(animated: Bool) {
+    open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
        
     }
-    public override func viewDidAppear(animated: Bool) {
+    open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
                 avcapturePreviewLayer!.frame = previewView.bounds
         captureSession?.startRunning()
-        self.previewView.bringSubviewToFront(self.overlayImageView)
+        self.previewView.bringSubview(toFront: self.overlayImageView)
 
     }
-    var lastDate = NSDate()
+    var lastDate = Date()
     var lastCIImage: CIImage?
 
-    public func captureOutput(captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, fromConnection connection: AVCaptureConnection!) {
-        let pixelBuffer: CVPixelBufferRef = CMSampleBufferGetImageBuffer(sampleBuffer)!
+    open func captureOutput(_ captureOutput: AVCaptureOutput!, didOutputSampleBuffer sampleBuffer: CMSampleBuffer!, from connection: AVCaptureConnection!) {
+        let pixelBuffer: CVPixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer)!
 //        print(connection.videoOrientation.rawValue)
         let currentAVOrientaion = avcapturePreviewLayer?.connection.videoOrientation
-        let ciImage = CIImage(CVPixelBuffer: pixelBuffer)
+        let ciImage = CIImage(cvPixelBuffer: pixelBuffer)
         if enableDetect{
-            let interval = NSDate().timeIntervalSinceDate(lastDate)
+            let interval = Date().timeIntervalSince(lastDate)
             if interval < 0.1 {
 //                print("dont detect now")
                 return
             }
             lastCIImage = nil
-            lastDate = NSDate()
+            lastDate = Date()
             
-            let features = detector.featuresInImage(ciImage, options: [CIDetectorAspectRatio:1.6]) as? [CIRectangleFeature]
+            let features = detector.features(in: ciImage, options: [CIDetectorAspectRatio:1.6]) as? [CIRectangleFeature]
 //            print("detected \(features?.count) features")
-            if let features = features where features.count > 0 {
+            if let features = features , features.count > 0 {
                 self.lastRectFeature = features[0]
             }else{
                 return
@@ -141,17 +145,23 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
 
             if let f = lastRectFeature{
                 var uiImage:UIImage? = nil
-                if isFeatureRectInRectangle(ciImage, feature: f,orientation: currentAVOrientaion!){
+                let shouldDrawOverlay: Bool
+                if #available(iOS 10, *) {
+                    shouldDrawOverlay = isFeatureRectInRectangleIOS10(ciImage, feature: f, orientation: currentAVOrientaion!)
+                } else {
+                    shouldDrawOverlay = isFeatureRectInRectangle(ciImage, feature: f,orientation: currentAVOrientaion!)
+                }
+                if shouldDrawOverlay {
                     let overlay = self.drawOverlay(ciImage, feature: f)
                     let context = CIContext()
-                    let cgImage = context.createCGImage(overlay, fromRect: ciImage.extent)
-                    uiImage = UIImage(CGImage: cgImage)
+                    let cgImage = context.createCGImage(overlay, from: ciImage.extent)
+                    uiImage = UIImage(cgImage: cgImage!)
                     lastCIImage = ciImage
 //                    print("uiimage orientation:\(uiImage!.imageOrientation.rawValue)")
 //                    print(ciImage.extent)
 //                    print(uiImage!.size)
                 }
-                dispatch_async(dispatch_get_main_queue(), { () -> Void in
+                DispatchQueue.main.async(execute: { () -> Void in
                     self.overlayImageView.image = uiImage
 //                    self.previewView.bringSubviewToFront(self.overlayImageView)
                 })
@@ -161,14 +171,14 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
 
     }
     
-    func drawOverlay(ciImage: CIImage , feature: CIRectangleFeature) -> CIImage{
+    func drawOverlay(_ ciImage: CIImage , feature: CIRectangleFeature) -> CIImage{
         var overlay = CIImage(color: detectionOverlayColor)
-        overlay = overlay.imageByCroppingToRect(ciImage.extent)
-        overlay = overlay.imageByApplyingFilter("CIPerspectiveTransformWithExtent", withInputParameters: ["inputExtent": CIVector(CGRect: ciImage.extent),
-            "inputTopLeft": CIVector(CGPoint:feature.topLeft),
-            "inputTopRight":CIVector(CGPoint:feature.topRight),
-            "inputBottomLeft": CIVector(CGPoint: feature.bottomLeft),
-            "inputBottomRight": CIVector(CGPoint: feature.bottomRight)])
+        overlay = overlay.cropping(to: ciImage.extent)
+        overlay = overlay.applyingFilter("CIPerspectiveTransformWithExtent", withInputParameters: ["inputExtent": CIVector(cgRect: ciImage.extent),
+            "inputTopLeft": CIVector(cgPoint:feature.topLeft),
+            "inputTopRight":CIVector(cgPoint:feature.topRight),
+            "inputBottomLeft": CIVector(cgPoint: feature.bottomLeft),
+            "inputBottomRight": CIVector(cgPoint: feature.bottomRight)])
         
 //        overlay = overlay.imageByCompositingOverImage(ciImage)
         return overlay
@@ -177,7 +187,7 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
     func setupCaptureSession() -> Bool{
         captureSession = AVCaptureSession()
         captureSession!.sessionPreset = AVCaptureSessionPresetPhoto
-        let backCamera = AVCaptureDevice.defaultDeviceWithMediaType(AVMediaTypeVideo)
+        let backCamera = AVCaptureDevice.defaultDevice(withMediaType: AVMediaTypeVideo)
         do{
             let input = try AVCaptureDeviceInput(device: backCamera)
             if captureSession!.canAddInput(input) {
@@ -196,25 +206,25 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
         }
         
         videoOutput = AVCaptureVideoDataOutput()
-        let rgbOutputSettings = [kCVPixelBufferPixelFormatTypeKey as NSString: NSNumber(unsignedInt:kCVPixelFormatType_32BGRA) ]
+        let rgbOutputSettings = [kCVPixelBufferPixelFormatTypeKey as NSString: NSNumber(value:kCVPixelFormatType_32BGRA) ]
         videoOutput?.videoSettings = rgbOutputSettings
         videoOutput?.alwaysDiscardsLateVideoFrames = true
-        let videoDataOutputQueue = dispatch_queue_create("videoOutputQueue", DISPATCH_QUEUE_SERIAL)
+        let videoDataOutputQueue = DispatchQueue(label: "videoOutputQueue", attributes: [])
         videoOutput?.setSampleBufferDelegate(self, queue: videoDataOutputQueue)
         if captureSession!.canAddOutput(videoOutput){
             captureSession!.addOutput(videoOutput)
             
-            let connection = self.videoOutput?.connectionWithMediaType(AVMediaTypeVideo)
+            let connection = self.videoOutput?.connection(withMediaType: AVMediaTypeVideo)
             switch self.initOrientation!{
-            case .Portrait:
-                connection?.videoOrientation = AVCaptureVideoOrientation.Portrait
-            case .PortraitUpsideDown:
-                connection?.videoOrientation = AVCaptureVideoOrientation.PortraitUpsideDown
-            case .LandscapeLeft:
-                connection?.videoOrientation = AVCaptureVideoOrientation.LandscapeLeft
-            case .LandscapeRight:
-                connection?.videoOrientation = AVCaptureVideoOrientation.LandscapeRight
-            case .Unknown:
+            case .portrait:
+                connection?.videoOrientation = AVCaptureVideoOrientation.portrait
+            case .portraitUpsideDown:
+                connection?.videoOrientation = AVCaptureVideoOrientation.portraitUpsideDown
+            case .landscapeLeft:
+                connection?.videoOrientation = AVCaptureVideoOrientation.landscapeLeft
+            case .landscapeRight:
+                connection?.videoOrientation = AVCaptureVideoOrientation.landscapeRight
+            case .unknown:
                 break
             }
             
@@ -226,16 +236,16 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
         return false
     }
     
-    @IBAction func clickedCancelButton(sender: AnyObject) {
-        dismissViewControllerAnimated(true) {
+    @IBAction func clickedCancelButton(_ sender: AnyObject) {
+        dismiss(animated: true) {
             self.delegate?.cameraViewControllerDidClose?(self)
         }
     }
-    @IBAction func clickedTakeButton(sender: AnyObject) {
-        SaveButton.enabled = false
-        if let videoConnection = stillImageOutput!.connectionWithMediaType(AVMediaTypeVideo) {
-            stillImageOutput?.captureStillImageAsynchronouslyFromConnection(videoConnection, completionHandler: { (sampleBuffer:CMSampleBuffer!, error:NSError!) -> Void in
-                if sampleBuffer == nil{
+    @IBAction func clickedTakeButton(_ sender: AnyObject) {
+        SaveButton.isEnabled = false
+        if let videoConnection = stillImageOutput!.connection(withMediaType: AVMediaTypeVideo) {
+            stillImageOutput?.captureStillImageAsynchronously(from: videoConnection, completionHandler: { sampleBuffer, error in
+                guard let sampleBuffer = sampleBuffer else {
                     print(error)
                     return
                 }
@@ -243,31 +253,35 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
                 var image: UIImage? = nil
                 if let _ = self.lastCIImage{
 //                    image = ImageHandler.getImageCorrectedPerspectiv(self.lastCIImage!, feature: self.lastRectFeature!)
-                    image = ImageHandler.getImageCorrectedPerspectiveShrink(self.lastCIImage!, feature: self.lastRectFeature!)
+                    if #available(iOS 10, *) {
+                        image = ImageHandler.getImageCorrectedPerspectiveShrinkIOS10(self.lastCIImage!, feature: self.lastRectFeature!)
+                    } else {
+                        image = ImageHandler.getImageCorrectedPerspectiveShrink(self.lastCIImage!, feature: self.lastRectFeature!)
+                    }
                 }else{
-                    let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(sampleBuffer)
-                    let dataProvider = CGDataProviderCreateWithCFData(imageData)
-                    let cgImageRef = CGImageCreateWithJPEGDataProvider(dataProvider, nil, true, CGColorRenderingIntent.RenderingIntentDefault)
-                    let connection = self.videoOutput?.connectionWithMediaType(AVMediaTypeVideo)
+                    let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(sampleBuffer) as NSData
+                    let dataProvider = CGDataProvider(data: imageData as CFData)
+                    let cgImageRef = CGImage(jpegDataProviderSource: dataProvider!, decode: nil, shouldInterpolate: true, intent: CGColorRenderingIntent.defaultIntent)
+                    let connection = self.videoOutput?.connection(withMediaType: AVMediaTypeVideo)
                     let outputOrientation = connection!.videoOrientation
-                    var imageOrientation = UIImageOrientation.Right
+                    var imageOrientation = UIImageOrientation.right
                     switch outputOrientation{
-                    case .Portrait:
+                    case .portrait:
 //                        print("portait")
-                        imageOrientation = UIImageOrientation.Right
-                    case .LandscapeLeft:
+                        imageOrientation = UIImageOrientation.right
+                    case .landscapeLeft:
 //                        print("land left")
-                        imageOrientation = UIImageOrientation.Down
-                    case .LandscapeRight:
+                        imageOrientation = UIImageOrientation.down
+                    case .landscapeRight:
 //                        print("land right")
-                        imageOrientation = UIImageOrientation.Up
-                    case .PortraitUpsideDown:
+                        imageOrientation = UIImageOrientation.up
+                    case .portraitUpsideDown:
 //                        print("up side")
-                        imageOrientation = UIImageOrientation.Left
+                        imageOrientation = UIImageOrientation.left
                     }
 //                    print(connection!.videoOrientation.rawValue)
 //                    print(UIImageOrientation.Right.rawValue)
-                    image = UIImage(CGImage: cgImageRef!, scale: 1.0, orientation: imageOrientation)
+                    image = UIImage(cgImage: cgImageRef!, scale: 1.0, orientation: imageOrientation)
                     image = ImageHandler.scaleAndRotateImage(image!)
                     let rect :CGRect
 //                    if outputOrientation == AVCaptureVideoOrientation.Portrait || outputOrientation == AVCaptureVideoOrientation.PortraitUpsideDown{
@@ -281,29 +295,29 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
 //                            image!.size.width * CameraKitConstants.RectangleRectLandscapeRatio.wp,
 //                            image!.size.height * CameraKitConstants.RectangleRectLandscapeRatio.hp)
 //                    }
-                    if outputOrientation == AVCaptureVideoOrientation.Portrait || outputOrientation == AVCaptureVideoOrientation.PortraitUpsideDown{
-                        rect = CGRectMake(image!.size.width * self.RectPortraitRatio.x,
-                            image!.size.height * self.RectPortraitRatio.y,
-                            image!.size.width * self.RectPortraitRatio.wp,
-                            image!.size.height * self.RectPortraitRatio.hp)
+                    if outputOrientation == AVCaptureVideoOrientation.portrait || outputOrientation == AVCaptureVideoOrientation.portraitUpsideDown{
+                        rect = CGRect(x: image!.size.width * self.RectPortraitRatio.x,
+                            y: image!.size.height * self.RectPortraitRatio.y,
+                            width: image!.size.width * self.RectPortraitRatio.wp,
+                            height: image!.size.height * self.RectPortraitRatio.hp)
                     }else{
-                        rect = CGRectMake(image!.size.width * self.RectLandscapeRatio.x,
-                            image!.size.height * self.RectLandscapeRatio.y,
-                            image!.size.width * self.RectLandscapeRatio.wp,
-                            image!.size.height * self.RectLandscapeRatio.hp)
+                        rect = CGRect(x: image!.size.width * self.RectLandscapeRatio.x,
+                            y: image!.size.height * self.RectLandscapeRatio.y,
+                            width: image!.size.width * self.RectLandscapeRatio.wp,
+                            height: image!.size.height * self.RectLandscapeRatio.hp)
                     }
 
-                    let imageRef = CGImageCreateWithImageInRect(image!.CGImage, rect)
-                    image = UIImage(CGImage: imageRef!)
+                    let imageRef = image!.cgImage!.cropping(to: rect)
+                    image = UIImage(cgImage: imageRef!)
 //                    let ciImage = CIImage(CGImage: cgImageRef!)
 //                    let image = ImageHandler.getImageCorrectedPerspectiv(ciImage, feature: self.lastRectFeature!)
 //                    print(image!.imageOrientation.rawValue)
 //                    print(image!.size)
                 }
-                dispatch_async(dispatch_get_main_queue()) {
-                    self.dismissViewControllerAnimated(true, completion: {
+                DispatchQueue.main.async {
+                    self.dismiss(animated: true, completion: {
                         self.delegate?.cameraViewController(self, didTakeImage: image)
-                        self.SaveButton.enabled = true
+                        self.SaveButton.isEnabled = true
                     })
                 }
             })
@@ -311,7 +325,7 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
     }
 
     var RectPortraitRatio: RectangleRatio{
-        if UIDevice.currentDevice().userInterfaceIdiom == .Phone{
+        if UIDevice.current.userInterfaceIdiom == .phone{
             if let ratio = CameraKitConstants.singleton.iphoneRectangleRatio {
                 return ratio
             } else {
@@ -322,7 +336,7 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
         }
     }
     var RectLandscapeRatio: RectangleRatio{
-        if UIDevice.currentDevice().userInterfaceIdiom == .Phone{
+        if UIDevice.current.userInterfaceIdiom == .phone{
             if let ratio = CameraKitConstants.singleton.iphoneRectangleLandscapeRatio {
                 return ratio
             } else {
@@ -333,7 +347,7 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
         }
     }
     var detectingRectRatioPortrait: RectangleRatio{
-        if UIDevice.currentDevice().userInterfaceIdiom == .Phone{
+        if UIDevice.current.userInterfaceIdiom == .phone{
             if let ratio = CameraKitConstants.singleton.iphoneRectangleRatio  {
                 return ratio
             } else {
@@ -345,7 +359,7 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
     }
 
     var detectingRectRatioLandscape: RectangleRatio{
-        if UIDevice.currentDevice().userInterfaceIdiom == .Phone{
+        if UIDevice.current.userInterfaceIdiom == .phone{
             if let ratio = CameraKitConstants.singleton.iphoneRectangleLandscapeRatio {
                 return ratio
             } else {
@@ -356,8 +370,8 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
         }
     }
 
-    func isFeatureRectInRectangle(image: CIImage, feature: CIRectangleFeature, orientation: AVCaptureVideoOrientation) -> Bool{
-        let isLandscape = (orientation == .LandscapeLeft || orientation == .LandscapeRight)
+    func isFeatureRectInRectangle(_ image: CIImage, feature: CIRectangleFeature, orientation: AVCaptureVideoOrientation) -> Bool{
+        let isLandscape = (orientation == .landscapeLeft || orientation == .landscapeRight)
         let leftBoundary = image.extent.width * (isLandscape ? detectingRectRatioLandscape.x : detectingRectRatioPortrait.x )
         let rightBoundary = leftBoundary + image.extent.width * (isLandscape ? detectingRectRatioLandscape.wp : detectingRectRatioPortrait.wp)
         let bottomBoundary = image.extent.height *
@@ -380,64 +394,95 @@ public class CameraViewController: UIViewController, AVCaptureVideoDataOutputSam
         }
         return true
     }
-    
-    public override func shouldAutorotate() -> Bool {
-        if UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Phone{
+
+    /// temporary fix in iOS 10 system until CoreImage API return correct data.
+    func isFeatureRectInRectangleIOS10(_ image: CIImage, feature: CIRectangleFeature, orientation: AVCaptureVideoOrientation) -> Bool{
+        let isLandscape = (orientation == .landscapeLeft || orientation == .landscapeRight)
+        let leftBoundary = image.extent.width * (isLandscape ? detectingRectRatioLandscape.x : detectingRectRatioPortrait.x )
+        let rightBoundary = leftBoundary + image.extent.width * (isLandscape ? detectingRectRatioLandscape.wp : detectingRectRatioPortrait.wp)
+        let bottomBoundary = image.extent.height *
+            (1 - (isLandscape ?
+                (detectingRectRatioLandscape.y + detectingRectRatioLandscape.hp) :
+                (detectingRectRatioPortrait.y + detectingRectRatioPortrait.hp)
+                ))
+        let topBoundary = image.extent.height * (1 - (isLandscape ? detectingRectRatioLandscape.y : detectingRectRatioPortrait.y))
+        let iOS10TopLeft = feature.bottomLeft
+        let iOS10TopRight = feature.topLeft
+        let iOS10BottomLeft = feature.bottomRight
+        let iOS10BottomRight = feature.topRight
+
+        if iOS10TopLeft.y > topBoundary || iOS10TopRight.y > topBoundary{
+            return false
+        }
+        if iOS10BottomLeft.y < bottomBoundary || iOS10BottomRight.y < bottomBoundary{
+            return false
+        }
+        if iOS10BottomLeft.x < leftBoundary || iOS10TopLeft.x < leftBoundary {
+            return false
+        }
+        if iOS10BottomRight.x > rightBoundary || iOS10TopRight.x > rightBoundary{
+            return false
+        }
+        return true
+    }
+
+    open override var shouldAutorotate: Bool {
+        if UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.phone{
             return false
         }else{
             return true
         }
     }
 
-    public override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-        if UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Phone{
-            return UIInterfaceOrientationMask.Portrait
+    open override var supportedInterfaceOrientations: UIInterfaceOrientationMask {
+        if UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.phone{
+            return UIInterfaceOrientationMask.portrait
         }else{
-            return UIInterfaceOrientationMask.All
+            return UIInterfaceOrientationMask.all
         }
     }
  
-    public override func viewDidLayoutSubviews() {
+    open override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        let connection = self.videoOutput?.connectionWithMediaType(AVMediaTypeVideo)
+        let connection = self.videoOutput?.connection(withMediaType: AVMediaTypeVideo)
 
-        switch UIApplication.sharedApplication().statusBarOrientation{
-        case .Portrait:
-            avcapturePreviewLayer?.connection.videoOrientation = AVCaptureVideoOrientation.Portrait
+        switch UIApplication.shared.statusBarOrientation{
+        case .portrait:
+            avcapturePreviewLayer?.connection.videoOrientation = AVCaptureVideoOrientation.portrait
 //            connection?.videoOrientation = AVCaptureVideoOrientation.Portrait
-        case .PortraitUpsideDown:
-            avcapturePreviewLayer?.connection.videoOrientation = .PortraitUpsideDown
+        case .portraitUpsideDown:
+            avcapturePreviewLayer?.connection.videoOrientation = .portraitUpsideDown
 //            connection?.videoOrientation = .PortraitUpsideDown
-        case .LandscapeLeft:
-            avcapturePreviewLayer?.connection.videoOrientation = .LandscapeLeft
+        case .landscapeLeft:
+            avcapturePreviewLayer?.connection.videoOrientation = .landscapeLeft
 //            connection?.videoOrientation = .LandscapeLeft
-        case .LandscapeRight:
-            avcapturePreviewLayer?.connection.videoOrientation = .LandscapeRight
+        case .landscapeRight:
+            avcapturePreviewLayer?.connection.videoOrientation = .landscapeRight
 //            connection?.videoOrientation = .LandscapeRight
-        case .Unknown:
+        case .unknown:
             break
         }
         avcapturePreviewLayer?.frame = previewView.bounds
         self.view.layoutIfNeeded()
         self.maskView.setNeedsDisplay()
         //TODO: change video orientation will cost a lot resource,
-        dispatch_async(dispatch_get_global_queue(QOS_CLASS_USER_INITIATED, 0)) { () -> Void in
-            switch UIApplication.sharedApplication().statusBarOrientation{
-            case .Portrait:
-                connection?.videoOrientation = AVCaptureVideoOrientation.Portrait
-            case .PortraitUpsideDown:
-                connection?.videoOrientation = .PortraitUpsideDown
-            case .LandscapeLeft:
-                connection?.videoOrientation = .LandscapeLeft
-            case .LandscapeRight:
-                connection?.videoOrientation = .LandscapeRight
-            case .Unknown:
+        DispatchQueue.global(qos: DispatchQoS.QoSClass.userInitiated).async { () -> Void in
+            switch UIApplication.shared.statusBarOrientation{
+            case .portrait:
+                connection?.videoOrientation = AVCaptureVideoOrientation.portrait
+            case .portraitUpsideDown:
+                connection?.videoOrientation = .portraitUpsideDown
+            case .landscapeLeft:
+                connection?.videoOrientation = .landscapeLeft
+            case .landscapeRight:
+                connection?.videoOrientation = .landscapeRight
+            case .unknown:
                 break
             }
         }
     }
     
-    public override func prefersStatusBarHidden() -> Bool {
+    open override var prefersStatusBarHidden: Bool {
         return true
     }
 }
