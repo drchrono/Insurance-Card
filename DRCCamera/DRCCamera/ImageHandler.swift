@@ -111,6 +111,7 @@ class ImageHandler {
         let correctUIImage = UIImage(cgImage: correctRef!)
         return correctUIImage
     }
+
     class func getImageCorrectedPerspectiveShrink(_ image: CIImage , feature f: CIRectangleFeature) -> UIImage{
         let horizonShrink = (f.topRight.x - f.topLeft.x) * 0.01
         let verticalShrink = (f.topRight.y - f.bottomRight.y) * 0.01
@@ -118,6 +119,31 @@ class ImageHandler {
         let topRight = CGPoint(x: f.topRight.x - horizonShrink, y: f.topRight.y - verticalShrink)
         let bottomLeft = CGPoint(x: f.bottomLeft.x + horizonShrink, y: f.bottomLeft.y + verticalShrink)
         let bottomRight = CGPoint(x: f.bottomRight.x - horizonShrink, y: f.bottomRight.y + verticalShrink)
+        let correctImage = image.applyingFilter("CIPerspectiveCorrection", withInputParameters: [
+            "inputTopLeft": CIVector(cgPoint: topLeft),
+            "inputTopRight": CIVector(cgPoint: topRight),
+            "inputBottomLeft": CIVector(cgPoint: bottomLeft),
+            "inputBottomRight": CIVector(cgPoint: bottomRight)])
+        let context = CIContext(options: nil)
+        let correctRef = context.createCGImage(correctImage, from: correctImage.extent)
+        let correctUIImage = UIImage(cgImage: correctRef!)
+        return correctUIImage
+    }
+
+    /// temporary fix in iOS 10 system until CoreImage API return correct data.
+    class func getImageCorrectedPerspectiveShrinkIOS10(_ image: CIImage , feature f: CIRectangleFeature) -> UIImage {
+        let notFlipped = f.bottomLeft.x < f.topLeft.x
+        let iOS10TopLeft = notFlipped ? f.bottomLeft : f.topRight
+        let iOS10TopRight = notFlipped ? f.topLeft : f.bottomRight
+        let iOS10BottomLeft = notFlipped ? f.bottomRight : f.topLeft
+        let iOS10BottomRight = notFlipped ? f.topRight : f.bottomLeft
+
+        let horizonShrink = (iOS10TopRight.x - iOS10TopLeft.x) * 0.01
+        let verticalShrink = (iOS10TopRight.y - iOS10BottomRight.y) * 0.01
+        let topLeft = CGPoint(x: iOS10TopLeft.x + horizonShrink, y: iOS10TopLeft.y - verticalShrink)
+        let topRight = CGPoint(x: iOS10TopRight.x - horizonShrink, y: iOS10TopRight.y - verticalShrink)
+        let bottomLeft = CGPoint(x: iOS10BottomLeft.x + horizonShrink, y: iOS10BottomLeft.y + verticalShrink)
+        let bottomRight = CGPoint(x: iOS10BottomRight.x - horizonShrink, y: iOS10BottomRight.y + verticalShrink)
         let correctImage = image.applyingFilter("CIPerspectiveCorrection", withInputParameters: [
             "inputTopLeft": CIVector(cgPoint: topLeft),
             "inputTopRight": CIVector(cgPoint: topRight),

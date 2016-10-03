@@ -145,7 +145,13 @@ open class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampl
 
             if let f = lastRectFeature{
                 var uiImage:UIImage? = nil
-                if isFeatureRectInRectangle(ciImage, feature: f,orientation: currentAVOrientaion!){
+                let shouldDrawOverlay: Bool
+                if #available(iOS 10, *) {
+                    shouldDrawOverlay = isFeatureRectInRectangleIOS10(ciImage, feature: f, orientation: currentAVOrientaion!)
+                } else {
+                    shouldDrawOverlay = isFeatureRectInRectangle(ciImage, feature: f,orientation: currentAVOrientaion!)
+                }
+                if shouldDrawOverlay {
                     let overlay = self.drawOverlay(ciImage, feature: f)
                     let context = CIContext()
                     let cgImage = context.createCGImage(overlay, from: ciImage.extent)
@@ -247,7 +253,11 @@ open class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampl
                 var image: UIImage? = nil
                 if let _ = self.lastCIImage{
 //                    image = ImageHandler.getImageCorrectedPerspectiv(self.lastCIImage!, feature: self.lastRectFeature!)
-                    image = ImageHandler.getImageCorrectedPerspectiveShrink(self.lastCIImage!, feature: self.lastRectFeature!)
+                    if #available(iOS 10, *) {
+                        image = ImageHandler.getImageCorrectedPerspectiveShrinkIOS10(self.lastCIImage!, feature: self.lastRectFeature!)
+                    } else {
+                        image = ImageHandler.getImageCorrectedPerspectiveShrink(self.lastCIImage!, feature: self.lastRectFeature!)
+                    }
                 }else{
                     let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(sampleBuffer) as NSData
                     let dataProvider = CGDataProvider(data: imageData as CFData)
@@ -384,7 +394,38 @@ open class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampl
         }
         return true
     }
-    
+
+    /// temporary fix in iOS 10 system until CoreImage API return correct data.
+    func isFeatureRectInRectangleIOS10(_ image: CIImage, feature: CIRectangleFeature, orientation: AVCaptureVideoOrientation) -> Bool{
+        let isLandscape = (orientation == .landscapeLeft || orientation == .landscapeRight)
+        let leftBoundary = image.extent.width * (isLandscape ? detectingRectRatioLandscape.x : detectingRectRatioPortrait.x )
+        let rightBoundary = leftBoundary + image.extent.width * (isLandscape ? detectingRectRatioLandscape.wp : detectingRectRatioPortrait.wp)
+        let bottomBoundary = image.extent.height *
+            (1 - (isLandscape ?
+                (detectingRectRatioLandscape.y + detectingRectRatioLandscape.hp) :
+                (detectingRectRatioPortrait.y + detectingRectRatioPortrait.hp)
+                ))
+        let topBoundary = image.extent.height * (1 - (isLandscape ? detectingRectRatioLandscape.y : detectingRectRatioPortrait.y))
+        let iOS10TopLeft = feature.bottomLeft
+        let iOS10TopRight = feature.topLeft
+        let iOS10BottomLeft = feature.bottomRight
+        let iOS10BottomRight = feature.topRight
+
+        if iOS10TopLeft.y > topBoundary || iOS10TopRight.y > topBoundary{
+            return false
+        }
+        if iOS10BottomLeft.y < bottomBoundary || iOS10BottomRight.y < bottomBoundary{
+            return false
+        }
+        if iOS10BottomLeft.x < leftBoundary || iOS10TopLeft.x < leftBoundary {
+            return false
+        }
+        if iOS10BottomRight.x > rightBoundary || iOS10TopRight.x > rightBoundary{
+            return false
+        }
+        return true
+    }
+
     open override var shouldAutorotate: Bool {
         if UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.phone{
             return false
