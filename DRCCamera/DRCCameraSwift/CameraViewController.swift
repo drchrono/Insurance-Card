@@ -146,7 +146,8 @@ open class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampl
             if let f = lastRectFeature{
                 var uiImage:UIImage? = nil
                 let shouldDrawOverlay: Bool
-                if #available(iOS 10, *) {
+                let systemVersion = UIDevice.current.systemVersion
+                if #available(iOS 10, *), (systemVersion.hasPrefix("10.0") || systemVersion.hasPrefix("10.1")) {
                     shouldDrawOverlay = isFeatureRectInRectangleIOS10(ciImage, feature: f, orientation: currentAVOrientaion!)
                 } else {
                     shouldDrawOverlay = isFeatureRectInRectangle(ciImage, feature: f,orientation: currentAVOrientaion!)
@@ -252,8 +253,8 @@ open class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampl
                 self.captureSession?.stopRunning()
                 var image: UIImage? = nil
                 if let _ = self.lastCIImage{
-//                    image = ImageHandler.getImageCorrectedPerspectiv(self.lastCIImage!, feature: self.lastRectFeature!)
-                    if #available(iOS 10, *) {
+                    let systemVersion = UIDevice.current.systemVersion
+                    if #available(iOS 10, *), (systemVersion.hasPrefix("10.0") || systemVersion.hasPrefix("10.1")) {
                         image = ImageHandler.getImageCorrectedPerspectiveShrinkIOS10(self.lastCIImage!, feature: self.lastRectFeature!)
                     } else {
                         image = ImageHandler.getImageCorrectedPerspectiveShrink(self.lastCIImage!, feature: self.lastRectFeature!)
@@ -395,7 +396,8 @@ open class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampl
         return true
     }
 
-    /// temporary fix in iOS 10 system until CoreImage API return correct data.
+    /// temporary fix in iOS 10.0 and 10.1 system which CoreImage API return incorrect data.
+    @available(iOS, introduced: 10.0, obsoleted: 10.2, message: "is obsoleted in iOS 10.2")
     func isFeatureRectInRectangleIOS10(_ image: CIImage, feature: CIRectangleFeature, orientation: AVCaptureVideoOrientation) -> Bool{
         let isLandscape = (orientation == .landscapeLeft || orientation == .landscapeRight)
         let leftBoundary = image.extent.width * (isLandscape ? detectingRectRatioLandscape.x : detectingRectRatioPortrait.x )

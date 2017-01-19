@@ -130,7 +130,8 @@ class ImageHandler {
         return correctUIImage
     }
 
-    /// temporary fix in iOS 10 system until CoreImage API return correct data.
+    /// temporary fix in iOS 10.0 and 10.1 system which CoreImage API return incorrect data.
+    @available(iOS, introduced: 10.0, obsoleted: 10.2, message: "is obsoleted in iOS 10.2")
     class func getImageCorrectedPerspectiveShrinkIOS10(_ image: CIImage , feature f: CIRectangleFeature) -> UIImage {
         let notFlipped = f.bottomLeft.x < f.topLeft.x
         let iOS10TopLeft = notFlipped ? f.bottomLeft : f.topRight
