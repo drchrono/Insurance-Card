@@ -247,7 +247,7 @@ open class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampl
         if let videoConnection = stillImageOutput!.connection(withMediaType: AVMediaTypeVideo) {
             stillImageOutput?.captureStillImageAsynchronously(from: videoConnection, completionHandler: { sampleBuffer, error in
                 guard let sampleBuffer = sampleBuffer else {
-                    print(error)
+                    print(error!)
                     return
                 }
                 self.captureSession?.stopRunning()

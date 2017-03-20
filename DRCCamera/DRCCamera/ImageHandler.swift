@@ -45,7 +45,7 @@ class ImageHandler {
             break
         case .down: //EXIF = 3
             transform = CGAffineTransform(translationX: imageSize.width, y: imageSize.height)
-            transform = transform.rotated(by: CGFloat(M_PI))
+            transform = transform.rotated(by: CGFloat(Double.pi))
             break
         case .downMirrored: //EXIF = 4
             transform = CGAffineTransform(translationX: 0.0, y: imageSize.height)
@@ -56,28 +56,28 @@ class ImageHandler {
             bounds.size.width = boundHeight
             transform = CGAffineTransform(translationX: imageSize.height, y: imageSize.width)
             transform = transform.scaledBy(x: -1.0, y: 1.0)
-            transform = transform.rotated(by: CGFloat(3.0 * M_PI / 2.0))
+            transform = transform.rotated(by: CGFloat(3.0 * Double.pi / 2.0))
             break
         case .left: // EXIF = 6
             boundHeight = bounds.size.height
             bounds.size.height = bounds.size.width
             bounds.size.width = boundHeight
             transform = CGAffineTransform(translationX: 0.0, y: imageSize.width)
-            transform = transform.rotated(by: CGFloat(3.0 * M_PI / 2.0))
+            transform = transform.rotated(by: CGFloat(3.0 * Double.pi / 2.0))
             break
         case .rightMirrored: //EXIF = 7
             boundHeight = bounds.size.height
             bounds.size.height = bounds.size.width
             bounds.size.width = boundHeight
             transform = CGAffineTransform(scaleX: -1.0, y: 1.0)
-            transform = transform.rotated(by: CGFloat( M_PI / 2.0))
+            transform = transform.rotated(by: CGFloat( Double.pi / 2.0))
             break
         case .right: //EXIF = 8
             boundHeight = bounds.size.height
             bounds.size.height = bounds.size.width
             bounds.size.width = boundHeight
             transform = CGAffineTransform(translationX: imageSize.height, y: 0.0)
-            transform = transform.rotated(by: CGFloat(M_PI / 2.0))
+            transform = transform.rotated(by: CGFloat(Double.pi / 2.0))
             break
         }
         
@@ -159,11 +159,8 @@ class ImageHandler {
 
 extension UIImage{
     public func imageRotatedByDegrees(_ degrees: CGFloat, flip: Bool) -> UIImage {
-        let radiansToDegrees: (CGFloat) -> CGFloat = {
-            return $0 * (180.0 / CGFloat(M_PI))
-        }
         let degreesToRadians: (CGFloat) -> CGFloat = {
-            return $0 / 180.0 * CGFloat(M_PI)
+            return $0 / 180.0 * CGFloat(Double.pi)
         }
         
         // calculate the size of the rotated view's containing box for our drawing space
