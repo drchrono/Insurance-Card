@@ -8,7 +8,6 @@
 
 import UIKit
 import AVFoundation
-import GLKit
 
 @objc public protocol CameraViewControllerDelegate{
     @objc optional func cameraViewControllerDidClose(_ cameraViewController: CameraViewController)
@@ -36,7 +35,7 @@ open class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampl
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var distanceBetweenPromptAndSaveButtonConstraint: NSLayoutConstraint!
 
-    open class func ViewControllerFromNib() -> CameraViewController{
+    open class func ViewControllerFromNib() -> CameraViewController {
         let nibVC = CameraViewController(nibName: "CameraViewController", bundle: Bundle(for: CameraViewController.classForCoder()))
         return nibVC
     }
@@ -80,7 +79,7 @@ open class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampl
     override open func viewDidLoad() {
         super.viewDidLoad()
         if UIDevice.current.userInterfaceIdiom == .pad {
-            if let centerRectangleSize = CameraKitConstants.singleton.RectangleRectProtrait?.size {
+            if let centerRectangleSize = CameraKitConstants.shared.rectangleRectInProtrait?.size {
                 distanceBetweenPromptAndSaveButtonConstraint.constant = (centerRectangleSize.height / 2) - 32 + 8
                 view.layoutIfNeeded()
             }
@@ -109,15 +108,15 @@ open class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampl
     
     open override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-       
     }
+    
     open override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-                avcapturePreviewLayer!.frame = previewView.bounds
+        avcapturePreviewLayer!.frame = previewView.bounds
         captureSession?.startRunning()
         self.previewView.bringSubview(toFront: self.overlayImageView)
-
     }
+    
     var lastDate = Date()
     var lastCIImage: CIImage?
 
@@ -297,15 +296,15 @@ open class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampl
 //                            image!.size.height * CameraKitConstants.RectangleRectLandscapeRatio.hp)
 //                    }
                     if outputOrientation == AVCaptureVideoOrientation.portrait || outputOrientation == AVCaptureVideoOrientation.portraitUpsideDown{
-                        rect = CGRect(x: image!.size.width * self.RectPortraitRatio.x,
-                            y: image!.size.height * self.RectPortraitRatio.y,
-                            width: image!.size.width * self.RectPortraitRatio.wp,
-                            height: image!.size.height * self.RectPortraitRatio.hp)
+                        rect = CGRect(x: image!.size.width * self.rectPortraitRatio.x,
+                            y: image!.size.height * self.rectPortraitRatio.y,
+                            width: image!.size.width * self.rectPortraitRatio.wp,
+                            height: image!.size.height * self.rectPortraitRatio.hp)
                     }else{
-                        rect = CGRect(x: image!.size.width * self.RectLandscapeRatio.x,
-                            y: image!.size.height * self.RectLandscapeRatio.y,
-                            width: image!.size.width * self.RectLandscapeRatio.wp,
-                            height: image!.size.height * self.RectLandscapeRatio.hp)
+                        rect = CGRect(x: image!.size.width * self.rectLandscapeRatio.x,
+                            y: image!.size.height * self.rectLandscapeRatio.y,
+                            width: image!.size.width * self.rectLandscapeRatio.wp,
+                            height: image!.size.height * self.rectLandscapeRatio.hp)
                     }
 
                     let imageRef = image!.cgImage!.cropping(to: rect)
@@ -325,49 +324,49 @@ open class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampl
         }
     }
 
-    var RectPortraitRatio: RectangleRatio{
+    var rectPortraitRatio: RectangleRatio{
         if UIDevice.current.userInterfaceIdiom == .phone{
-            if let ratio = CameraKitConstants.singleton.iphoneRectangleRatio {
+            if let ratio = CameraKitConstants.shared.iphoneRectangleRatio {
                 return ratio
             } else {
                 return RectangleRatio()
             }
         } else {
-            return CameraKitConstants.RectangleRectRatio
+            return CameraKitConstants.rectangleRectRatioInProtrait
         }
     }
-    var RectLandscapeRatio: RectangleRatio{
+    var rectLandscapeRatio: RectangleRatio{
         if UIDevice.current.userInterfaceIdiom == .phone{
-            if let ratio = CameraKitConstants.singleton.iphoneRectangleLandscapeRatio {
+            if let ratio = CameraKitConstants.shared.iphoneRectangleLandscapeRatio {
                 return ratio
             } else {
                 return RectangleRatio()
             }
         } else {
-            return CameraKitConstants.RectangleRectLandscapeRatio
+            return CameraKitConstants.rectangleRectRatioInLandscape
         }
     }
     var detectingRectRatioPortrait: RectangleRatio{
         if UIDevice.current.userInterfaceIdiom == .phone{
-            if let ratio = CameraKitConstants.singleton.iphoneRectangleRatio  {
+            if let ratio = CameraKitConstants.shared.iphoneRectangleRatio  {
                 return ratio
             } else {
                 return RectangleRatio()
             }
         } else {
-            return CameraKitConstants.DetectionRectangleRatio
+            return CameraKitConstants.detectionRectangleRatioInProtrait
         }
     }
 
     var detectingRectRatioLandscape: RectangleRatio{
         if UIDevice.current.userInterfaceIdiom == .phone{
-            if let ratio = CameraKitConstants.singleton.iphoneRectangleLandscapeRatio {
+            if let ratio = CameraKitConstants.shared.iphoneRectangleLandscapeRatio {
                 return ratio
             } else {
                 return RectangleRatio()
             }
         } else {
-            return CameraKitConstants.DetectionRectangleLandscapeRatio
+            return CameraKitConstants.detectionRectangleRatioInLandscape
         }
     }
 
@@ -448,7 +447,7 @@ open class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampl
         super.viewDidLayoutSubviews()
         let connection = self.videoOutput?.connection(withMediaType: AVMediaTypeVideo)
 
-        switch UIApplication.shared.statusBarOrientation{
+        switch UIApplication.shared.statusBarOrientation {
         case .portrait:
             avcapturePreviewLayer?.connection.videoOrientation = AVCaptureVideoOrientation.portrait
 //            connection?.videoOrientation = AVCaptureVideoOrientation.Portrait

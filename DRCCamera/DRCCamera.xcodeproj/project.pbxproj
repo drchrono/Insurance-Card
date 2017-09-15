@@ -14,7 +14,6 @@
 		3ECC6F901BB9A82F00E5BE7A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3ECC6F8F1BB9A82F00E5BE7A /* Assets.xcassets */; };
 		3ECC6F931BB9A82F00E5BE7A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3ECC6F911BB9A82F00E5BE7A /* LaunchScreen.storyboard */; };
 		3ECC6F9E1BB9A82F00E5BE7A /* DRCCameraTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECC6F9D1BB9A82F00E5BE7A /* DRCCameraTests.swift */; };
-		3ECC6FA91BB9A82F00E5BE7A /* DRCCameraUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3ECC6FA81BB9A82F00E5BE7A /* DRCCameraUITests.swift */; };
 		3EE44E2B1BFBC0A600D03F5F /* CameraViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE44E291BFBC0A600D03F5F /* CameraViewController.swift */; };
 		3EE44E301BFBC57E00D03F5F /* CameraViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3EE44E2F1BFBC57E00D03F5F /* CameraViewController.xib */; };
 		3EE44E321BFCFD7000D03F5F /* CameraMaskView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3EE44E311BFCFD7000D03F5F /* CameraMaskView.swift */; };
@@ -29,13 +28,6 @@
 
 /* Begin PBXContainerItemProxy section */
 		3ECC6F9A1BB9A82F00E5BE7A /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 3ECC6F7D1BB9A82F00E5BE7A /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 3ECC6F841BB9A82F00E5BE7A;
-			remoteInfo = DRCCamera;
-		};
-		3ECC6FA51BB9A82F00E5BE7A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 3ECC6F7D1BB9A82F00E5BE7A /* Project object */;
 			proxyType = 1;
@@ -91,7 +83,6 @@
 		3ECC6F991BB9A82F00E5BE7A /* DRCCameraTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DRCCameraTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3ECC6F9D1BB9A82F00E5BE7A /* DRCCameraTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DRCCameraTests.swift; sourceTree = "<group>"; };
 		3ECC6F9F1BB9A82F00E5BE7A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		3ECC6FA41BB9A82F00E5BE7A /* DRCCameraUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = DRCCameraUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3ECC6FA81BB9A82F00E5BE7A /* DRCCameraUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DRCCameraUITests.swift; sourceTree = "<group>"; };
 		3ECC6FAA1BB9A82F00E5BE7A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3ECC6FB61BB9A85600E5BE7A /* DRCCamera-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "DRCCamera-Bridging-Header.h"; sourceTree = "<group>"; };
@@ -118,13 +109,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		3ECC6F961BB9A82F00E5BE7A /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3ECC6FA11BB9A82F00E5BE7A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -166,7 +150,6 @@
 			children = (
 				3ECC6F851BB9A82F00E5BE7A /* DRCCamera.app */,
 				3ECC6F991BB9A82F00E5BE7A /* DRCCameraTests.xctest */,
-				3ECC6FA41BB9A82F00E5BE7A /* DRCCameraUITests.xctest */,
 				3EE87C331BB9C15B00F0D4CE /* DRCCameraSwift.framework */,
 				3EE87C3C1BB9C15B00F0D4CE /* DRCCameraSwiftTests.xctest */,
 			);
@@ -280,24 +263,6 @@
 			productReference = 3ECC6F991BB9A82F00E5BE7A /* DRCCameraTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		3ECC6FA31BB9A82F00E5BE7A /* DRCCameraUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 3ECC6FB31BB9A82F00E5BE7A /* Build configuration list for PBXNativeTarget "DRCCameraUITests" */;
-			buildPhases = (
-				3ECC6FA01BB9A82F00E5BE7A /* Sources */,
-				3ECC6FA11BB9A82F00E5BE7A /* Frameworks */,
-				3ECC6FA21BB9A82F00E5BE7A /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				3ECC6FA61BB9A82F00E5BE7A /* PBXTargetDependency */,
-			);
-			name = DRCCameraUITests;
-			productName = DRCCameraUITests;
-			productReference = 3ECC6FA41BB9A82F00E5BE7A /* DRCCameraUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 		3EE87C321BB9C15B00F0D4CE /* DRCCameraSwift */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 3EE87C4A1BB9C15B00F0D4CE /* Build configuration list for PBXNativeTarget "DRCCameraSwift" */;
@@ -358,11 +323,6 @@
 						LastSwiftMigration = 0800;
 						TestTargetID = 3ECC6F841BB9A82F00E5BE7A;
 					};
-					3ECC6FA31BB9A82F00E5BE7A = {
-						CreatedOnToolsVersion = 7.0;
-						LastSwiftMigration = 0800;
-						TestTargetID = 3ECC6F841BB9A82F00E5BE7A;
-					};
 					3EE87C321BB9C15B00F0D4CE = {
 						CreatedOnToolsVersion = 7.0;
 						LastSwiftMigration = 0800;
@@ -389,7 +349,6 @@
 			targets = (
 				3ECC6F841BB9A82F00E5BE7A /* DRCCamera */,
 				3ECC6F981BB9A82F00E5BE7A /* DRCCameraTests */,
-				3ECC6FA31BB9A82F00E5BE7A /* DRCCameraUITests */,
 				3EE87C321BB9C15B00F0D4CE /* DRCCameraSwift */,
 				3EE87C3B1BB9C15B00F0D4CE /* DRCCameraSwiftTests */,
 			);
@@ -408,13 +367,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		3ECC6F971BB9A82F00E5BE7A /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		3ECC6FA21BB9A82F00E5BE7A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -457,14 +409,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		3ECC6FA01BB9A82F00E5BE7A /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				3ECC6FA91BB9A82F00E5BE7A /* DRCCameraUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		3EE87C2E1BB9C15B00F0D4CE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -491,11 +435,6 @@
 			isa = PBXTargetDependency;
 			target = 3ECC6F841BB9A82F00E5BE7A /* DRCCamera */;
 			targetProxy = 3ECC6F9A1BB9A82F00E5BE7A /* PBXContainerItemProxy */;
-		};
-		3ECC6FA61BB9A82F00E5BE7A /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 3ECC6F841BB9A82F00E5BE7A /* DRCCamera */;
-			targetProxy = 3ECC6FA51BB9A82F00E5BE7A /* PBXContainerItemProxy */;
 		};
 		3EE87C3F1BB9C15B00F0D4CE /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -676,32 +615,6 @@
 			};
 			name = Release;
 		};
-		3ECC6FB41BB9A82F00E5BE7A /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				INFOPLIST_FILE = DRCCameraUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = drchrono.DRCCameraUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
-				TEST_TARGET_NAME = DRCCamera;
-				USES_XCTRUNNER = YES;
-			};
-			name = Debug;
-		};
-		3ECC6FB51BB9A82F00E5BE7A /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				INFOPLIST_FILE = DRCCameraUITests/Info.plist;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = drchrono.DRCCameraUITests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_VERSION = 3.0;
-				TEST_TARGET_NAME = DRCCamera;
-				USES_XCTRUNNER = YES;
-			};
-			name = Release;
-		};
 		3EE87C4B1BB9C15B00F0D4CE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -794,15 +707,6 @@
 			buildConfigurations = (
 				3ECC6FB11BB9A82F00E5BE7A /* Debug */,
 				3ECC6FB21BB9A82F00E5BE7A /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		3ECC6FB31BB9A82F00E5BE7A /* Build configuration list for PBXNativeTarget "DRCCameraUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				3ECC6FB41BB9A82F00E5BE7A /* Debug */,
-				3ECC6FB51BB9A82F00E5BE7A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

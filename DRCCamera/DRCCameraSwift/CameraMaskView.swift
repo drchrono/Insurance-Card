@@ -20,7 +20,7 @@ class CameraMaskView: UIView {
         let maskLayer = CAShapeLayer()
         let maskPath = CGMutablePath()
         // draw central rect
-        if UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.phone{
+        if UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.phone {
             if rect.width < rect.height {
                 maskPath.__addRoundedRect(transform: nil, rect: iphoneRectPortrait, cornerWidth: RectangleCornerRadius, cornerHeight: RectangleCornerRadius)
             } else {
@@ -60,22 +60,22 @@ class CameraMaskView: UIView {
     }
     
     override init(frame: CGRect) {
-        if let rect = CameraKitConstants.singleton.iPhoneRectangleRectPortrait {
+        if let rect = CameraKitConstants.shared.iPhoneRectangleRectPortrait {
             self.iphoneRectPortrait = rect
         } else {
             self.iphoneRectPortrait = CGRect(x: 0, y: 0, width: 10, height: 10)
         }
-        if let rect = CameraKitConstants.singleton.iPhoneRectangleRectLandscape {
+        if let rect = CameraKitConstants.shared.iPhoneRectangleRectLandscape {
             self.iphoneRectLandscape = rect
         } else {
             self.iphoneRectLandscape = CGRect(x: 0, y: 0, width: 10, height: 10)
         }
-        if let rect = CameraKitConstants.singleton.RectangleRectProtrait {
+        if let rect = CameraKitConstants.shared.rectangleRectInProtrait {
             self.iPadRectPortrait = rect
         } else {
             self.iPadRectPortrait = CGRect(x: 0, y: 0, width: 10, height: 10)
         }
-        if let rect = CameraKitConstants.singleton.RectangleRectLandscape {
+        if let rect = CameraKitConstants.shared.rectangleRectInLandscape {
             self.iPadRectLandscape = rect
         } else {
             self.iPadRectLandscape = CGRect(x: 0, y: 0, width: 10, height: 10)
@@ -84,22 +84,22 @@ class CameraMaskView: UIView {
     }
     
     required init?(coder aDecoder: NSCoder) {
-        if let rect = CameraKitConstants.singleton.iPhoneRectangleRectPortrait {
+        if let rect = CameraKitConstants.shared.iPhoneRectangleRectPortrait {
             self.iphoneRectPortrait = rect
         } else {
             self.iphoneRectPortrait = CGRect(x: 0, y: 0, width: 10, height: 10)
         }
-        if let rect = CameraKitConstants.singleton.iPhoneRectangleRectLandscape {
+        if let rect = CameraKitConstants.shared.iPhoneRectangleRectLandscape {
             self.iphoneRectLandscape = rect
         } else {
             self.iphoneRectLandscape = CGRect(x: 0, y: 0, width: 10, height: 10)
         }
-        if let rect = CameraKitConstants.singleton.RectangleRectProtrait {
+        if let rect = CameraKitConstants.shared.rectangleRectInProtrait {
             self.iPadRectPortrait = rect
         } else {
             self.iPadRectPortrait = CGRect(x: 0, y: 0, width: 10, height: 10)
         }
-        if let rect = CameraKitConstants.singleton.RectangleRectLandscape {
+        if let rect = CameraKitConstants.shared.rectangleRectInLandscape {
             self.iPadRectLandscape = rect
         } else {
             self.iPadRectLandscape = CGRect(x: 0, y: 0, width: 10, height: 10)

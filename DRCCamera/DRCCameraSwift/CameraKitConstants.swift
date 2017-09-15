@@ -30,14 +30,16 @@ struct RectangleRatio {
 }
 
 struct CameraKitConstants {
-    static let singleton : CameraKitConstants = CameraKitConstants()
-    let RectangleRectProtrait : CGRect?
-    let RectangleRectLandscape : CGRect?
+    static let shared : CameraKitConstants = CameraKitConstants()
+    /// `rect` of the transparent rectangle in the center of MaskView in protrait mode
+    let rectangleRectInProtrait : CGRect?
+    /// `rect` of the transparent rectangle in the center of MaskView in landscape mode
+    let rectangleRectInLandscape : CGRect?
     // ipad and ipadPro ratio are same, because Rect in iPad Pro is scaled
-    static let RectangleRectRatio = RectangleRatio(x: 100 / 768, y: 334.5 / 1024, wp: 568 / 768, hp: 355 / 1024)
-    static let DetectionRectangleRatio = RectangleRatio(x: 84 / 768, y: (334.5 + 10) / 1024, wp: 600 / 768, hp: (355 + 20) / 1024)
-    static let RectangleRectLandscapeRatio = RectangleRatio(x: 228/1024, y: 206.5/768, wp: 568/1024, hp: 355/768)
-    static let DetectionRectangleLandscapeRatio = RectangleRatio(x: 212/1024, y: (206.5+10)/768, wp: 600/1024, hp: (355+20)/768)
+    static let rectangleRectRatioInProtrait = RectangleRatio(x: 100 / 768, y: 334.5 / 1024, wp: 568 / 768, hp: 355 / 1024)
+    static let detectionRectangleRatioInProtrait = RectangleRatio(x: 84 / 768, y: (334.5 + 10) / 1024, wp: 600 / 768, hp: (355 + 20) / 1024)
+    static let rectangleRectRatioInLandscape = RectangleRatio(x: 228/1024, y: 206.5/768, wp: 568/1024, hp: 355/768)
+    static let detectionRectangleRatioInLandscape = RectangleRatio(x: 212/1024, y: (206.5+10)/768, wp: 600/1024, hp: (355+20)/768)
 
     let iphoneRectangleRatio: RectangleRatio?
     let iphoneRectangleLandscapeRatio: RectangleRatio?
@@ -92,27 +94,25 @@ struct CameraKitConstants {
             let iPadDeviceSize = UIScreen.main.bounds.size
             if iPadDeviceSize == CGSize(width: 1024, height: 768) || iPadDeviceSize == CGSize(width: 768, height: 1024) {
                 //iPad normal
-                RectangleRectProtrait = CGRect(x: 100, y: 334.5, width: 568, height: 355)
-                RectangleRectLandscape = CGRect(x: 228, y: 206.5, width: 568, height: 355)
+                rectangleRectInProtrait = CGRect(x: 100, y: 334.5, width: 568, height: 355)
+                rectangleRectInLandscape = CGRect(x: 228, y: 206.5, width: 568, height: 355)
             } else if iPadDeviceSize == CGSize(width: 1366, height: 1024) || iPadDeviceSize == CGSize(width: 1024, height: 1366) {
                 //iPad Pro
-                RectangleRectProtrait = CGRect(x: 133, y: 446, width: 758, height: 474)
-                RectangleRectLandscape = CGRect(x: 304, y: 275, width: 758, height: 474)
+                rectangleRectInProtrait = CGRect(x: 133, y: 446, width: 758, height: 474)
+                rectangleRectInLandscape = CGRect(x: 304, y: 275, width: 758, height: 474)
+            } else if iPadDeviceSize == CGSize(width: 1112, height: 834) || iPadDeviceSize == CGSize(width: 834, height: 1112) {
+                // iPad 10.5 inch
+                rectangleRectInProtrait = CGRect(x: 109, y: 363.5, width: 616, height: 385)
+                rectangleRectInLandscape = CGRect(x: 248, y: 224.5, width: 616, height: 385)
             } else {
                 // Unkown
-                RectangleRectProtrait = nil
-                RectangleRectLandscape = nil
+                rectangleRectInProtrait = nil
+                rectangleRectInLandscape = nil
             }
         } else {
-            RectangleRectProtrait = nil
-            RectangleRectLandscape = nil
+            rectangleRectInProtrait = nil
+            rectangleRectInLandscape = nil
         }
     }
-
-    func initForIphone(){
-
-    }
-
-    
 }
 
