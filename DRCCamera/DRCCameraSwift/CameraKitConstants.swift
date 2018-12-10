@@ -105,9 +105,14 @@ struct CameraKitConstants {
                 rectangleRectInProtrait = CGRect(x: 109, y: 363.5, width: 616, height: 385)
                 rectangleRectInLandscape = CGRect(x: 248, y: 224.5, width: 616, height: 385)
             } else {
-                // Unkown
-                rectangleRectInProtrait = nil
-                rectangleRectInLandscape = nil
+                let longEdge = max(iPadDeviceSize.width, iPadDeviceSize.height)
+                let shortEdge = min(iPadDeviceSize.width, iPadDeviceSize.height)
+                let rectWidth = round(shortEdge * 0.74)
+                let rectHeight = round(rectWidth / 1.6)
+                rectangleRectInProtrait = CGRect(origin: CGPoint(x: round((shortEdge - rectWidth)/2), y: round((longEdge - rectHeight)/2)),
+                                                 size: CGSize(width: rectWidth, height: rectHeight))
+                rectangleRectInLandscape = CGRect(origin: CGPoint(x: round((longEdge - rectWidth)/2), y: round((shortEdge - rectHeight)/2)),
+                                                  size: CGSize(width: rectWidth, height: rectHeight))
             }
         } else {
             rectangleRectInProtrait = nil
