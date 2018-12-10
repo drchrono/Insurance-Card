@@ -229,6 +229,7 @@ open class CameraViewController: UIViewController, AVCaptureVideoDataOutputSampl
             }
             
             avcapturePreviewLayer = AVCaptureVideoPreviewLayer(session: captureSession!)
+            avcapturePreviewLayer?.videoGravity = AVLayerVideoGravityResizeAspectFill
             self.previewView.layer.addSublayer(avcapturePreviewLayer!)
             
             return true
