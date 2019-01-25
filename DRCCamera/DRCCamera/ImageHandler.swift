@@ -35,8 +35,8 @@ class ImageHandler {
         let imageSize: CGSize = CGSize(width: width, height: height)
         var boundHeight: CGFloat
         let orient = image.imageOrientation
-        switch orient{
-        case UIImageOrientation.up: //EXIF = 1
+        switch orient {
+        case .up: //EXIF = 1
             transform = CGAffineTransform.identity
             break
         case .upMirrored: //EXIF = 2
@@ -83,7 +83,7 @@ class ImageHandler {
         
         UIGraphicsBeginImageContext(bounds.size)
         let context:CGContext = UIGraphicsGetCurrentContext()!
-        if orient == UIImageOrientation.right || orient == UIImageOrientation.left{
+        if orient == UIImage.Orientation.right || orient == UIImage.Orientation.left{
             context.scaleBy(x: -scaleRatio, y: scaleRatio)
             context.translateBy(x: -height, y: 0)
         }else{
@@ -101,7 +101,7 @@ class ImageHandler {
     
     
     class func getImageCorrectedPerspectiv(_ image: CIImage , feature f: CIRectangleFeature) -> UIImage{
-        let correctImage = image.applyingFilter("CIPerspectiveCorrection", withInputParameters: [
+        let correctImage = image.applyingFilter("CIPerspectiveCorrection", parameters: [
             "inputTopLeft": CIVector(cgPoint: f.topLeft),
             "inputTopRight": CIVector(cgPoint: f.topRight),
             "inputBottomLeft": CIVector(cgPoint: f.bottomLeft),
@@ -119,7 +119,7 @@ class ImageHandler {
         let topRight = CGPoint(x: f.topRight.x - horizonShrink, y: f.topRight.y - verticalShrink)
         let bottomLeft = CGPoint(x: f.bottomLeft.x + horizonShrink, y: f.bottomLeft.y + verticalShrink)
         let bottomRight = CGPoint(x: f.bottomRight.x - horizonShrink, y: f.bottomRight.y + verticalShrink)
-        let correctImage = image.applyingFilter("CIPerspectiveCorrection", withInputParameters: [
+        let correctImage = image.applyingFilter("CIPerspectiveCorrection", parameters: [
             "inputTopLeft": CIVector(cgPoint: topLeft),
             "inputTopRight": CIVector(cgPoint: topRight),
             "inputBottomLeft": CIVector(cgPoint: bottomLeft),
@@ -145,7 +145,7 @@ class ImageHandler {
         let topRight = CGPoint(x: iOS10TopRight.x - horizonShrink, y: iOS10TopRight.y - verticalShrink)
         let bottomLeft = CGPoint(x: iOS10BottomLeft.x + horizonShrink, y: iOS10BottomLeft.y + verticalShrink)
         let bottomRight = CGPoint(x: iOS10BottomRight.x - horizonShrink, y: iOS10BottomRight.y + verticalShrink)
-        let correctImage = image.applyingFilter("CIPerspectiveCorrection", withInputParameters: [
+        let correctImage = image.applyingFilter("CIPerspectiveCorrection", parameters: [
             "inputTopLeft": CIVector(cgPoint: topLeft),
             "inputTopRight": CIVector(cgPoint: topRight),
             "inputBottomLeft": CIVector(cgPoint: bottomLeft),

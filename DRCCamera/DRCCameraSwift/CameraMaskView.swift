@@ -37,7 +37,7 @@ class CameraMaskView: UIView {
 //        CGPathAddRect(maskPath, nil, rect)
         maskLayer.path = maskPath
         maskLayer.fillColor = UIColor.white.cgColor
-        maskLayer.fillRule = kCAFillRuleEvenOdd
+        maskLayer.fillRule = CAShapeLayerFillRule.evenOdd
         self.layer.mask = maskLayer
         
         let path : UIBezierPath!
