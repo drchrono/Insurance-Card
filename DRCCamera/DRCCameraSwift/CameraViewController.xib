@@ -1,18 +1,22 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11198.2" systemVersion="15G31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="CameraViewController" customModule="DRCCameraSwift" customModuleProvider="target">
             <connections>
-                <outlet property="SaveButton" destination="QlH-zd-LXu" id="zWk-Tj-t8d"/>
                 <outlet property="backButton" destination="Y5X-4i-Bnf" id="4Ma-Yg-AGd"/>
                 <outlet property="distanceBetweenPromptAndSaveButtonConstraint" destination="Hkf-d9-M9l" id="Hbb-Od-ffl"/>
                 <outlet property="maskView" destination="WtL-je-bOn" id="tKX-S7-Rra"/>
                 <outlet property="overlayImageView" destination="l3Q-Ve-C5X" id="Ecl-ic-MdQ"/>
                 <outlet property="previewView" destination="4qs-ce-Y4D" id="Jyy-Kq-55F"/>
+                <outlet property="saveButton" destination="QlH-zd-LXu" id="gJs-Fd-v0Y"/>
                 <outlet property="view" destination="OiA-7G-spd" id="gCF-b3-7qU"/>
             </connections>
         </placeholder>
@@ -22,8 +26,11 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4qs-ce-Y4D">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                     <subviews>
-                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="l3Q-Ve-C5X"/>
+                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="l3Q-Ve-C5X">
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        </imageView>
                     </subviews>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.0" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
@@ -34,8 +41,10 @@
                     </constraints>
                 </view>
                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WtL-je-bOn" customClass="CameraMaskView" customModule="DRCCameraSwift" customModuleProvider="target">
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                     <subviews>
                         <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Position card in frame" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v2H-Hx-dT5">
+                            <rect key="frame" x="102.5" y="508" width="170" height="21"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="21" id="EgZ-U9-HlT"/>
                                 <constraint firstAttribute="width" constant="170" id="gOF-kO-hvt"/>
@@ -45,6 +54,7 @@
                             <nil key="highlightedColor"/>
                         </label>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QlH-zd-LXu">
+                            <rect key="frame" x="155.5" y="597" width="64" height="64"/>
                             <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             <constraints>
                                 <constraint firstAttribute="width" constant="64" id="0UZ-Dv-BaW"/>
@@ -76,9 +86,9 @@
                     </constraints>
                     <variation key="default">
                         <mask key="constraints">
-                            <exclude reference="hxo-j3-YnX"/>
                             <exclude reference="h6A-pV-78R"/>
                             <exclude reference="n7d-9K-gRe"/>
+                            <exclude reference="hxo-j3-YnX"/>
                         </mask>
                     </variation>
                     <variation key="widthClass=compact">
@@ -86,16 +96,17 @@
                             <include reference="QlH-zd-LXu"/>
                         </mask>
                         <mask key="constraints">
-                            <exclude reference="Hkf-d9-M9l"/>
-                            <include reference="hxo-j3-YnX"/>
                             <include reference="h6A-pV-78R"/>
                             <exclude reference="iDg-mE-dfX"/>
                             <include reference="n7d-9K-gRe"/>
                             <exclude reference="xTD-4x-gx7"/>
+                            <exclude reference="Hkf-d9-M9l"/>
+                            <include reference="hxo-j3-YnX"/>
                         </mask>
                     </variation>
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Y5X-4i-Bnf">
+                    <rect key="frame" x="20" y="20" width="44" height="44"/>
                     <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.34999999999999998" colorSpace="custom" customColorSpace="sRGB"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="44" id="fxf-Rz-qwo"/>

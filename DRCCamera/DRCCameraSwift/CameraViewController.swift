@@ -31,11 +31,11 @@ import AVFoundation
     
     var context: EAGLContext?
     @IBOutlet weak var maskView: CameraMaskView!
-    @IBOutlet weak var SaveButton: UIButton!
+    @IBOutlet weak var saveButton: UIButton!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var distanceBetweenPromptAndSaveButtonConstraint: NSLayoutConstraint!
 
-    open class func ViewControllerFromNib() -> CameraViewController {
+    @objc open class func viewControllerFromNib() -> CameraViewController {
         let nibVC = CameraViewController(nibName: "CameraViewController", bundle: Bundle(for: CameraViewController.classForCoder()))
         return nibVC
     }
@@ -84,12 +84,12 @@ import AVFoundation
                 view.layoutIfNeeded()
             }
         }
-        self.SaveButton.layer.cornerRadius = 32
-        self.SaveButton.layer.masksToBounds = true
+        self.saveButton.layer.cornerRadius = 32
+        self.saveButton.layer.masksToBounds = true
         self.backButton.layer.cornerRadius = 22
         self.backButton.layer.masksToBounds = true
         //iOS 10, move up 1 point to be center
-        SaveButton.imageEdgeInsets = UIEdgeInsets(top: -1, left: 0, bottom: 1, right: 0)
+        saveButton.imageEdgeInsets = UIEdgeInsets(top: -1, left: 0, bottom: 1, right: 0)
         initOrientation = UIApplication.shared.statusBarOrientation
 //        let value = UIInterfaceOrientation.Portrait.rawValue
 //        UIDevice.currentDevice().setValue(value, forKey: "orientation")
@@ -242,7 +242,7 @@ import AVFoundation
         }
     }
     @IBAction func clickedTakeButton(_ sender: AnyObject) {
-        SaveButton.isEnabled = false
+        saveButton.isEnabled = false
         if let videoConnection = stillImageOutput.connection(with: AVMediaType.video) {
             stillImageOutput.captureStillImageAsynchronously(from: videoConnection, completionHandler: { sampleBuffer, error in
                 guard let sampleBuffer = sampleBuffer else {
@@ -317,7 +317,7 @@ import AVFoundation
                 DispatchQueue.main.async {
                     self.dismiss(animated: true, completion: {
                         self.delegate?.cameraViewController(self, didTakeImage: image)
-                        self.SaveButton.isEnabled = true
+                        self.saveButton.isEnabled = true
                     })
                 }
             })
