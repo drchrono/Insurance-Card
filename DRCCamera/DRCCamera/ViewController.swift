@@ -29,7 +29,7 @@ class ViewController: UIViewController, CameraViewControllerDelegate{
     @IBAction func click(_ sender: AnyObject) {
     }
     @IBAction func clickedNew(_ sender: AnyObject) {
-        let vc = CameraViewController.ViewControllerFromNib()
+        let vc = CameraViewController.viewControllerFromNib()
         vc.delegate = self
         vc.showCaremaIfPossible(inViewController: self)
     }
