@@ -79,6 +79,8 @@ class ImageHandler {
             transform = CGAffineTransform(translationX: imageSize.height, y: 0.0)
             transform = transform.rotated(by: CGFloat(Double.pi / 2.0))
             break
+        @unknown default:
+            break
         }
         
         UIGraphicsBeginImageContext(bounds.size)

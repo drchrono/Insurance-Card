@@ -70,6 +70,8 @@ import AVFoundation
                 }
             })
             return
+        @unknown default:
+            break
         }
         
         rootViewController.present(self, animated: true, completion: nil)
@@ -145,12 +147,7 @@ import AVFoundation
             if let f = lastRectFeature{
                 var uiImage:UIImage? = nil
                 let shouldDrawOverlay: Bool
-                let systemVersion = UIDevice.current.systemVersion
-                if #available(iOS 10, *), (systemVersion.hasPrefix("10.0") || systemVersion.hasPrefix("10.1")) {
-                    shouldDrawOverlay = isFeatureRectInRectangleIOS10(ciImage, feature: f, orientation: currentAVOrientaion!)
-                } else {
-                    shouldDrawOverlay = isFeatureRectInRectangle(ciImage, feature: f,orientation: currentAVOrientaion!)
-                }
+                shouldDrawOverlay = isFeatureRectInRectangle(ciImage, feature: f,orientation: currentAVOrientaion!)
                 if shouldDrawOverlay {
                     let overlay = self.drawOverlay(ciImage, feature: f)
                     let context = CIContext()
@@ -200,7 +197,7 @@ import AVFoundation
             return false
         }
 
-        stillImageOutput.outputSettings = [AVVideoCodecKey: AVVideoCodecJPEG]
+        stillImageOutput.outputSettings = [AVVideoCodecKey: AVVideoCodecType.jpeg]
         if captureSession!.canAddOutput(stillImageOutput){
             captureSession!.addOutput(stillImageOutput)
         }
@@ -224,6 +221,8 @@ import AVFoundation
             case .landscapeRight:
                 connection?.videoOrientation = AVCaptureVideoOrientation.landscapeRight
             case .unknown:
+                break
+            @unknown default:
                 break
             }
             
@@ -252,12 +251,7 @@ import AVFoundation
                 self.captureSession?.stopRunning()
                 var image: UIImage? = nil
                 if let _ = self.lastCIImage{
-                    let systemVersion = UIDevice.current.systemVersion
-                    if #available(iOS 10, *), (systemVersion.hasPrefix("10.0") || systemVersion.hasPrefix("10.1")) {
-                        image = ImageHandler.getImageCorrectedPerspectiveShrinkIOS10(self.lastCIImage!, feature: self.lastRectFeature!)
-                    } else {
-                        image = ImageHandler.getImageCorrectedPerspectiveShrink(self.lastCIImage!, feature: self.lastRectFeature!)
-                    }
+                    image = ImageHandler.getImageCorrectedPerspectiveShrink(self.lastCIImage!, feature: self.lastRectFeature!)
                 }else{
                     let imageData = AVCaptureStillImageOutput.jpegStillImageNSDataRepresentation(sampleBuffer)!
                     let dataProvider = CGDataProvider(data: imageData as CFData)
@@ -278,6 +272,8 @@ import AVFoundation
                     case .portraitUpsideDown:
 //                        print("up side")
                         imageOrientation = UIImage.Orientation.left
+                    @unknown default:
+                        break
                     }
 //                    print(connection!.videoOrientation.rawValue)
 //                    print(UIImageOrientation.Right.rawValue)
@@ -462,6 +458,8 @@ import AVFoundation
 //            connection?.videoOrientation = .LandscapeRight
         case .unknown:
             break
+        @unknown default:
+            break
         }
         avcapturePreviewLayer?.frame = previewView.bounds
         self.view.layoutIfNeeded()
@@ -478,6 +476,8 @@ import AVFoundation
             case .landscapeRight:
                 connection?.videoOrientation = .landscapeRight
             case .unknown:
+                break
+            @unknown default:
                 break
             }
         }
