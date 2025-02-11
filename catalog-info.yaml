@@ -1,0 +1,18 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: Insurance-Card
+  description: Repository for Insurance-Card
+  annotations:
+    business-unit: EverHealth
+    github.com/project-slug: drchrono/Insurance-Card
+    product: DRC
+spec:
+  type: service
+  lifecycle: production
+  owner: EverHealth
+  implementation:
+    languages:
+    - Swift
+    - Objective-C
+    - C
